@@ -18,6 +18,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
     'api_key' => env('APP_API_KEY'),
+    'mulai_absen' => env('JAM_ABSEN '),
 
     /*
     |--------------------------------------------------------------------------

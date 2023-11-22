@@ -26,6 +26,8 @@ class AbsenRequest extends FormRequest
     {
         return [
             'user_id' => ['required', Rule::exists('users','id')],
+            'lat' => 'required',
+            'lon' => 'required',
         ];
     }
 
