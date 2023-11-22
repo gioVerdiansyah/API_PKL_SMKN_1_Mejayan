@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('no_telp_dudi');
             $table->string('alamat_dudi');
             $table->string('koordinat');
-            $table->timestamps();
         });
     }
 

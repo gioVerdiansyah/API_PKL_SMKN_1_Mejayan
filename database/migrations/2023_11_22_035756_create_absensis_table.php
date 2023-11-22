@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('detail_users', function (Blueprint $table) {
+        Schema::create('absensis', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('jurusan', ['RPL','TKR', 'TO', 'TBSM', 'APHP']);
-            $table->enum('kelas', ['X','XI', 'XII']);
-            $table->string('nis');
-            $table->enum('jenis_kelamin', ['P', 'L']);
-            $table->string('alamat');
-            $table->string('no_hp');
-            $table->string('no_hp_ortu');
+            $table->enum('status', ['1','2','3','4','5','6','7'])->default('3')->comment('1=absen,2=telat,3=alpha,4=wfh,5=cuti,6=izin,7=sakit');
+            $table->timestamps();
         });
     }
 
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('detail_users');
+        Schema::dropIfExists('absensis');
     }
 };

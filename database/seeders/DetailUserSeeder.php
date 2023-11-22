@@ -17,7 +17,7 @@ class DetailUserSeeder extends Seeder
         DetailUser::create(
             [
                 'user_id' => User::latest()->first()->id,
-                'nik' => '123456789',
+                'nis' => '123456789',
                 'jurusan'=> 'RPL',
                 'kelas' => 'XI',
                 'jenis_kelamin' => 'P',

@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserAuthRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -27,8 +28,7 @@ class LoginController extends Controller
 
             return response()->json([
                 'success' => true,
-                'user' => auth()->user(),
-                'detail_user' => auth()->user()->detailUser()->get(),
+                'user' => User::with(['detailUser', 'detailUser.detailPkl', 'detailUser.detailPkl.jamPkl'])->where('id', auth()->user()->first()->id)->first(),
                 'token' => $token
             ], 200);
         } else {

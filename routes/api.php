@@ -14,9 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/register', App\Http\Controllers\Api\RegisterController::class);
-Route::post('/login', App\Http\Controllers\Api\LoginController::class);
-Route::get('/check-login', [App\Http\Controllers\Api\CheckLoginController::class,'index']);
+Route::middleware("verifyAPIKey")->group(function () {
+    Route::post('/register', App\Http\Controllers\Api\RegisterController::class);
+    Route::post('/login', App\Http\Controllers\Api\LoginController::class);
+    Route::get('/check-login', [App\Http\Controllers\Api\CheckLoginController::class, 'index']);
+    Route::post('/absensi/hadir', [App\Http\Controllers\Api\AbsensiController::class, 'absen']);
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
