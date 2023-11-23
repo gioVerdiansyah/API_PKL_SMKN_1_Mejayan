@@ -32,6 +32,7 @@ class RegisterController extends Controller
         $detailUser = new DetailUser();
         $detailUser->user_id = $user->id;
         $detailUser->jurusan = $request->jurusan;
+        $detailUser->tingkat = $request->tingkat;
         $detailUser->kelas = $request->kelas;
         $detailUser->nis = $request->nis;
         $detailUser->jenis_kelamin = $request->jenis_kelamin;

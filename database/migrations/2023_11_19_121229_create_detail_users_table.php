@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->enum('jurusan', ['RPL','TKR', 'TO', 'TBSM', 'APHP']);
-            $table->enum('kelas', ['X','XI', 'XII']);
+            $table->enum('tingkat', ['X','XI', 'XII']);
+            $table->enum('kelas', ['1', '2', '3']);
             $table->string('nis');
             $table->enum('jenis_kelamin', ['P', 'L']);
             $table->string('alamat');

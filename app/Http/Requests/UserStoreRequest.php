@@ -29,6 +29,7 @@ class UserStoreRequest extends FormRequest
             'email' => 'required|email|unique:users,email',
             'nik' => 'required|string',
             'jurusan'=> ['required', Rule::in(['RPL', 'TKR', 'TO', 'TBSM', 'APHP'])],
+            'tingkat'=> ['required', Rule::in(['1', '2', '3'])],
             'kelas'=> ['required', Rule::in(['X', 'XI', 'XII'])],
             'jenis_kelamin' => ['required', Rule::in(['P', 'L'])],
             'alamat' => 'required|string',

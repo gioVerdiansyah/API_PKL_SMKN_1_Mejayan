@@ -45,25 +45,26 @@ class AbsensiController extends Controller
 
             $jamMasuk = $user['detailUser']['detailPkl']['jamPkl']["$hariIni"];
             $jamMasuk = explode(" - ", $jamMasuk)[0];
+            $jamMasukTimestamp = strtotime($jamMasuk);
+            $jamSekarangTimestamp = strtotime($now->format('H:i'));
 
+            $selisihSatuJam = 3600;
 
-
-            $jamSekarang = $now->format('H:i');
-            if (config('app.mulai_absen' > $jamSekarang)) {
-                if ($request->wfh == '1') {
-                    Absensi::create([
-                        'user_id' => $user_id,
-                        'status' => 4,
-                    ]);
-                    return response()->json(['absen' => ['success' => true, 'status' => 4, 'message' => 'Berhasil absen WFH!']]);
-                }
-                if ($jamSekarang > $jamMasuk) {
+            if ($jamSekarangTimestamp >= ($jamMasukTimestamp - $selisihSatuJam)) {
+                if ($jamSekarangTimestamp > $jamMasukTimestamp) {
                     Absensi::create([
                         'user_id' => $user_id,
                         'status' => 2,
                     ]);
                     return response()->json(['absen' => ['success' => true, 'status' => 2, 'message' => 'Anda telat absen!']]);
                 } else {
+                    if ($request->wfh == '1') {
+                        Absensi::create([
+                            'user_id' => $user_id,
+                            'status' => 4,
+                        ]);
+                        return response()->json(['absen' => ['success' => true, 'status' => 4, 'message' => 'Berhasil absen WFH!']]);
+                    }
                     Absensi::create([
                         'user_id' => $user_id,
                         'status' => 1,
@@ -71,7 +72,7 @@ class AbsensiController extends Controller
                     return response()->json(['absen' => ['success' => true, 'status' => 1, 'message' => 'Berhasil absen tepat waktu!']]);
                 }
             }else{
-                return response()->json(['absen' => ['success' => false, 'message' => 'Anda hanya bisa absen mulai dari jam 4 pagi!']]);
+                return response()->json(['absen' => ['success' => false, 'message' => 'Absen di mulai 1 jam sebelum jam masuk!']]);
             }
         } else {
             return response()->json(['absen' => ['success' => false, 'message' => 'Anda harus berada di kantor untuk melakukan absen']]);
