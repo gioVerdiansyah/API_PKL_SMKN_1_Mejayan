@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api;
-
-use Geocoder\Laravel\Facades\Geocoder;
+namespace App\Http\Controllers\Api\Siswa;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AbsenRequest;
 use App\Models\Absensi;
 use App\Models\User;
-use Geocoder\Query\GeocodeQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -20,6 +17,14 @@ class AbsensiController extends Controller
 
         if (!$user) {
             return response()->json(['absen' => ['success' => false, 'message' => 'User tidak ditemukan']], 404);
+        }
+
+        if ($request->wfh == '1') {
+            Absensi::create([
+                'user_id' => $user->id,
+                'status' => 4,
+            ]);
+            return response()->json(['absen' => ['success' => true, 'status' => 4, 'message' => 'Berhasil absen WFH!']]);
         }
 
         $coorUser = ['latitude' => $request->lat, 'longitude' => $request->lon];
@@ -44,6 +49,9 @@ class AbsensiController extends Controller
             }
 
             $jamMasuk = $user['detailUser']['detailPkl']['jamPkl']["$hariIni"];
+            if(is_null($jamMasuk)){
+                return response()->json(["absen"=> ["success"=> false, "message"=> "Anda tidak dapat absen pada hari $hariIni"]]);
+            }
             $jamMasuk = explode(" - ", $jamMasuk)[0];
             $jamMasukTimestamp = strtotime($jamMasuk);
             $jamSekarangTimestamp = strtotime($now->format('H:i'));
@@ -58,13 +66,6 @@ class AbsensiController extends Controller
                     ]);
                     return response()->json(['absen' => ['success' => true, 'status' => 2, 'message' => 'Anda telat absen!']]);
                 } else {
-                    if ($request->wfh == '1') {
-                        Absensi::create([
-                            'user_id' => $user_id,
-                            'status' => 4,
-                        ]);
-                        return response()->json(['absen' => ['success' => true, 'status' => 4, 'message' => 'Berhasil absen WFH!']]);
-                    }
                     Absensi::create([
                         'user_id' => $user_id,
                         'status' => 1,

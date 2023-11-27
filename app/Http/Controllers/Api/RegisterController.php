@@ -58,16 +58,16 @@ class RegisterController extends Controller
         $jamPkl->rabu = $request->rabu_awal . ' - ' . $request->rabu_akhir;
         $jamPkl->kamis = $request->kamis_awal . ' - ' . $request->kamis_akhir;
         $jamPkl->jumat = $request->jumat_awal . ' - ' . $request->jumat_akhir;
-        $jamPkl->saptu = $request->saptu_awal && $request->saptu_akhir ? $request->saptu_awal . ' - ' . $request->saptu_akhir : null;
-        $jamPkl->minggu = $request->minggu_awal && $request->minggu_akhir ? $request->minggu_awal . ' - ' . $request->minggu_akhir : null;
+        $jamPkl->saptu = $request->saptu_awal && $request->saptu_akhir ? $request->saptu_awal . ' - ' . $request->saptu_akhir : "00:00 - 00:00";
+        $jamPkl->minggu = $request->minggu_awal && $request->minggu_akhir ? $request->minggu_awal . ' - ' . $request->minggu_akhir : "00:00 - 00:00";
 
         $jamPkl->ji_senin = $request->ji_senin_awal . ' - ' . $request->ji_senin_akhir;
         $jamPkl->ji_selasa = $request->ji_selasa_awal . ' - ' . $request->ji_selasa_akhir;
         $jamPkl->ji_rabu = $request->ji_rabu_awal . ' - ' . $request->ji_rabu_akhir;
         $jamPkl->ji_kamis = $request->ji_kamis_awal . ' - ' . $request->ji_kamis_akhir;
         $jamPkl->ji_jumat = $request->ji_jumat_awal . ' - ' . $request->ji_jumat_akhir;
-        $jamPkl->ji_saptu = $request->ji_saptu_awal && $request->ji_saptu_akhir ? $request->ji_saptu_awal . ' - ' . $request->ji_saptu_akhir : null;
-        $jamPkl->ji_minggu = $request->ji_minggu_awal && $request->ji_minggu_akhir ? $request->ji_minggu_awal . ' - ' . $request->ji_minggu_akhir : null;
+        $jamPkl->ji_saptu = $request->ji_saptu_awal && $request->ji_saptu_akhir ? $request->ji_saptu_awal . ' - ' . $request->ji_saptu_akhir : "00:00 - 00:00";
+        $jamPkl->ji_minggu = $request->ji_minggu_awal && $request->ji_minggu_akhir ? $request->ji_minggu_awal . ' - ' . $request->ji_minggu_akhir : "00:00 - 00:00";
 
         $detailPkl->jamPkl()->save($jamPkl);
 
