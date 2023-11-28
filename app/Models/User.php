@@ -61,4 +61,7 @@ class User extends Authenticatable
     public function absen():BelongsToMany{
         return $this->belongsToMany(Absensi::class,'user_id');
     }
+    public function izin(): HasOne{
+        return $this->hasOne(Izin::class,'user_id');
+    }
 }

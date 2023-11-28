@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('absensis', function (Blueprint $table) {
+        Schema::create('izins', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('status', ['1','2','3','4','5'])->default('3')->comment('1=absen,2=telat,3=alpha,4=wfh,5yy=pulang');
+            $table->enum('tipe_izin', ['Sakit','Izin', 'Dispensasi']);
+            $table->text('alasan');
+            $table->date('awal_izin');
+            $table->date('akhir_izin');
+            $table->string('bukti');
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('absensis');
+        Schema::dropIfExists('izins');
     }
 };

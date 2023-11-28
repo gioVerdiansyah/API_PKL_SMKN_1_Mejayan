@@ -27,14 +27,18 @@ class LoginController extends Controller
             $token = auth()->user()->createToken('authToken')->plainTextToken;
 
             return response()->json([
-                'success' => true,
-                'user' => User::with(['detailUser', 'detailUser.detailPkl', 'detailUser.detailPkl.jamPkl'])->where('id', auth()->user()->first()->id)->first(),
-                'token' => $token
+                'login' => [
+                    'success' => true,
+                    'user' => User::with(['detailUser', 'detailUser.detailPkl', 'detailUser.detailPkl.jamPkl'])->where('id', auth()->user()->first()->id)->first(),
+                    'token' => $token
+                ]
             ], 200);
         } else {
             return response()->json([
-                'success' => false,
-                'message' => 'Email atau Password Anda salah'
+                'login' => [
+                    'success' => false,
+                    'message' => 'Email atau Password Anda salah'
+                ]
             ], 401);
         }
     }
