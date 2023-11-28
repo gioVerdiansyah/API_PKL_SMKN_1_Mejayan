@@ -201,6 +201,10 @@ class AbsensiController extends Controller
             $izin->awal_izin = Carbon::parse($request->awal_izin);
             $izin->akhir_izin = Carbon::parse($request->akhir_izin);
 
+            if(!$request->hasFile("bukti")){
+                return response()->json(["izin"=> ["success"=> false, "message" => "Foto Bukti tidak ditemukan!"]]);
+            }
+
             $nameFile = $request->file('bukti')->hashName();
             $path = $request->file('bukti')->storeAs('bukti_izin', $nameFile);
 
@@ -211,6 +215,21 @@ class AbsensiController extends Controller
 
         } catch (\Exception $e) {
             return response()->json(["izin" => ["success" => false, 'message' => "Error: {$e->getMessage()}"]]);
+        }
+    }
+
+    public function izinGet(string $id)
+    {
+        try {
+            $user = User::where('id', $id)->first();
+            if (!$user) {
+                return response()->json(['izin' => ['success' => false, 'message' => 'User Id tidak di temukan']]);
+            }
+            $dataIzin = Izin::where('user_id', $user->id)->get();
+
+            return response()->json(['izin' => ['success' => true, 'message' => 'Berhasil mendapatkan data', 'data' => $dataIzin->toArray()]]);
+        } catch (\Exception $e) {
+            return response()->json(['izin' => ['success' => false, 'message' => "Error: {$e->getMessage()}"]]);
         }
     }
 }

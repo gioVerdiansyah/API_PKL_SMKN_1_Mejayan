@@ -24,12 +24,12 @@ class IzinStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'name' => 'required|string',
-            // 'tipe_izin'=> 'required|in:Izin, Sakit, Dispensasi',
-            // 'alasan' => 'required|string|max:1000',
-            // 'awal_izin' => 'required|date',
-            // 'akhir_izin' => 'required|date',
-            // 'bukti'=> 'required|file|mimes:png,jpg,jpeg,word,pdf,mp4',
+            'name' => 'required|string',
+            'tipe_izin'=> 'required|in:Izin,Sakit,Dispensasi',
+            'alasan' => 'required|string|max:1000',
+            'awal_izin' => 'required|date',
+            'akhir_izin' => 'required|date',
+            'bukti' => 'required|file|mimes:png,jpg,jpeg,pdf',
         ];
     }
     protected function failedValidation(Validator $validator)
