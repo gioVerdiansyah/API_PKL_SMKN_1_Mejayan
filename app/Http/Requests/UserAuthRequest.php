@@ -31,6 +31,20 @@ class UserAuthRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
+        $errors = $validator->errors()->toArray();
+
+        $messages = [];
+        $i = 0;
+        foreach ($errors as $field => $errorMessages) {
+            $formattedMessages = [];
+            foreach ($errorMessages as $errorMessage) {
+                $i++;
+                $formattedMessages[] = $i . ". {$errorMessage}";
+            }
+            $messages[] = implode(', ', $formattedMessages);
+        }
+
+        $response = response()->json(['login' => ['success' => false, 'message' => "Validasi Error: " . implode(', ', $messages)]], 422);
         $response = response()->json($validator->errors(), 422);
 
         throw new ValidationException($validator, $response);

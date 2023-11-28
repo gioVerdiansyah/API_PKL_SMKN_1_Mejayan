@@ -34,7 +34,21 @@ class IzinStoreRequest extends FormRequest
     }
     protected function failedValidation(Validator $validator)
     {
-        $response = response()->json($validator->errors(), 422);
+        $errors = $validator->errors()->toArray();
+
+        $messages = [];
+        $i = 0;
+        foreach ($errors as $field => $errorMessages) {
+            $formattedMessages = [];
+            foreach ($errorMessages as $errorMessage) {
+                $i++;
+                $formattedMessages[] = $i . ". {$errorMessage}";
+            }
+            $messages[] = implode(', ', $formattedMessages);
+        }
+
+        $response = response()->json(['izin' => ['success' => false, 'message' => "Validasi Error: " . implode(', ', $messages)]], 422);
+
 
         throw new ValidationException($validator, $response);
     }

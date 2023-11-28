@@ -22,6 +22,7 @@ Route::middleware("verifyAPIKey")->group(function () {
     Route::post('/absensi/pulang', [App\Http\Controllers\Api\Siswa\AbsensiController::class, 'pulang']);
     Route::post('/absensi/izin', [App\Http\Controllers\Api\Siswa\AbsensiController::class, 'izin']);
     Route::get('/absensi/izin/get/{id}', [App\Http\Controllers\Api\Siswa\AbsensiController::class, 'izinGet']);
+    Route::post('/jurnal', [\App\Http\Controllers\Api\Siswa\JurnalController::class,'jurnal']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
