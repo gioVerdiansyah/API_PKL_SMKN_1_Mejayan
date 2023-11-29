@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Http\FormRequest;
 
 class JurnalStoreRequest extends FormRequest
@@ -22,13 +24,28 @@ class JurnalStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id' => 'required|string',
+            'kegiatan' => 'required|string|max:2000',
+            'bukti' => 'required|image|max:5120',
         ];
     }
 
     protected function failedValidation(Validator $validator)
     {
-        $response = response()->json($validator->errors(), 422);
+        $errors = $validator->errors()->toArray();
+
+        $messages = [];
+        $i = 0;
+        foreach ($errors as $field => $errorMessages) {
+            $formattedMessages = [];
+            foreach ($errorMessages as $errorMessage) {
+                $i++;
+                $formattedMessages[] = $i . ". {$errorMessage}";
+            }
+            $messages[] = implode(', ', $formattedMessages);
+        }
+
+        $response = response()->json(['jurnal' => ['success' => false, 'message' => "Validasi Error: " . implode(', ', $messages)]], 422);
 
         throw new ValidationException($validator, $response);
     }

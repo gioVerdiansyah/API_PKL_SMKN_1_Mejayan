@@ -9,12 +9,14 @@ use App\Models\Absensi;
 use App\Models\Izin;
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AbsensiController extends Controller
 {
     public function absen(AbsenRequest $request)
     {
         try {
+            DB::beginTransaction();
             $user = User::with(['detailUser.detailPkl', 'detailUser.detailPkl.jamPkl'])->where('id', $request->user_id)->first();
             $user_id = $user->id;
 
@@ -27,20 +29,12 @@ class AbsensiController extends Controller
                 ->exists();
 
             if ($absenSudahAda) {
-                return response()->json(['absen' => ['success' => false, 'message' => 'Anda sudah absen!']]);
+                return response()->json(['absen' => ['success' => false, 'message' => 'Anda sudah absen!']], 403);
             }
 
             $absenIzin = Izin::where('user_id', $user_id)->whereDate('created_at', today())->exists();
             if ($absenIzin) {
-                return response()->json(['absen' => ['success' => false, 'message' => "Anda tidak bisa absen karena anda sudah melakukan izin"]]);
-            }
-
-            if ($request->wfh == '1') {
-                Absensi::create([
-                    'user_id' => $user_id,
-                    'status' => 4,
-                ]);
-                return response()->json(['absen' => ['success' => true, 'status' => 4, 'message' => 'Berhasil absen WFH!']]);
+                return response()->json(['absen' => ['success' => false, 'message' => "Anda tidak bisa absen karena anda sudah melakukan izin"]], 403);
             }
 
             $coorUser = ['latitude' => $request->lat, 'longitude' => $request->lon];
@@ -51,42 +45,53 @@ class AbsensiController extends Controller
 
             $jarakBatas = 100;
 
-            if ($jarak <= $jarakBatas) {
-                $now = Carbon::now()->locale('id');
-                $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
+            $now = Carbon::now()->locale('id');
+            $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
 
-                $jamMasuk = $user['detailUser']['detailPkl']['jamPkl']["$hariIni"];
-                if (is_null($jamMasuk)) {
-                    return response()->json(["absen" => ["success" => false, "message" => "Anda tidak dapat absen pada hari $hariIni"]]);
+            $jamMasuk = $user['detailUser']['detailPkl']['jamPkl']["$hariIni"];
+            if (is_null($jamMasuk)) {
+                return response()->json(["absen" => ["success" => false, "message" => "Anda tidak dapat absen pada hari $hariIni"]], 204);
+            }
+            $jamMasuk = explode(" - ", $jamMasuk)[0];
+            $jamMasukTimestamp = strtotime($jamMasuk);
+            $jamSekarangTimestamp = strtotime($now->format('H:i'));
+
+            $selisihSatuJam = 3600;
+
+            if ($jamSekarangTimestamp >= ($jamMasukTimestamp - $selisihSatuJam)) {
+                if ($request->wfh == '1') {
+                    Absensi::create([
+                        'user_id' => $user_id,
+                        'status' => 4,
+                    ]);
+                    DB::commit();
+                    return response()->json(['absen' => ['success' => true, 'status' => 4, 'message' => 'Berhasil absen WFH!']], 201);
                 }
-                $jamMasuk = explode(" - ", $jamMasuk)[0];
-                $jamMasukTimestamp = strtotime($jamMasuk);
-                $jamSekarangTimestamp = strtotime($now->format('H:i'));
-
-                $selisihSatuJam = 3600;
-
-                if ($jamSekarangTimestamp >= ($jamMasukTimestamp - $selisihSatuJam)) {
+                if ($jarak <= $jarakBatas) {
                     if ($jamSekarangTimestamp > $jamMasukTimestamp) {
                         Absensi::create([
                             'user_id' => $user_id,
                             'status' => 2,
                         ]);
-                        return response()->json(['absen' => ['success' => true, 'status' => 2, 'message' => 'Anda telat absen!']]);
+                        DB::commit();
+                        return response()->json(['absen' => ['success' => true, 'status' => 2, 'message' => 'Anda telat absen!']], 201);
                     } else {
                         Absensi::create([
                             'user_id' => $user_id,
                             'status' => 1,
                         ]);
-                        return response()->json(['absen' => ['success' => true, 'status' => 1, 'message' => 'Berhasil absen tepat waktu!']]);
+                        DB::commit();
+                        return response()->json(['absen' => ['success' => true, 'status' => 1, 'message' => 'Berhasil absen tepat waktu!']], 201);
                     }
                 } else {
-                    return response()->json(['absen' => ['success' => false, 'message' => 'Absen di mulai 1 jam sebelum jam masuk!']]);
+                    return response()->json(['absen' => ['success' => false, 'message' => 'Anda harus berada di kantor untuk melakukan absen']], 403);
                 }
             } else {
-                return response()->json(['absen' => ['success' => false, 'message' => 'Anda harus berada di kantor untuk melakukan absen']]);
+                return response()->json(['absen' => ['success' => false, 'message' => 'Absen di mulai 1 jam sebelum jam masuk!']], 403);
             }
         } catch (\Exception $e) {
-            return response()->json(['absen' => ['success' => false, "message" => "Error: {$e->getMessage()}"]]);
+            DB::rollBack();
+            return response()->json(['absen' => ['success' => false, "message" => "Error: {$e->getMessage()}"]], 500);
         }
     }
 
@@ -113,6 +118,7 @@ class AbsensiController extends Controller
     public function pulang(AbsenRequest $request)
     {
         try {
+            DB::beginTransaction();
             $user = User::with(['detailUser.detailPkl', 'detailUser.detailPkl.jamPkl'])->where('id', $request->user_id)->first();
 
             if (!$user) {
@@ -136,7 +142,7 @@ class AbsensiController extends Controller
                     ->exists();
 
                 if ($absenPulang) {
-                    return response()->json(['absen' => ['success' => false, 'message' => 'Anda sudah absen pulang!']]);
+                    return response()->json(['absen' => ['success' => false, 'message' => 'Anda sudah absen pulang!']], 403);
                 }
 
                 $absenHadir = Absensi::where('user_id', $user_id)
@@ -145,7 +151,7 @@ class AbsensiController extends Controller
                     ->exists();
 
                 if (!$absenHadir) {
-                    return response()->json(['absen' => ['success' => false, 'message' => 'Anda belum absen pada hari ini!']]);
+                    return response()->json(['absen' => ['success' => false, 'message' => 'Anda belum absen pada hari ini!']], 403);
                 }
 
                 $absenCutiIzinSakit = Izin::where('user_id', $user_id)
@@ -153,7 +159,7 @@ class AbsensiController extends Controller
                     ->exists();
 
                 if ($absenCutiIzinSakit) {
-                    return response()->json(['absen' => ['success' => false, 'message' => 'Anda tidak bisa absen pulang karena [\'Cuti\', \'Izin\', \'Sakit\']!']]);
+                    return response()->json(['absen' => ['success' => false, 'message' => 'Anda tidak bisa absen pulang karena [\'Cuti\', \'Izin\', \'Sakit\']!']], 403);
                 }
 
                 $absenAlpha = Absensi::where('user_id', $user_id)
@@ -162,7 +168,7 @@ class AbsensiController extends Controller
                     ->exists();
 
                 if ($absenAlpha) {
-                    return response()->json(['absen' => ['success' => false, 'message' => 'Anda tidak bisa absen pulang karena anda dinyatakan alpha!']]);
+                    return response()->json(['absen' => ['success' => false, 'message' => 'Anda tidak bisa absen pulang karena anda dinyatakan alpha!']], 403);
                 }
 
                 Absensi::create([
@@ -170,28 +176,31 @@ class AbsensiController extends Controller
                     'status' => 5,
                 ]);
 
-                return response()->json(['absen' => ['success' => true, 'status' => 1, 'message' => 'Berhasil absen pulang!']]);
+                DB::commit();
+                return response()->json(['absen' => ['success' => true, 'status' => 1, 'message' => 'Berhasil absen pulang!']], 201);
 
             } else {
-                return response()->json(['absen' => ['success' => false, 'message' => 'Anda harus berada di kantor untuk melakukan absen']]);
+                return response()->json(['absen' => ['success' => false, 'message' => 'Anda harus berada di kantor untuk melakukan absen']], 403);
             }
         } catch (\Exception $e) {
-            return response()->json(['absen' => ['success' => false, "message" => "Error: {$e->getMessage()}"]]);
+            DB::rollBack();
+            return response()->json(['absen' => ['success' => false, "message" => "Error: {$e->getMessage()}"]], 500);
         }
     }
 
     public function izin(IzinStoreRequest $request)
     {
         try {
+            DB::beginTransaction();
             $user = User::where('name', $request->name)->first();
 
             if (!$user) {
-                return response()->json(['izin' => ['success' => false, 'message' => 'Nama siswa tidak ditemukan']]);
+                return response()->json(['izin' => ['success' => false, 'message' => 'Nama siswa tidak ditemukan']], 404);
             }
 
             $sudahIzin = Izin::where('user_id', $user->id)->whereDate('created_at', today())->exists();
             if ($sudahIzin) {
-                return response()->json(['izin' => ['success' => false, "message" => "Anda sudah izin pada hari ini"]]);
+                return response()->json(['izin' => ['success' => false, "message" => "Anda sudah izin pada hari ini"]], 403);
             }
 
             $izin = new Izin;
@@ -201,8 +210,8 @@ class AbsensiController extends Controller
             $izin->awal_izin = Carbon::parse($request->awal_izin);
             $izin->akhir_izin = Carbon::parse($request->akhir_izin);
 
-            if(!$request->hasFile("bukti")){
-                return response()->json(["izin"=> ["success"=> false, "message" => "Foto Bukti tidak ditemukan!"]]);
+            if (!$request->hasFile("bukti")) {
+                return response()->json(["izin" => ["success" => false, "message" => "Foto Bukti tidak ditemukan!"]], 404);
             }
 
             $nameFile = $request->file('bukti')->hashName();
@@ -211,10 +220,12 @@ class AbsensiController extends Controller
             $izin->bukti = $path;
             $izin->save();
 
-            return response()->json(['izin' => ['success' => true, 'message' => "Berhasil izin pada hari ini"]]);
+            DB::commit();
+            return response()->json(['izin' => ['success' => true, 'message' => "Berhasil izin pada hari ini"]], 201);
 
         } catch (\Exception $e) {
-            return response()->json(["izin" => ["success" => false, 'message' => "Error: {$e->getMessage()}"]]);
+            DB::rollBack();
+            return response()->json(["izin" => ["success" => false, 'message' => "Error: {$e->getMessage()}"]], 500);
         }
     }
 
@@ -223,13 +234,13 @@ class AbsensiController extends Controller
         try {
             $user = User::where('id', $id)->first();
             if (!$user) {
-                return response()->json(['izin' => ['success' => false, 'message' => 'User Id tidak di temukan']]);
+                return response()->json(['izin' => ['success' => false, 'message' => 'User Id tidak di temukan']], 404);
             }
-            $dataIzin = Izin::where('user_id', $user->id)->get();
+            $dataIzin = Izin::where('user_id', $user->id)->latest()->get();
 
-            return response()->json(['izin' => ['success' => true, 'message' => 'Berhasil mendapatkan data', 'data' => $dataIzin->toArray()]]);
+            return response()->json(['izin' => ['success' => true, 'message' => 'Berhasil mendapatkan data', 'data' => $dataIzin->toArray()]], 200);
         } catch (\Exception $e) {
-            return response()->json(['izin' => ['success' => false, 'message' => "Error: {$e->getMessage()}"]]);
+            return response()->json(['izin' => ['success' => false, 'message' => "Error: {$e->getMessage()}"]], 500);
         }
     }
 }

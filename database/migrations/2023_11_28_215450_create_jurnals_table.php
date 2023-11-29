@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jurnals', function (Blueprint $table) {
-            $table->id();
-            $table->text('deskripsi');
+            $table->id('id');
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
+            $table->text('kegiatan');
             $table->string('bukti');
             $table->timestamps();
         });
