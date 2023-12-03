@@ -59,6 +59,23 @@ class AbsensiController extends Controller
             $selisihSatuJam = 3600;
 
             if ($jamSekarangTimestamp >= ($jamMasukTimestamp - $selisihSatuJam)) {
+                if (!is_null($request->absenPaksa)) {
+                    if ($jamSekarangTimestamp > $jamMasukTimestamp) {
+                        Absensi::create([
+                            'user_id' => $user_id,
+                            'status' => 2,
+                        ]);
+                        DB::commit();
+                        return response()->json(['absen' => ['success' => true, 'status' => 2, 'message' => 'Anda telat absen!']], 201);
+                    } else {
+                        Absensi::create([
+                            'user_id' => $user_id,
+                            'status' => 1,
+                        ]);
+                        DB::commit();
+                        return response()->json(['absen' => ['success' => true, 'status' => 1, 'message' => 'Berhasil absen tepat waktu!']], 201);
+                    }
+                }
                 if ($request->wfh == '1') {
                     Absensi::create([
                         'user_id' => $user_id,
