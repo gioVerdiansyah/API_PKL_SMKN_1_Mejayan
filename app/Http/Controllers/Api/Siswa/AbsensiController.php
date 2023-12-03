@@ -18,11 +18,11 @@ class AbsensiController extends Controller
         try {
             DB::beginTransaction();
             $user = User::with(['detailUser.detailPkl', 'detailUser.detailPkl.jamPkl'])->where('id', $request->user_id)->first();
-            $user_id = $user->id;
-
             if (!$user) {
                 return response()->json(['absen' => ['success' => false, 'message' => 'User tidak ditemukan']], 404);
             }
+            $user_id = $user->id;
+
 
             $absenSudahAda = Absensi::where('user_id', $user_id)
                 ->whereDate('created_at', today())->where('status', '!=', '5')
@@ -50,7 +50,7 @@ class AbsensiController extends Controller
 
             $jamMasuk = $user['detailUser']['detailPkl']['jamPkl']["$hariIni"];
             if (is_null($jamMasuk)) {
-                return response()->json(["absen" => ["success" => false, "message" => "Anda tidak dapat absen pada hari $hariIni"]], 204);
+                return response()->json(["absen" => ["success" => false, "message" => "Anda tidak dapat absen pada hari $hariIni"]], 403);
             }
             $jamMasuk = explode(" - ", $jamMasuk)[0];
             $jamMasukTimestamp = strtotime($jamMasuk);
