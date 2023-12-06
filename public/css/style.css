@@ -433,6 +433,7 @@ button:focus,
 }
 
 .main-nav .navbar-brand {
+    width: 30%;
     padding: 0;
 }
 
@@ -2397,4 +2398,16 @@ hr {
 
 .button-login:active {
     filter: brightness(.8);
+}
+
+@media screen and (max-width: 560px) {
+    .card-body {
+        padding-top: 5px;
+    }
+    .main-nav .navbar-brand {
+        width: 80%;
+    }
+    .absensi-trouble-title {
+        font-size: medium;
+    }
 }

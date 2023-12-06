@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AbsensiTroubleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -17,7 +19,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('index');
+
+Route::get('/absen/trouble', [AbsensiTroubleController::class, 'absenTroubles']);
+Route::post('/absen/trouble', [AbsensiTroubleController::class, 'absenTroublesStore'])->name('absen-trouble');
 
 Auth::routes(['verify'=> false]);
 

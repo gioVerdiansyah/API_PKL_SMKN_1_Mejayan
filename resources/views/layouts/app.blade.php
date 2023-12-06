@@ -20,7 +20,7 @@
     <meta name="theme-name" content="small-apps" />
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}" />
 
     <!-- PLUGINS CSS STYLE -->
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}">
@@ -32,18 +32,20 @@
 
     {{-- CSS CDN --}}
     <script src="https://kit.fontawesome.com/981acb16d7.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- CUSTOM CSS -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
 </head>
 
 <body class="body-wrapper" data-spy="scroll" data-target=".privacy-nav">
-
-
     <nav class="navbar main-nav navbar-expand-lg px-2 px-sm-0 py-2 py-lg-0 position-fixed w-100">
         <div class="container">
-            <a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="logo"></a>
+            <div class="w-50">
+                <a class="navbar-brand" href="{{ route('index') }}"><img
+                        src="{{ asset('images/app/logo-with-title-dark.png') }}" class="w-100" alt="logo"></a>
+            </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="ti-menu"></span>
@@ -73,9 +75,8 @@
                             <li><a class="dropdown-item" href="comming-soon.html">Coming Soon</a></li>
 
                             <li class="dropdown dropdown-submenu dropleft">
-                                <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0501"
-                                    role="button" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">Sub Menu</a>
+                                <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0501" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
 
                                 <ul class="dropdown-menu" aria-labelledby="dropdown0501">
                                     <li><a class="dropdown-item" href="index.html">Submenu 21</a></li>
@@ -102,8 +103,106 @@
     <main>
         @yield('content')
     </main>
-    </div>
+
+    <!--============================
+=            Footer            =
+=============================-->
+    <footer>
+        <div class="footer-main">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-12 m-md-auto align-self-center">
+                        <div class="block">
+                            <a href="index.html"><img src="{{ asset('images/app/logo-with-title.png') }}"
+                                    class="w-50" alt="footer-logo"></a>
+                            <!-- Social Site Icons -->
+                            <ul class="social-icon list-inline">
+                                <li class="list-inline-item">
+                                    <a href="https://www.facebook.com/themefisher"><i class="ti-facebook"></i></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="https://twitter.com/themefisher"><i class="ti-twitter"></i></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="https://www.instagram.com/themefisher/"><i class="ti-instagram"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-6 mt-5 mt-lg-0">
+                        <div class="block-2">
+                            <!-- heading -->
+                            <h6>Product</h6>
+                            <!-- links -->
+                            <ul>
+                                <li><a href="team.html">Teams</a></li>
+                                <li><a href="blog.html">Blogs</a></li>
+                                <li><a href="FAQ.html">FAQs</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-6 mt-5 mt-lg-0">
+                        <div class="block-2">
+                            <!-- heading -->
+                            <h6>Resources</h6>
+                            <!-- links -->
+                            <ul>
+                                <li><a href="sign-up.html">Singup</a></li>
+                                <li><a href="sign-in.html">Login</a></li>
+                                <li><a href="blog.html">Blog</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-6 mt-5 mt-lg-0">
+                        <div class="block-2">
+                            <!-- heading -->
+                            <h6>Company</h6>
+                            <!-- links -->
+                            <ul>
+                                <li><a href="career.html">Career</a></li>
+                                <li><a href="contact.html">Contact</a></li>
+                                <li><a href="team.html">Investor</a></li>
+                                <li><a href="privacy.html">Terms</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-6 mt-5 mt-lg-0">
+                        <div class="block-2">
+                            <!-- heading -->
+                            <h6>Company</h6>
+                            <!-- links -->
+                            <ul>
+                                <li><a href="about.html">About</a></li>
+                                <li><a href="contact.html">Contact</a></li>
+                                <li><a href="team.html">Team</a></li>
+                                <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center bg-dark py-4">
+            <div class="d-flex justify-content-center align-items-center flex-column">
+                <small class="text-secondary">Copyright &copy;</small>
+                <small class="text-secondary w-75">
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script>. Designed &amp; Developed by Siswa RPL Smkn 1 Mejayan
+                </small>
+            </div>
+        </div>
+    </footer>
     <!-- JAVASCRIPTS -->
+    @if (session('message'))
+        <script>
+            Swal.fire({
+                icon: "{{ session('message')['icon'] ?? 'question' }}",
+                title: "{{ session('message')['title'] ?? 'Tidak ada keterangan' }}",
+                text: "{{ session('message')['text'] ?? 'Tidak ada keterangan...' }}",
+            });
+        </script>
+    @endif
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap/bootstrap.min.js') }}"></script>
     <script src="{{ asset('plugins/slick/slick.min.js') }}"></script>

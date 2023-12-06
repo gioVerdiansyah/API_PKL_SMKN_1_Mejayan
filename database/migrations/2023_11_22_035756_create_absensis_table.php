@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('absensis', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('status', ['1','2','3','4','5'])->default('3')->comment('1=absen,2=telat,3=alpha,4=wfh,5yy=pulang');
+            $table->enum('status', ['1','2','3','4','5'])->default('3')->comment('1=absen,2=telat,3=alpha,4=wfh,5=pulang');
             $table->timestamps();
         });
     }
