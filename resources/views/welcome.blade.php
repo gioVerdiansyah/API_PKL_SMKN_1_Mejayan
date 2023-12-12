@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@dump(Auth::guard('guru')->user())
 @section('content')
     <section class="section gradient-banner">
             <div class="shapes-container">

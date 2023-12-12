@@ -51,6 +51,15 @@
                             </div>
                         </div>
 
+                        {{-- <div class="row mb-3">
+                            <div class="col-md-6 offset-md-4">
+                                <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                                <div class="g-recaptcha" id="feedback-recaptcha"
+                                    data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}">
+                                </div>
+                            </div>
+                        </div> --}}
+
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
@@ -64,6 +73,16 @@
                                 @endif
                             </div>
                         </div>
+
+                        <div class="row mb-0">
+                            <div class="col-md-8 offset-md-4">
+                                {{ __('Don\'t have an account yet?') }}
+                                    <a class="btn btn-link" href="{{ route('register') }}">
+                                        {{ __('Register?') }}
+                                    </a>
+                            </div>
+                        </div>
+
                     </form>
                 </div>
             </div>

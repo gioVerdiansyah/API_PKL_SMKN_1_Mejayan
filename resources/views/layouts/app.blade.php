@@ -92,7 +92,7 @@
                         <a class="nav-link" href="contact.html">Contact</a>
                     </li>
                     <li class="nav-item ml-3">
-                        <button class="button-login d-flex align-items-center"> Login Guru
+                        <button class="button-login d-flex align-items-center" onclick="window.location.href = '{{ route('login') }}'"> Login Guru
                         </button>
                     </li>
                 </ul>

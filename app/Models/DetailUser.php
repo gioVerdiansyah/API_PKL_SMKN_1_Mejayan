@@ -17,4 +17,8 @@ class DetailUser extends Model
     public function detailPkl():HasOne{
         return $this->hasOne(DetailPkl::class);
     }
+
+    public function jurusan():BelongsTo{
+        return $this->belongsTo(Jurusan::class, 'jurusan_id');
+    }
 }

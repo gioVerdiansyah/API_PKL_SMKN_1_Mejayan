@@ -14,6 +14,8 @@
                         </div>
                     @endif
 
+                    @dump(Auth::guard('guru')->user())
+
                     {{ __('You are logged in!') }}
                 </div>
             </div>

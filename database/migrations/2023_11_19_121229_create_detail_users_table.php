@@ -14,9 +14,7 @@ return new class extends Migration
         Schema::create('detail_users', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('jurusan', ['RPL','TKR', 'TO', 'TBSM', 'APHP']);
-            $table->enum('tingkat', ['X','XI', 'XII']);
-            $table->enum('kelas', ['1', '2', '3']);
+            $table->foreignId('jurusan_id')->constrained()->restrictOnDelete();
             $table->string('nis');
             $table->enum('jenis_kelamin', ['P', 'L']);
             $table->string('alamat');

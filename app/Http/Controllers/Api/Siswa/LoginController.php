@@ -29,7 +29,7 @@ class LoginController extends Controller
             return response()->json([
                 'login' => [
                     'success' => true,
-                    'user' => User::with(['detailUser', 'detailUser.detailPkl', 'detailUser.detailPkl.jamPkl'])->where('id', auth()->user()->first()->id)->first(),
+                    'user' => User::with(['detailUser', 'detailUser.detailPkl', 'detailUser.jurusan', 'detailUser.detailPkl.jamPkl'])->where('id', auth()->user()->first()->id)->first(),
                     'token' => $token
                 ]
             ], 200);

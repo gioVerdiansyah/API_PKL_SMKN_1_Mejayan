@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\AbsensiTroubleController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -26,4 +28,13 @@ Route::post('/absen/trouble', [AbsensiTroubleController::class, 'absenTroublesSt
 
 Auth::routes(['verify'=> false]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/home', [App\Http\Controllers\GuruController::class, 'index'])->name('home');
+
+// Admin INI
+Route::middleware(['admin.ini'])->group(function(){
+    Route::prefix('/admin-ini')->group(function(){
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/persetujuan', [AdminController::class, 'persetujuan'])->name('admin.persetujuan');
+    });
+});

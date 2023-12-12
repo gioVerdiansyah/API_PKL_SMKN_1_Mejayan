@@ -1,0 +1,7 @@
+.header-section .light-logo {
+    display: none !important;
+}
+
+.header-section .dark-logo {
+    display: block !important;
+}

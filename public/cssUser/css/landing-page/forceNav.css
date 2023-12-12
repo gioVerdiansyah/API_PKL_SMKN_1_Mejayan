@@ -1,0 +1,15 @@
+.header-section {
+    background: white !important;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+.header-section .header-menu .main-menu li a {
+    color: black;
+}
+
+.header-section .header-menu .main-menu li.active>a {
+    color: #086ad8 !important;
+}

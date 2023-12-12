@@ -4,16 +4,48 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+// use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Rules\Recaptcha;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Login Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller handles authenticating users for the application and
+    | redirecting them to your home screen. The controller uses a trait
+    | to conveniently provide its functionality to your applications.
+    |
+    */
+
+    // use AuthenticatesUsers;
+
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = RouteServiceProvider::HOME;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
+
     use RedirectsUsers, ThrottlesLogins;
     public function showLoginForm()
     {
@@ -22,8 +54,10 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $this->validateLogin($request);
-        if (method_exists($this, 'hasTooManyLoginAttempts') &&
-            $this->hasTooManyLoginAttempts($request)) {
+        if (
+            method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)
+        ) {
             $this->fireLockoutEvent($request);
 
             return $this->sendLockoutResponse($request);
@@ -40,23 +74,43 @@ class LoginController extends Controller
 
         return $this->sendFailedLoginResponse($request);
     }
+
     protected function validateLogin(Request $request)
     {
         $request->validate([
+            // 'g-recaptcha-response' => ['required', new Recaptcha()],
             $this->username() => 'required|string',
             'password' => 'required|string',
         ]);
     }
+
     protected function attemptLogin(Request $request)
     {
-        return $this->guard()->attempt(
-            $this->credentials($request), $request->boolean('remember')
-        );
+        $credentials = $this->credentials($request);
+
+        // Cek apakah pengguna bisa login berdasarkan alamat email
+        $user = $this->guard()->getProvider()->retrieveByCredentials([
+            'email' => $credentials['email'],
+        ]);
+
+        if (!$user) {
+            $user = $this->guard()->getProvider()->retrieveByCredentials([
+                'nama' => $credentials['email'],
+            ]);
+        }
+
+        if ($user && Hash::check($credentials['password'], $user->getAuthPassword())) {
+            $this->guard()->login($user, $request->boolean('remember'));
+            return true;
+        }
+
+        return false;
     }
     protected function credentials(Request $request)
     {
         return $request->only($this->username(), 'password');
     }
+
     protected function sendLoginResponse(Request $request)
     {
         $request->session()->regenerate();
@@ -68,23 +122,32 @@ class LoginController extends Controller
         }
 
         return $request->wantsJson()
-                    ? new JsonResponse([], 204)
-                    : redirect()->intended($this->redirectPath());
+            ? new JsonResponse([], 204)
+            : redirect('/home');
     }
+
     protected function authenticated(Request $request, $user)
     {
         //
     }
+
     protected function sendFailedLoginResponse(Request $request)
     {
         throw ValidationException::withMessages([
             $this->username() => [trans('auth.failed')],
         ]);
     }
+
     public function username()
     {
         return 'email';
     }
+
+    public function toEmail()
+    {
+        return view('auth.passwords.email');
+    }
+
     public function logout(Request $request)
     {
         $this->guard()->logout();
@@ -105,13 +168,9 @@ class LoginController extends Controller
     {
         //
     }
+
     protected function guard()
     {
-        return Auth::guard();
-    }
-    protected $redirectTo = RouteServiceProvider::HOME;
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
+        return Auth::guard('guru');
     }
 }
