@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-// use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Rules\Recaptcha;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -93,14 +93,18 @@ class LoginController extends Controller
             'email' => $credentials['email'],
         ]);
 
+
         if (!$user) {
             $user = $this->guard()->getProvider()->retrieveByCredentials([
                 'nama' => $credentials['email'],
             ]);
         }
 
-        if ($user && Hash::check($credentials['password'], $user->getAuthPassword())) {
-            $this->guard()->login($user, $request->boolean('remember'));
+        if ($user && $user->status === '1' && Hash::check($credentials['password'], $user->getAuthPassword())) {
+            $this->guard()->attempt(
+                $this->credentials($request), true
+            );
+            $this->guard()->login($user, true);
             return true;
         }
 
@@ -123,7 +127,7 @@ class LoginController extends Controller
 
         return $request->wantsJson()
             ? new JsonResponse([], 204)
-            : redirect('/home');
+            : to_route('home');
     }
 
     protected function authenticated(Request $request, $user)

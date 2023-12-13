@@ -28,7 +28,13 @@ class RegisterGuruRequest extends FormRequest
             'password_confirmation' => ['required', 'same:password', 'min:8'],
             'deskripsi' => ['nullable', 'string', 'max:1000'],
             'poto_guru' => ['nullable', 'image','mimes:png,jpeg,jpg' ,'max:15000'],
-            'jurusan_id' => ['required', 'integer']
+            'jurusan_id' => ['required', 'integer', 'unique:gurus,jurusan_id']
+        ];
+    }
+
+    public function messages(){
+        return [
+            'jurusan_id.unique' => "Jurusan ini sudah di pakai oleh guru lain!"
         ];
     }
 }

@@ -21,7 +21,7 @@
               <th>Nama</th>
               <th>Ketua Jurusan</th>
               <th>Email</th>
-              <th>Alamat</th>
+              <th>Deskripsi</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -38,15 +38,17 @@
                 <td class="scroll-custome" style="max-width: 200px; overflow: auto">{{ $data->deskripsi ?? 'Tidak ada deskripsi' }}</td>
                 <td class="d-flex align-items-center gap-2">
                   {{-- Terima --}}
-                  <form class="formTerima" action="" method="POST">
+                  <form nameGuru="{{ $data->nama }}" jurusan="{{ $data->jurusan->jurusan }}" class="agree" action="{{ route('admin.acceptorreject', $data->id) }}" method="POST">
                     @method('PATCH')
                     @csrf
+                    <input type="hidden" name="status" value="1">
                     <button type="submit" class="btn btn-primary btn-icon"><i class="link-icon" data-feather="check"></i></button>
                   </form>
                   {{-- Tolak --}}
-                  <form class="formTolak" action="" method="POST">
+                  <form nameGuru="{{ $data->nama }}" jurusan="{{ $data->jurusan->jurusan }}" class="disagree" action="{{ route('admin.acceptorreject', $data->id) }}" method="POST">
                     @method('PATCH')
                     @csrf
+                    <input type="hidden" name="status" value="0">
                     <button type="submit" class="btn btn-danger btn-icon"><i class="link-icon" data-feather="x"></i></button>
                   </form>
                 </td>
@@ -54,7 +56,7 @@
             @empty
               <tr>
                 <td colspan="6">
-                  <p class="mt-3 mb-3 text-center fw-bold">Tidak Ada Permintaan Pendaftaran Kelas Industri</p>
+                  <p class="mt-3 mb-3 text-center fw-bold">Belum ada guru yang mendaftar</p>
                 </td>
               </tr>
             @endforelse
@@ -66,4 +68,50 @@
       </div>
     </div>
   </div>
+    <script>
+    if(document.querySelectorAll('.agree').length > 0){
+    document.querySelectorAll('.agree').forEach(function(form) {
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var nameGuru = form.getAttribute('nameGuru');
+        var jurusan = form.getAttribute('jurusan');
+        Swal.fire({
+          title: 'Apakah anda yakin?',
+          text: "Ingin menyetujui guru '" + nameGuru + "' menjadi ketua jurusan '" + jurusan + "'?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Ya, Setujui!",
+          cancelButtonText: "Batal",
+          background: 'var(--bs-body-bg)',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            form.submit();
+          }
+        });
+      });
+    });
+  }
+    if(document.querySelectorAll('.disagree').length > 0){
+    document.querySelectorAll('.disagree').forEach(function(form) {
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var nameGuru = form.getAttribute('nameGuru');
+        var jurusan = form.getAttribute('jurusan');
+        Swal.fire({
+          title: 'Apakah anda yakin?',
+          text: "Ingin menolak guru '" + nameGuru + "' menjadi ketua jurusan '" + jurusan + "'?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Ya, Tolak!",
+          cancelButtonText: "Batal",
+          background: 'var(--bs-body-bg)',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            form.submit();
+          }
+        });
+      });
+    });
+  }
+  </script>
 @endsection

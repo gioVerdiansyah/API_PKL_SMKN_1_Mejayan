@@ -3,23 +3,36 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Auth\Authenticatable as AuthenticableTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
 
-class Guru extends Model implements Authenticatable
+class Guru extends Authenticatable
 {
-    use AuthenticableTrait;
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    protected $guarded=[], $hidden = [
+    public $incrementing = false, $keyType = "string";
+    protected $rememberTokenName = 'remember_token';
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = Str::uuid()->toString();
+            }
+        });
+    }
+
+    protected $guarded = [], $hidden = [
         'password'
-    ],$cast = [
+    ], $cast = [
         'password' => 'hashed'
     ];
 
-    public function jurusan():BelongsTo
+    public function jurusan(): BelongsTo
     {
         return $this->belongsTo(Jurusan::class, 'jurusan_id');
     }

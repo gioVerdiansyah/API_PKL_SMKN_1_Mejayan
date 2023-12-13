@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CheckLoginController;
-use App\Http\Controllers\Api\RegisterController;
+use App\Http\Controllers\Api\Guru\RegisterController;
 use App\Http\Controllers\Api\Siswa\AbsensiController;
 use App\Http\Controllers\Api\Siswa\JurnalController;
 use App\Http\Controllers\Api\Siswa\LoginController;
@@ -31,6 +31,11 @@ Route::middleware("verifyAPIKey")->group(function () {
     Route::post('/jurnal', [JurnalController::class,'jurnal']);
     Route::put('/ubah-pass', [UbahPassController::class,'ubahPass']);
     Route::get('/absensi/trouble', [AbsensiController::class, 'absenTrouble']);
+
+    // Guru
+    Route::prefix('/guru')->group(function(){
+        Route::post('/login', \App\Http\Controllers\Api\Guru\LoginController::class);
+    });
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

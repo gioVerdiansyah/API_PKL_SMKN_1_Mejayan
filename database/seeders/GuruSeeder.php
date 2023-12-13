@@ -16,9 +16,9 @@ class GuruSeeder extends Seeder
     {
         Guru::create([
             'nama' => "Admin",
-            'email' => 'gioverdiansyah@gmail.com',
+            'email' => config('app.admin_email'),
             'password' => Hash::make('admin-pkl-smkn-1-mejayan'),
-            'status' => 1,
+            'status' => '1',
             'jurusan_id' => 1,
         ]);
     }

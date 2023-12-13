@@ -26,15 +26,16 @@ Route::get('/', function () {
 Route::get('/absen/trouble', [AbsensiTroubleController::class, 'absenTroubles']);
 Route::post('/absen/trouble', [AbsensiTroubleController::class, 'absenTroublesStore'])->name('absen-trouble');
 
-Auth::routes(['verify'=> false]);
+Auth::routes(['verify' => false]);
 
-
-Route::get('/home', [App\Http\Controllers\GuruController::class, 'index'])->name('home');
+// Auth Guru
+Route::middleware(['auth.guru'])->prefix('/guru')->group(function () {
+    Route::get('/home', [App\Http\Controllers\GuruController::class, 'index'])->name('home');
+});
 
 // Admin INI
-Route::middleware(['admin.ini'])->group(function(){
-    Route::prefix('/admin-ini')->group(function(){
-        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-        Route::get('/persetujuan', [AdminController::class, 'persetujuan'])->name('admin.persetujuan');
-    });
+Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/persetujuan', [AdminController::class, 'persetujuan'])->name('admin.persetujuan');
+    Route::patch('/agreement/{id}', [AdminController::class, 'acceptOrReject'])->name('admin.acceptorreject');
 });
