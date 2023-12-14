@@ -16,6 +16,10 @@ class AuthGuru
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if(!Auth::guard('guru')->check()){
+            return to_route('index');
+        }
+
         if (Auth::guard('guru')->check() && Auth::guard('guru')->user()->email !== config('app.admin_email')) {
             return $next($request);
         }

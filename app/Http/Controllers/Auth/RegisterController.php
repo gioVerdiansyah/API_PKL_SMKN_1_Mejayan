@@ -59,7 +59,7 @@ class RegisterController extends Controller
         $jurusan = Jurusan::all();
         return view('auth.register', compact('jurusan'));
     }
-    protected function register(Request $request)
+    protected function register(RegisterGuruRequest $request)
     {
         $path = NULL;
         if ($request->hasFile('poto_guru')) {
@@ -69,12 +69,16 @@ class RegisterController extends Controller
 
         Guru::create([
             'nama' => $request->name,
+            'gelar' => $request->gelar,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'deskripsi' => $request->deskripsi,
             'jurusan_id' => $request->jurusan_id,
-            'photo_guru' => $path
+            'photo_guru' => $path,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
+        return view('auth.await-accept');
     }
 }

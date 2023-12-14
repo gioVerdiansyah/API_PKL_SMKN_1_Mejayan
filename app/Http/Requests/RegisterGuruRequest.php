@@ -23,6 +23,7 @@ class RegisterGuruRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255', 'unique:gurus,nama'],
+            'gelar' => ['required', 'string', 'max:10'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:gurus,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['required', 'same:password', 'min:8'],
@@ -34,6 +35,7 @@ class RegisterGuruRequest extends FormRequest
 
     public function messages(){
         return [
+            'jurusan_id.required' => "Pilihlah ketua jurusan",
             'jurusan_id.unique' => "Jurusan ini sudah di pakai oleh guru lain!"
         ];
     }

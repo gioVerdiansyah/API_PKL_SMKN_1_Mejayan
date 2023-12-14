@@ -35,9 +35,25 @@
                                 <div class="col-md-6">
                                     <input id="name" type="text"
                                         class="form-control @error('name') is-invalid @enderror" name="name"
-                                        value="{{ old('name') }}" autocomplete="name" autofocus>
+                                        value="{{ old('name') }}" autocomplete="name" placeholder="Nama Anda" autofocus>
 
                                     @error('name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="gelar" class="col-md-4 col-form-label text-md-end">Gelar (Opsional)</label>
+
+                                <div class="col-md-6">
+                                    <input id="gelar" type="text"
+                                        class="form-control @error('gelar') is-invalid @enderror" name="gelar"
+                                        value="{{ old('gelar') }}" placeholder="Contoh: S.Kom">
+
+                                    @error('gelar')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -52,7 +68,7 @@
                                 <div class="col-md-6">
                                     <input id="email" type="email"
                                         class="form-control @error('email') is-invalid @enderror" name="email"
-                                        value="{{ old('email') }}" autocomplete="email">
+                                        value="{{ old('email') }}" autocomplete="email" placeholder="example@gmail.com">
 
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
@@ -69,7 +85,7 @@
                                 <div class="col-md-6">
                                     <input id="password" type="password"
                                         class="form-control @error('password') is-invalid @enderror" name="password"
-                                     autocomplete="new-password">
+                                     autocomplete="new-password" placeholder="Minimal 8 karakter">
 
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
@@ -84,7 +100,7 @@
                                     class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="password-confirm" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" autocomplete="new-password">
+                                    <input id="password-confirm" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" autocomplete="new-password" placeholder="Samakan dengan password di atas">
                                     @error('password_confirmation')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -98,7 +114,7 @@
                                     class="col-md-4 col-form-label text-md-end">{{ __('Description') }}(Optional)</label>
 
                                 <div class="col-md-6">
-                                    <textarea id="description" class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" rows="5">{{ old('deskripsi') }}</textarea>
+                                    <textarea id="description" class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" rows="5" placeholder="Deskripsi singkat tentang diri Anda">{{ old('deskripsi') }}</textarea>
                                     @error('deskripsi')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
