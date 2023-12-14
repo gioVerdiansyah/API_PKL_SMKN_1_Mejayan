@@ -28,6 +28,7 @@ Route::middleware("verifyAPIKey")->group(function () {
     Route::post('/absensi/pulang', [AbsensiController::class, 'pulang']);
     Route::post('/absensi/izin', [AbsensiController::class, 'izin']);
     Route::get('/absensi/izin/get/{id}', [AbsensiController::class, 'izinGet']);
+    Route::patch('/absensi/salah', [AbsensiController::class, 'absenSalah']);
     Route::post('/jurnal', [JurnalController::class,'jurnal']);
     Route::put('/ubah-pass', [UbahPassController::class,'ubahPass']);
     Route::get('/absensi/trouble', [AbsensiController::class, 'absenTrouble']);

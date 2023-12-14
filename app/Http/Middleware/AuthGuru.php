@@ -20,6 +20,6 @@ class AuthGuru
             return $next($request);
         }
 
-        return abort(403);
+        return to_route('admin.dashboard');
     }
 }

@@ -5,7 +5,7 @@
     <div>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-dot mb-0">
-          <li class="breadcrumb-item active" aria-current="page">Persetujuan guru pengurus ketua jurusan    </li>
+          <li class="breadcrumb-item active" aria-current="page">Persetujuan guru pengurus ketua jurusan </li>
         </ol>
       </nav>
     </div>

@@ -4,14 +4,17 @@ namespace App\Http\Controllers\Api\Siswa;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AbsenRequest;
+use App\Http\Requests\AbsenSalahRequest;
 use App\Http\Requests\IzinStoreRequest;
 use App\Models\Absensi;
 use App\Models\Izin;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AbsensiController extends Controller {
+
     public function absen(AbsenRequest $request) {
         try {
             DB::beginTransaction();
@@ -110,6 +113,56 @@ class AbsensiController extends Controller {
         $distance = $radius * $c;
 
         return $distance * 1000;
+    }
+
+    public function absenSalah(Request $request){
+        try {
+            DB::beginTransaction();
+            $user = User::with(['detailUser.detailPkl', 'detailUser.detailPkl.jamPkl'])->where('id', $request->user_id)->first();
+            if (!$user) {
+                return response()->json(['absen' => ['success' => false, 'message' => 'User tidak ditemukan']], 404);
+            }
+
+            $absen = Absensi::whereDate('created_at', today())->where('status', '!=', '5')->first();
+            if(!$absen){
+                return response()->json(['absen' => ['success' => false, 'message' => "ID Absen tidak ditemukan, mungkin Anda belum absen!"]]);
+            }
+
+            $now = Carbon::now()->locale('id');
+            $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
+
+            $jamMasuk = $user['detailUser']['detailPkl']['jamPkl']["$hariIni"];
+            if (is_null($jamMasuk)) {
+                return response()->json(["absen" => ["success" => false, "message" => "Anda tidak dapat absen pada hari $hariIni"]], 403);
+            }
+            $jamMasuk = explode(" - ", $jamMasuk)[0];
+            $jamMasukTimestamp = strtotime($jamMasuk);
+            $jamSekarangTimestamp = strtotime($now->format('H:i'));
+
+            $selisihSatuJam = 3600;
+
+
+            if($jamSekarangTimestamp >= ($jamMasukTimestamp - $selisihSatuJam)) {
+                switch ($request->status) {
+                    case '4':
+                        $absen->status = $request->status;
+                        $absen->save();
+                        DB::commit();
+                        return response()->json(['absen' => ['success' => true, 'message' => "Berhasil mengubah absen menjadi WFH"]]);
+                    case '1':
+                        $absen->status = $request->status;
+                        $absen->save();
+                        DB::commit();
+                        return response()->json(['absen' => ['success' => true, 'message' => "Berhasil mengubah absen menjadi hadir"]]);
+                    default:
+                        return response()->json(['absen' => ['success' => false, 'message' => "Status Absensi tidak valid!"]]);
+                }
+            }else{
+                return response()->json(['absen' => ['success' => false, 'message' => 'Absen di mulai 1 jam sebelum jam masuk!']], 403);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['absen' => ['success' => false, "Error: $e"]]);
+        }
     }
 
     public function pulang(AbsenRequest $request) {
