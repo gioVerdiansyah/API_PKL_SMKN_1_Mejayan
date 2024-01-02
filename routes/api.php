@@ -33,9 +33,13 @@ Route::middleware("verifyAPIKey")->group(function () {
     Route::put('/ubah-pass', [UbahPassController::class,'ubahPass']);
     Route::get('/absensi/trouble', [AbsensiController::class, 'absenTrouble']);
 
+
     // Guru
     Route::prefix('/guru')->group(function(){
         Route::post('/login', \App\Http\Controllers\Api\Guru\LoginController::class);
+        
+        // list absensi
+        Route::get('/absensi/get', [AbsensiController::class, 'getAbsen']);
     });
 });
 
