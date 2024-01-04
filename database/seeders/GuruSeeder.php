@@ -21,5 +21,13 @@ class GuruSeeder extends Seeder
             'status' => '1',
             'jurusan_id' => 1,
         ]);
+
+        Guru::create([
+            'nama' => "Pak Ananda",
+            'email' => config('app.admin_email'),
+            'password' => Hash::make('guru ini'),
+            'status' => '1',
+            'jurusan_id' => 1,
+        ]);
     }
 }

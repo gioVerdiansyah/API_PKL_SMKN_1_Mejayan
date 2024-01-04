@@ -3,11 +3,13 @@
 use App\Http\Controllers\Api\CheckLoginController;
 use App\Http\Controllers\Api\Guru\RegisterController;
 use App\Http\Controllers\Api\Siswa\AbsensiController;
+use App\Http\Controllers\Api\Siswa\IzinController;
 use App\Http\Controllers\Api\Siswa\JurnalController;
 use App\Http\Controllers\Api\Siswa\LoginController;
 use App\Http\Controllers\Api\Siswa\UbahPassController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,8 +28,10 @@ Route::middleware("verifyAPIKey")->group(function () {
     Route::get('/check-login', [CheckLoginController::class, 'index']);
     Route::post('/absensi/hadir', [AbsensiController::class, 'absen']);
     Route::post('/absensi/pulang', [AbsensiController::class, 'pulang']);
-    Route::post('/absensi/izin', [AbsensiController::class, 'izin']);
-    Route::get('/absensi/izin/get/{id}', [AbsensiController::class, 'izinGet']);
+    Route::post('/absensi/izin', [IzinController::class, 'izin']);
+    Route::get('/absensi/izin/get/{id}', [IzinController::class, 'izinGet']);
+    Route::get('/absensi/izin/show/{id}', [IzinController::class, 'izinShow']);
+    Route::post('/absensi/izin/edit/{id}', [IzinController::class, 'editIzin']);
     Route::patch('/absensi/salah', [AbsensiController::class, 'absenSalah']);
     Route::post('/jurnal', [JurnalController::class,'jurnal']);
     Route::put('/ubah-pass', [UbahPassController::class,'ubahPass']);
@@ -37,9 +41,10 @@ Route::middleware("verifyAPIKey")->group(function () {
     // Guru
     Route::prefix('/guru')->group(function(){
         Route::post('/login', \App\Http\Controllers\Api\Guru\LoginController::class);
-        
+
         // list absensi
         Route::get('/absensi/get', [AbsensiController::class, 'getAbsen']);
+        Route::get('/absensi/pulang', [AbsensiController::class, 'getAbsenPulang']);
     });
 });
 

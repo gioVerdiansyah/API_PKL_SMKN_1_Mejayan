@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Siswa;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AbsenRequest;
 use App\Http\Requests\AbsenSalahRequest;
-use App\Http\Requests\IzinStoreRequest;
 use App\Models\Absensi;
 use App\Models\Izin;
 use App\Models\User;
@@ -225,65 +224,20 @@ class AbsensiController extends Controller {
 
     public function getAbsen(Request $request){
         try{
-            $absen = Absensi::with('user')->whereDate('created_at', today())->whereNot('status', 5)->get();
+            $absen = Absensi::with('user')->whereDate('created_at', today())->whereNot('status', 5)->paginate(1);
 
             return response()->json(['absen' => ['success' => true, 'data' => $absen]], 200);
         }catch(\Exception $e){
             return response()->json(['absen' => ['success' => false, 'message' => "Error: {$e->getMessage()}"]], 500);
         }
     }
+    public function getAbsenPulang(Request $request){
+        try{
+            $absen = Absensi::with('user')->whereDate('created_at', today())->where('status', 5)->paginate(1);
 
-    public function izin(IzinStoreRequest $request) {
-        try {
-            DB::beginTransaction();
-            $user = User::where('name', $request->name)->first();
-
-            if(!$user) {
-                return response()->json(['izin' => ['success' => false, 'message' => 'Nama siswa tidak ditemukan']], 404);
-            }
-
-            $sudahIzin = Izin::where('user_id', $user->id)->whereDate('created_at', today())->exists();
-            if($sudahIzin) {
-                return response()->json(['izin' => ['success' => false, "message" => "Anda sudah izin pada hari ini"]], 403);
-            }
-
-            $izin = new Izin;
-            $izin->user_id = $user->id;
-            $izin->tipe_izin = $request->tipe_izin;
-            $izin->alasan = $request->alasan;
-            $izin->awal_izin = Carbon::parse($request->awal_izin);
-            $izin->akhir_izin = Carbon::parse($request->akhir_izin);
-
-            if(!$request->hasFile("bukti")) {
-                return response()->json(["izin" => ["success" => false, "message" => "Foto Bukti tidak ditemukan!"]], 404);
-            }
-
-            $nameFile = $request->file('bukti')->hashName();
-            $path = $request->file('bukti')->storeAs('bukti_izin', $nameFile);
-
-            $izin->bukti = $path;
-            $izin->save();
-
-            DB::commit();
-            return response()->json(['izin' => ['success' => true, 'message' => "Berhasil izin pada hari ini"]], 201);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(["izin" => ["success" => false, 'message' => "Error: {$e->getMessage()}"]], 500);
-        }
-    }
-
-    public function izinGet(string $id) {
-        try {
-            $user = User::where('id', $id)->first();
-            if(!$user) {
-                return response()->json(['izin' => ['success' => false, 'message' => 'User Id tidak di temukan']], 404);
-            }
-            $dataIzin = Izin::where('user_id', $user->id)->latest()->get();
-
-            return response()->json(['izin' => ['success' => true, 'message' => 'Berhasil mendapatkan data', 'data' => $dataIzin->toArray()]], 200);
-        } catch (\Exception $e) {
-            return response()->json(['izin' => ['success' => false, 'message' => "Error: {$e->getMessage()}"]], 500);
+            return response()->json(['absen' => ['success' => true, 'data' => $absen]], 200);
+        }catch(\Exception $e){
+            return response()->json(['absen' => ['success' => false, 'message' => "Error: {$e->getMessage()}"]], 500);
         }
     }
 }

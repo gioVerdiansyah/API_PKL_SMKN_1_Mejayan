@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Guru;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -18,6 +19,7 @@ class UserSeeder extends Seeder
         User::create(
             [
                 'id' => Str::uuid(),
+                'guru_id' => Guru::latest()->first()->id,
                 'name' => 'Verdi',
                 'email' => 'email@example.com',
                 'password' => Hash::make('user baru'),

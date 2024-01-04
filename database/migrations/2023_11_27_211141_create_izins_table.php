@@ -19,6 +19,8 @@ return new class extends Migration
             $table->date('awal_izin');
             $table->date('akhir_izin');
             $table->string('bukti');
+            $table->enum('status', [0,1,2])->default(0)->comment("0=Netral,1=disetujui,2=ditolak");
+            $table->text('comment_guru')->nullable();
             $table->timestamps();
         });
     }
