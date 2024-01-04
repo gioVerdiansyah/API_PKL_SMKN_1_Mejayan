@@ -34,6 +34,9 @@ Route::middleware("verifyAPIKey")->group(function () {
     Route::post('/absensi/izin/edit/{id}', [IzinController::class, 'editIzin']);
     Route::patch('/absensi/salah', [AbsensiController::class, 'absenSalah']);
     Route::post('/jurnal', [JurnalController::class,'jurnal']);
+    Route::get('/jurnal/get/{id}', [JurnalController::class,'jurnalGet']);
+    Route::get('/jurnal/show/{id}', [JurnalController::class,'jurnalShow']);
+    Route::post('/jurnal/edit/{id}', [JurnalController::class,'editJurnal']);
     Route::put('/ubah-pass', [UbahPassController::class,'ubahPass']);
     Route::get('/absensi/trouble', [AbsensiController::class, 'absenTrouble']);
 
