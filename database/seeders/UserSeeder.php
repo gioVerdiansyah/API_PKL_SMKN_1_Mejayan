@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
                 'id' => Str::uuid(),
                 'guru_id' => Guru::latest()->first()->id,
                 'name' => 'Verdi',
-                'email' => 'email@example.com',
+                'email' => 'e01010010or@gmail.com',
                 'password' => Hash::make('user baru'),
                 'created_at' => now(),
                 'updated_at' => now(),

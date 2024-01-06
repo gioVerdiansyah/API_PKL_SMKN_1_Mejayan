@@ -6,7 +6,7 @@
     <!-- Basic Page Needs
   ================================================== -->
     <meta charset="utf-8">
-    <title>Small Apps | Bootstrap App Landing Template</title>
+    <title>Presensi PKL SMKN 1 Mejayan</title>
 
     <!-- Mobile Specific Metas
   ================================================== -->
@@ -100,7 +100,7 @@
         </div>
     </nav>
 
-    <main>
+    <main class="bg-light">
         @yield('content')
     </main>
 
@@ -188,7 +188,7 @@
                 <small class="text-secondary w-75">
                     <script>
                         document.write(new Date().getFullYear())
-                    </script>. Designed &amp; Developed by Siswa RPL Smkn 1 Mejayan
+                    </script>. Designed &amp; Developed by Siswa RPL SMKN 1 Mejayan
                 </small>
             </div>
         </div>
