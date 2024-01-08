@@ -7,6 +7,8 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
 
 class ResetPasswordGuruController extends Controller
 {
@@ -30,6 +32,22 @@ class ResetPasswordGuruController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    public function showResetForm(Request $request)
+    {
+        $token = $request->route()->parameter('token');
+
+        return view('auth.passwords.guru.reset')->with(
+            ['token' => $token, 'email' => $request->email]
+        );
+    }
+    public function broker()
+    {
+        return Password::broker('guru');
+    }
+    protected function guard()
+    {
+        return Auth::guard('guru');
+    }
     protected function sendResetResponse(Request $request, $response)
     {
         if ($request->wantsJson()) {

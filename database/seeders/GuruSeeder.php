@@ -16,10 +16,11 @@ class GuruSeeder extends Seeder
     {
         Guru::create([
             'nama' => "Admin",
-            'email' => config('app.admin_email'),
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('admin-pkl-smkn-1-mejayan'),
             'status' => '1',
             'jurusan_id' => 1,
+            'gelar' => 'S.Kom'
         ]);
 
         Guru::create([
@@ -28,6 +29,7 @@ class GuruSeeder extends Seeder
             'password' => Hash::make('guru ini'),
             'status' => '1',
             'jurusan_id' => 1,
+            'gelar' => 'S.Kom'
         ]);
     }
 }
