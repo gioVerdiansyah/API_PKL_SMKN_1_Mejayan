@@ -65,4 +65,8 @@ class User extends Authenticatable
     public function izin(): HasOne{
         return $this->hasOne(Izin::class,'user_id');
     }
+
+    public function jurnal(): HasMany{
+        return $this->hasMany(Jurnal::class, 'id');
+    }
 }

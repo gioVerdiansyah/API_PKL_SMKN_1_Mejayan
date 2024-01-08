@@ -61,7 +61,7 @@ class IzinController extends Controller
             if (!$user) {
                 return response()->json(['izin' => ['success' => false, 'message' => 'User Id tidak di temukan']], 404);
             }
-            $dataIzin = Izin::where('user_id', $user->id)->latest()->get();
+            $dataIzin = Izin::where('user_id', $user->id)->latest()->paginate(3);
 
             return response()->json(['izin' => ['success' => true, 'message' => 'Berhasil mendapatkan data', 'data' => $dataIzin->toArray()]], 200);
         } catch (\Exception $e) {

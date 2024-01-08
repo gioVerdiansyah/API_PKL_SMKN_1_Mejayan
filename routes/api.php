@@ -7,8 +7,10 @@ use App\Http\Controllers\Api\Siswa\IzinController;
 use App\Http\Controllers\Api\Siswa\JurnalController;
 use App\Http\Controllers\Api\Siswa\LoginController;
 use App\Http\Controllers\Api\Siswa\UbahPassController;
+use App\Http\Controllers\PrintController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*

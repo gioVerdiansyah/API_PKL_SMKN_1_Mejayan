@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('jurusan_id')->constrained()->restrictOnDelete();
+            $table->foreignId('kelas_id')->constrained()->restrictOnDelete();
+            $table->integer('absen');
             $table->string('nis');
             $table->enum('jenis_kelamin', ['P', 'L']);
             $table->string('alamat');

@@ -52,7 +52,7 @@ class JurnalController extends Controller
 
     public function jurnalGet(string $id){
         try{
-            $jurnal = Jurnal::where('user_id', $id)->paginate(1);
+            $jurnal = Jurnal::where('user_id', $id)->paginate(2);
 
             if(!$jurnal){
                 return response()->json(['jurnal' => ['success' => false, 'message' => "ID user tidak ditemukan, cobalah logout lalu login ulang"]], 404);

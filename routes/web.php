@@ -3,9 +3,13 @@
 use App\Http\Controllers\AbsensiTroubleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\PrintController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -19,11 +23,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
-
 Route::get('/', function () {
     return view('welcome');
 })->name('index');
+
+
+// Auth::routes(['verify' => false]);
 
 // Reset password siswa
 Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
@@ -31,12 +36,21 @@ Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkE
 Route::get('/password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
+// Absensi bermasalah
 Route::get('/absen/trouble', [AbsensiTroubleController::class, 'absenTroubles']);
 Route::post('/absen/trouble', [AbsensiTroubleController::class, 'absenTroublesStore'])->name('absen-trouble');
 
-Auth::routes(['verify' => false]);
+// print
+Route::get('/print/jurnal/{id}', [PrintController::class, 'showPrintJurnalSiswa']);
+Route::post('/print/jurnal', [PrintController::class, 'printJurnalSiswa'])->name('print_jurnal');
 
 // Auth Guru
+Route::get('/guru/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/guru/login', [LoginController::class, 'login']);
+Route::post('/guru/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/guru/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/guru/register', [RegisterController::class, 'register']);
 Route::middleware(['auth.guru'])->prefix('/guru')->group(function () {
     Route::get('/home', [App\Http\Controllers\GuruController::class, 'index'])->name('home');
 });
@@ -46,4 +60,10 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/persetujuan', [AdminController::class, 'persetujuan'])->name('admin.persetujuan');
     Route::patch('/agreement/{id}', [AdminController::class, 'acceptOrReject'])->name('admin.acceptorreject');
+});
+
+
+// test
+Route::get('/test', function(){
+    return view('generate_pdf.jurnal_siswa');
 });

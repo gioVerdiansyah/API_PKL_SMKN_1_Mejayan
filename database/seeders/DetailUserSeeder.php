@@ -18,7 +18,9 @@ class DetailUserSeeder extends Seeder
             [
                 'user_id' => User::latest()->first()->id,
                 'nis' => '123456789',
-                'jurusan_id'=> 1,
+                'jurusan_id' => 1,
+                'kelas_id' => 2,
+                'absen' => 25,
                 'jenis_kelamin' => 'P',
                 'alamat' => 'Kab Maidun, Kec Balerejo, Ds Sogo',
                 'no_hp' => '081234567890',

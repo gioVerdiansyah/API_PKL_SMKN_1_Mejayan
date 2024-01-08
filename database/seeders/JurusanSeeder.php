@@ -14,11 +14,11 @@ class JurusanSeeder extends Seeder
     public function run(): void
     {
         Jurusan::insert([
-            ['jurusan' => "RPL"],
-            ['jurusan' => "TKR"],
-            ['jurusan' => "TBSM"],
-            ['jurusan' => "TO"],
-            ['jurusan' => "APHP"],
+            ['jurusan' => "RPL", 'gambar' => asset('images/jurusan/RPL.png')],
+            ['jurusan' => "TKR", 'gambar' => asset('images/jurusan/TKR.png')],
+            ['jurusan' => "TBSM", 'gambar' => asset('images/jurusan/TBSM.png')],
+            ['jurusan' => "TO", 'gambar' => asset('images/jurusan/TO.png')],
+            ['jurusan' => "APHP", 'gambar' => asset('images/jurusan/APHP.png')],
         ]);
     }
 }
