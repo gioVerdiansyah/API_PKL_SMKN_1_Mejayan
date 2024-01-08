@@ -19,7 +19,7 @@
                 <tr>
                     <th style="border: 1px solid #ddd; padding: 8px;">{{ ++$i }}</th>
                     <td style="border: 1px solid #ddd; padding: 8px; text-align: center">{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y H:i:s') }}</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;"><img src="https://80b9-125-166-9-52.ngrok-free.app/storage/{{ $data->bukti }}" alt="Foto Jurnal siswa {{ $user->name }} ke {{ $i }}" style="width: 100px; height: auto;"></td>
+                    <td style="border: 1px solid #ddd; padding: 8px;"><img src="storage/{{ $data->bukti }}" alt="Foto Jurnal siswa {{ $user->name }} ke {{ $i }}" style="width: 100px; height: auto;"></td>
                     <td style="border: 1px solid #ddd; padding: 8px;">{{ $data->kegiatan }}</td>
                 </tr>
             @empty
