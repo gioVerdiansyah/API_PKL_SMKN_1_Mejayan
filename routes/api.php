@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\CheckLoginController;
+use App\Http\Controllers\Api\Guru\KelolaAbsensiController;
+use App\Http\Controllers\Api\Guru\KelolaJurnalController;
 use App\Http\Controllers\Api\Guru\RegisterController;
 use App\Http\Controllers\Api\Siswa\AbsensiController;
 use App\Http\Controllers\Api\Siswa\IzinController;
@@ -10,6 +12,7 @@ use App\Http\Controllers\Api\Siswa\UbahPassController;
 use App\Http\Controllers\PrintController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -48,8 +51,12 @@ Route::middleware("verifyAPIKey")->group(function () {
         Route::post('/login', \App\Http\Controllers\Api\Guru\LoginController::class);
 
         // list absensi
-        Route::get('/absensi/get', [AbsensiController::class, 'getAbsen']);
-        Route::get('/absensi/pulang', [AbsensiController::class, 'getAbsenPulang']);
+        Route::get('/absensi/get', [KelolaAbsensiController::class, 'getAbsen']);
+        Route::get('/absensi/pulang', [KelolaAbsensiController::class, 'getAbsenPulang']);
+
+        // list jurnal
+        Route::get('/jurnal/get', [KelolaJurnalController::class, 'getJurnal']);
+        Route::put('/jurnal/agreement', [KelolaJurnalController::class, 'jurnalAgreement']);
     });
 });
 

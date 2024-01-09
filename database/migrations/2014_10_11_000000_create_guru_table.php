@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('gelar')->nullable();
             $table->string("email");
             $table->string('password');
-            $table->string('photo_guru')->nullable();
+            $table->string('photo_guru')->default('images/mobile/default_photo.png');
             $table->enum('status', [0, 1, 2])->default(0);
             $table->foreignId('jurusan_id')->constrained()->restrictOnDelete();
             $table->text('deskripsi')->nullable();

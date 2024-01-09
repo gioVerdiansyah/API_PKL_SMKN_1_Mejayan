@@ -24,6 +24,8 @@
 }
 
 .upload__button {
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
     position: relative;
     padding: 16px;
     margin: 0;
@@ -32,7 +34,6 @@
     color: white;
     background: none;
     border: none;
-    border-radius: inherit;
     outline: none;
     cursor: pointer;
     transform: scale(0.9);

@@ -4,6 +4,7 @@
         <p style="margin: 0"><span style="font-weight: bold;">Nama:</span> {{ $user->name }}</p>
         <p style="margin: 0"><span style="font-weight: bold;">Absen:</span> {{ $user->detailUser->absen }}</p>
         <p style="margin: 0"><span style="font-weight: bold;">Kelas:</span> {{ $user->detailUser->kelas->kelas }}</p>
+        <p style="margin: 0"><span style="font-weight: bold;">Tempat Dudi:</span> {{ $user->detailUser->detailPkl->tempat_dudi }}</p>
     </div>
     <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
         <thead>
@@ -20,7 +21,7 @@
                     <th style="border: 1px solid #ddd; padding: 8px;">{{ ++$i }}</th>
                     <td style="border: 1px solid #ddd; padding: 8px; text-align: center">{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y H:i:s') }}</td>
                     <td style="border: 1px solid #ddd; padding: 8px;"><img src="storage/{{ $data->bukti }}" alt="Foto Jurnal siswa {{ $user->name }} ke {{ $i }}" style="width: 100px; height: auto;"></td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $data->kegiatan }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;"><p style="width: 26%; word-wrap: break-word; white-space: pre-line;">{{ $data->kegiatan }}</p></td>
                 </tr>
             @empty
                 <tr>

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('kegiatan');
             $table->string('bukti');
             $table->enum('status', [0, 1, 2])->default(0)->comment("0=Netral,1=disetujui,2=ditolak");
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }

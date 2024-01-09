@@ -11,6 +11,14 @@ class PrintController extends Controller
 {
     public function showPrintJurnalSiswa(string $id)
     {
+        $user = User::with(['detailUser', 'detailUser.jurusan'])->where('id', $id)->first();
+        if (!$user) {
+            return to_route('home')->with('message', [
+                'icon' => 'error',
+                'title' => 'Not Found',
+                'text' => 'ID user / jurnal tidak ditemukan'
+            ]);
+        }
         return view('print_jurnal', compact('id'));
     }
     public function printJurnalSiswa(Request $request)
@@ -20,16 +28,14 @@ class PrintController extends Controller
             $user = User::with(['detailUser', 'detailUser.jurusan'])->where('id', $request->user_id)->first();
 
             if (!$jurnal || !$user) {
-                return response()->json(['success' => false, 'message' => 'Ada kesalahan server', 'error' => 'ID user /jurnal tidak ditemukan']);
+                return response()->json(['success' => false, 'message' => 'Ada kesalahan server', 'error' => 'ID user / jurnal tidak ditemukan']);
             }
-
-            sleep(5);
 
             $base_path = 'app/public/jurnal_siswa';
             $file_name = 'Jurnal_PKL_' . str_replace(' ', '_', $user->name);
-            $path = storage_path($base_path .'/'. $file_name . '.pdf');
+            $path = storage_path($base_path . '/' . $file_name . '.pdf');
 
-            if(file_exists($path)){
+            if (file_exists($path)) {
                 unlink($path);
             }
             $pdf = PDF::setPaper('A4', 'potrait')->loadView('generate_pdf.jurnal_siswa', ['dataJurnal' => $jurnal, 'user' => $user]);
