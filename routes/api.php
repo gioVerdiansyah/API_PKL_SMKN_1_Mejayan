@@ -57,6 +57,7 @@ Route::middleware("verifyAPIKey")->group(function () {
         // list jurnal
         Route::get('/jurnal/get', [KelolaJurnalController::class, 'getJurnal']);
         Route::put('/jurnal/agreement', [KelolaJurnalController::class, 'jurnalAgreement']);
+        Route::get('/jurnal/prev_day/{day}/{status?}', [KelolaJurnalController::class, 'getNextPrevJurnal']);
     });
 });
 

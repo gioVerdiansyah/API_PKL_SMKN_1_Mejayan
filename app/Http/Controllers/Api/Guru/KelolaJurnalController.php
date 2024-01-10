@@ -12,7 +12,23 @@ class KelolaJurnalController extends Controller
     public function getJurnal()
     {
         try {
-            $jurnal = Jurnal::with('user')->paginate(10);
+            $jurnal = Jurnal::with('user')->whereDate('created_at', today())->get();
+
+            return response()->json(['jurnal' => ['success' => true, 'data' => $jurnal]]);
+        } catch (\Exception $e) {
+            return response()->json(['jurnal' => ['success' => false, 'message' => 'Ada kesalahaan server!']]);
+        }
+    }
+    public function getNextPrevJurnal(int $day, int $status = null)
+    {
+        try {
+            $jurnal = Jurnal::with('user');
+
+            if($status){
+                $jurnal = $jurnal->where('status', "$status");
+            }
+
+            $jurnal = $jurnal->whereDate('created_at', today()->subDays($day))->get();
 
             return response()->json(['jurnal' => ['success' => true, 'data' => $jurnal]]);
         } catch (\Exception $e) {
