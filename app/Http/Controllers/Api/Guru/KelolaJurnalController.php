@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Guru;
 
 use App\Http\Controllers\Controller;
 use App\Models\Jurnal;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -56,6 +57,18 @@ class KelolaJurnalController extends Controller
         }catch(\Exception $e){
             DB::rollBack();
             return response()->json(['jurnal' => ['success' => false, 'message' => 'Error: ' . $e]]);
+        }
+    }
+
+    public function jurnalReject(){
+        try{
+            $jurnal = User::whereDoesntHave('jurnal', function($query){
+                $query->where('created_at', today());
+            })->get();
+
+            return response()->json(['jurnal' => ['success' => true, 'data' => $jurnal]]);
+        }catch(\Exception $e){
+            return response()->json(['jurnal' => ['success' => false, 'message' => "Ada kesalahan server"]]);
         }
     }
 }
