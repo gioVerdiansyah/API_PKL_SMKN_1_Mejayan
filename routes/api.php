@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CheckLoginController;
 use App\Http\Controllers\Api\Guru\KelolaAbsensiController;
+use App\Http\Controllers\Api\Guru\KelolaIzinController;
 use App\Http\Controllers\Api\Guru\KelolaJurnalController;
 use App\Http\Controllers\Api\Guru\RegisterController;
 use App\Http\Controllers\Api\Siswa\AbsensiController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Api\Siswa\UbahPassController;
 use App\Http\Controllers\PrintController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -51,14 +53,18 @@ Route::middleware("verifyAPIKey")->group(function () {
         Route::post('/login', \App\Http\Controllers\Api\Guru\LoginController::class);
 
         // list absensi
-        Route::get('/absensi/get', [KelolaAbsensiController::class, 'getAbsen']);
-        Route::get('/absensi/pulang', [KelolaAbsensiController::class, 'getAbsenPulang']);
+        Route::get('/{guru_id}/absensi/get', [KelolaAbsensiController::class, 'getAbsen']);
+        Route::get('/{guru_id}/absensi/pulang', [KelolaAbsensiController::class, 'getAbsenPulang']);
+        Route::get('/{guru_id}/absen/reject', [KelolaAbsensiController::class, 'absenReject']);
 
         // list jurnal
-        Route::get('/jurnal/get', [KelolaJurnalController::class, 'getJurnal']);
-        Route::put('/jurnal/agreement', [KelolaJurnalController::class, 'jurnalAgreement']);
-        Route::get('/jurnal/prev_day/{day}/{status?}', [KelolaJurnalController::class, 'getNextPrevJurnal']);
-        Route::get('/jurnal/reject', [KelolaJurnalController::class, 'jurnalReject']);
+        Route::get('/{guru_id}/jurnal/get', [KelolaJurnalController::class, 'getJurnal']);
+        Route::put('/{guru_id}/jurnal/agreement', [KelolaJurnalController::class, 'jurnalAgreement']);
+        Route::get('/{guru_id}/jurnal/prev_day/{day}/{status?}', [KelolaJurnalController::class, 'getNextPrevJurnal']);
+        Route::get('/{guru_id}/jurnal/reject', [KelolaJurnalController::class, 'jurnalReject']);
+
+        // list izin
+        Route::get('/{guru_id}/izin/get', [KelolaIzinController::class, 'getIzin']);
     });
 });
 

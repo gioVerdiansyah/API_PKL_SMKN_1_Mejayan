@@ -10,20 +10,26 @@ use Illuminate\Support\Facades\DB;
 
 class KelolaJurnalController extends Controller
 {
-    public function getJurnal()
+    public function getJurnal(string $guru_id)
     {
         try {
-            $jurnal = Jurnal::with('user')->whereDate('created_at', today())->get();
+            $jurnal = Jurnal::with(['user' => function($query) use($guru_id) {
+$query->where('guru_id', $guru_id);
+            }])->whereDate('created_at', today())->get();
 
             return response()->json(['jurnal' => ['success' => true, 'data' => $jurnal]]);
         } catch (\Exception $e) {
             return response()->json(['jurnal' => ['success' => false, 'message' => 'Ada kesalahaan server!']]);
         }
     }
-    public function getNextPrevJurnal(int $day, int $status = null)
+    public function getNextPrevJurnal(string $guru_id, int $day, int $status = null)
     {
         try {
-            $jurnal = Jurnal::with('user');
+            $jurnal = Jurnal::with([
+                'user' => function ($query) use ($guru_id) {
+                    $query->where('guru_id', $guru_id);
+                }
+            ]);
 
             if($status){
                 $jurnal = $jurnal->where('status', "$status");
@@ -62,11 +68,14 @@ class KelolaJurnalController extends Controller
 
     public function jurnalReject(){
         try{
-            $jurnal = User::whereDoesntHave('jurnal', function($query){
-                $query->where('created_at', today());
-            })->get();
+            $user_id = [];
+            $absen = Jurnal::whereDate('created_at', today())->get();
+            foreach ($absen as $item) {
+                array_push($user_id, $item->user_id);
+            }
+            $user = User::whereNotIn('id', $user_id)->get();
 
-            return response()->json(['jurnal' => ['success' => true, 'data' => $jurnal]]);
+            return response()->json(['jurnal' => ['success' => true, 'data' => $user]]);
         }catch(\Exception $e){
             return response()->json(['jurnal' => ['success' => false, 'message' => "Ada kesalahan server"]]);
         }

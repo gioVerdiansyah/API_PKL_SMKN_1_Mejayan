@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
         User::create(
             [
                 'id' => Str::uuid(),
-                'guru_id' => Guru::latest()->first()->id,
+                'guru_id' => Guru::where('email', config('app.admin_email'))->first()->id,
                 'name' => 'Verdi',
                 'email' => 'e01010010or@gmail.com',
                 'password' => Hash::make('user baru'),
