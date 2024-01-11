@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -54,6 +55,8 @@ Route::post('/absen/trouble', [AbsensiTroubleController::class, 'absenTroublesSt
 // print
 Route::get('/print/jurnal/{id}', [PrintController::class, 'showPrintJurnalSiswa']);
 Route::post('/print/jurnal', [PrintController::class, 'printJurnalSiswa'])->name('print_jurnal');
+Route::get('/guru/{guru_id}/absen/print', [PrintController::class, 'showPrintAbensiSiswa']);
+Route::post('/guru/absen/print', [PrintController::class, 'absenPrint'])->name('print_absensi');
 
 // Auth Guru
 Route::get('/guru/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -62,6 +65,8 @@ Route::post('/guru/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/guru/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/guru/register', [RegisterController::class, 'register']);
+
+
 Route::middleware(['auth.guru'])->prefix('/guru')->group(function () {
     Route::get('/home', [App\Http\Controllers\GuruController::class, 'index'])->name('home');
 });

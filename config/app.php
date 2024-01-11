@@ -19,6 +19,7 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
     'api_key' => env('APP_API_KEY'),
     'admin_email' => env('MAIL_ADMIN'),
+    'jam_tutup_absen' => env('JAM_TUTUP_ABSEN'),
 
     /*
     |--------------------------------------------------------------------------
