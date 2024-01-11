@@ -64,7 +64,8 @@ Route::middleware("verifyAPIKey")->group(function () {
         Route::get('/{guru_id}/jurnal/reject', [KelolaJurnalController::class, 'jurnalReject']);
 
         // list izin
-        Route::get('/{guru_id}/izin/get', [KelolaIzinController::class, 'getIzin']);
+        Route::get('/{guru_id}/izin/get/{status?}', [KelolaIzinController::class, 'getIzin']);
+        Route::put('/{guru_id}/izin/agreement', [KelolaIzinController::class, 'izinAgreement']);
     });
 });
 
