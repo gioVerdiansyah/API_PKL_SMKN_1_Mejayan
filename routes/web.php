@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbsensiTroubleController;
+use App\Http\Controllers\Admin\KakomliController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\Guru\ForgotPasswordGuruController;
@@ -8,9 +9,12 @@ use App\Http\Controllers\Auth\Guru\ResetPasswordGuruController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Kakomli\DudiController;
+use App\Http\Controllers\Kakomli\HomeController;
 use App\Http\Controllers\PrintController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -56,26 +60,28 @@ Route::post('/absen/trouble', [AbsensiTroubleController::class, 'absenTroublesSt
 Route::get('/print/jurnal/{id}', [PrintController::class, 'showPrintJurnalSiswa']);
 Route::post('/print/jurnal', [PrintController::class, 'printJurnalSiswa'])->name('print_jurnal');
 Route::get('/guru/{guru_id}/absen/print', [PrintController::class, 'showPrintAbensiSiswa']);
-Route::post('/guru/absen/print', [PrintController::class, 'absenPrint'])->name('print_absensi');
+Route::get('/guru/{guru_id}/absen/cetak', [PrintController::class, 'absenPrint'])->name('print_absensi');
 
-// Auth Guru
-Route::get('/guru/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/guru/login', [LoginController::class, 'login']);
-Route::post('/guru/logout', [LoginController::class, 'logout'])->name('logout');
+// Auth Kaomli
+Route::get('/kakomli/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/kakomli/login', [LoginController::class, 'login']);
+Route::post('/kakomli/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/guru/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/guru/register', [RegisterController::class, 'register']);
+// Route::get('/guru/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+// Route::post('/guru/register', [RegisterController::class, 'register']);
 
 
-Route::middleware(['auth.guru'])->prefix('/guru')->group(function () {
-    Route::get('/home', [App\Http\Controllers\GuruController::class, 'index'])->name('home');
+Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    Route::resource('/dudi', DudiController::class);
 });
 
 // Admin INI
 Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/persetujuan', [AdminController::class, 'persetujuan'])->name('admin.persetujuan');
-    Route::patch('/agreement/{id}', [AdminController::class, 'acceptOrReject'])->name('admin.acceptorreject');
+    Route::get('/data_kakomli', [AdminController::class, 'dataKakomli'])->name('admin.persetujuan');
+    Route::resource('/kakomli', KakomliController::class)->except('show');
 });
 
 

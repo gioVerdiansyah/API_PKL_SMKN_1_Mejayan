@@ -100,7 +100,7 @@ class LoginController extends Controller
             ]);
         }
 
-        if ($user && $user->status === '1' && Hash::check($credentials['password'], $user->getAuthPassword())) {
+        if ($user && Hash::check($credentials['password'], $user->getAuthPassword())) {
             $this->guard()->attempt(
                 $this->credentials($request), true
             );
@@ -175,6 +175,6 @@ class LoginController extends Controller
 
     protected function guard()
     {
-        return Auth::guard('guru');
+        return Auth::guard('kakomli');
     }
 }

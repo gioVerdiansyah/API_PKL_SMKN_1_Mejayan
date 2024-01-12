@@ -26,6 +26,14 @@ class UserSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
                 'remember_token' => Str::random(10),
+                'nis' => '123456789',
+                'jurusan_id' => 1,
+                'kelas_id' => 2,
+                'absen' => 25,
+                'jenis_kelamin' => 'P',
+                'alamat' => 'Kab Maidun, Kec Balerejo, Ds Sogo',
+                'no_hp' => '081234567890',
+                'no_hp_ortu' => '081234567891',
             ]
         );
     }

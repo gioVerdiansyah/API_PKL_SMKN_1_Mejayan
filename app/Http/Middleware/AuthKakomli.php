@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthGuru
+class AuthKakomli
 {
     /**
      * Handle an incoming request.
@@ -16,11 +16,11 @@ class AuthGuru
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!Auth::guard('guru')->check()){
+        if(!Auth::guard('kakomli')->check()){
             return to_route('index');
         }
 
-        if (Auth::guard('guru')->check() && Auth::guard('guru')->user()->email !== config('app.admin_email')) {
+        if (Auth::guard('kakomli')->check() && Auth::guard('kakomli')->user()->email !== config('app.admin_email')) {
             return $next($request);
         }
 

@@ -16,7 +16,7 @@ class AdminIni
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::guard('guru')->check() || Auth::guard('guru')->user()->email !== config('app.admin_email')) {
+        if (!Auth::guard('kakomli')->check() || Auth::guard('kakomli')->user()->email !== config('app.admin_email')) {
             return abort(403);
         }
 

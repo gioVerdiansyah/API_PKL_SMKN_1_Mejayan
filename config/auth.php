@@ -47,6 +47,10 @@ return [
         'guru' => [
             'driver' => 'session',
             'provider' => 'guru'
+        ],
+        'kakomli' => [
+            'driver' => 'session',
+            'provider' => 'kakomli'
         ]
     ],
 
@@ -76,6 +80,11 @@ return [
         'guru' => [
             'driver' => 'eloquent',
             'model' => App\Models\Guru::class,
+        ],
+
+        'kakomli' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Kakomli::class,
         ],
     ],
 

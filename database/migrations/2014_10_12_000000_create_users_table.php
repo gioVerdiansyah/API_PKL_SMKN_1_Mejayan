@@ -18,6 +18,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->foreignId('jurusan_id')->constrained()->restrictOnDelete();
+            $table->foreignId('kelas_id')->constrained()->restrictOnDelete();
+            $table->integer('absen');
+            $table->string('nis');
+            $table->enum('jenis_kelamin', ['P', 'L']);
+            $table->string('alamat')->nullable();
+            $table->string('no_hp')->nullable();
+            $table->string('no_hp_ortu')->nullable();
             $table->timestamps();
             $table->rememberToken();
         });

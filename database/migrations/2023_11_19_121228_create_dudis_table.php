@@ -11,9 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jam_pkls', function (Blueprint $table) {
+        Schema::create('dudis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('detail_pkl_id')->constrained()->cascadeOnDelete();
+            $table->string('nama');
+            $table->string('pemimpin');
+            $table->string('no_telp')->nullable();
+            $table->string('email')->nullable();
+            $table->string('alamat');
+            $table->string('koordinat');
+            $table->integer('radius');
+
             $table->string('senin');
             $table->string('selasa');
             $table->string('rabu');
@@ -30,6 +37,7 @@ return new class extends Migration
             $table->string('ji_jumat')->nullable();
             $table->string('ji_saptu')->nullable();
             $table->string('ji_minggu')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -38,6 +46,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jam_pkls');
+        Schema::dropIfExists('dudis');
     }
 };

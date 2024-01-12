@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Notifications\ResetPasswordGuruNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -40,5 +41,9 @@ class Guru extends Authenticatable
     public function jurusan(): BelongsTo
     {
         return $this->belongsTo(Jurusan::class, 'jurusan_id');
+    }
+
+    public function user(): HasOne{
+        return $this->hasOne(User::class, 'guru_id');
     }
 }

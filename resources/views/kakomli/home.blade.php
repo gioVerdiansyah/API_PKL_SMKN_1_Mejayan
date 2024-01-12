@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.nav-kakomli')
 
 @section('content')
 <div class="container">
@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    @dump(Auth::guard('guru')->user())
+                    @dump(Auth::guard('kakomli')->user())
 
                     {{ __('You are logged in!') }}
                 </div>

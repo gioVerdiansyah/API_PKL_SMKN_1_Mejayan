@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -55,10 +56,6 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
-
-    public function detailUser(): HasOne{
-        return $this->hasOne(DetailUser::class,'user_id');
-    }
     public function absen():HasMany{
         return $this->hasMany(Absensi::class, 'id');
     }
@@ -66,7 +63,23 @@ class User extends Authenticatable
         return $this->hasOne(Izin::class,'user_id');
     }
 
+    public function guru(): BelongsTo {
+        return $this->belongsTo(Guru::class, 'id');
+    }
     public function jurnal(): HasMany{
         return $this->hasMany(Jurnal::class, 'id');
+    }
+
+    public function dudi(): BelongsTo
+    {
+        return $this->belongsTo(Dudi::class, 'dudi_id');
+    }
+    public function jurusan(): BelongsTo
+    {
+        return $this->belongsTo(Jurusan::class, 'jurusan_id');
+    }
+    public function kelas(): BelongsTo
+    {
+        return $this->belongsTo(Kelas::class, 'kelas_id');
     }
 }
