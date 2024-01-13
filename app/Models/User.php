@@ -5,7 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -17,6 +17,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $guarded = [];
     public $incrementing = false, $keyType = "string";
     protected static function boot()
     {
@@ -29,15 +30,14 @@ class User extends Authenticatable
     }
 
     /**
-     * The attributes that are mass assignable.
+     * Get all the column names from the model's table.
      *
-     * @var array<int, string>
+     * @return array
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    public function getTableColumns()
+    {
+        return Schema::getColumnListing($this->getTable());
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -61,10 +61,6 @@ class User extends Authenticatable
     }
     public function izin(): HasOne{
         return $this->hasOne(Izin::class,'user_id');
-    }
-
-    public function guru(): BelongsTo {
-        return $this->belongsTo(Guru::class, 'id');
     }
     public function jurnal(): HasMany{
         return $this->hasMany(Jurnal::class, 'id');

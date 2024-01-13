@@ -171,8 +171,8 @@
     <script>
       Swal.fire({
         icon: "{{ session('message')['icon'] ?? 'question' }}",
-        title: "{{ session('message')['title'] ?? 'Tidak ada keteerangan' }}",
-        text: "{{ session('message')['text'] ?? 'Tidak ada keterangan' }}",
+        title: `{{ session('message')['title'] ?? 'Tidak ada keteerangan' }}`,
+        text: `{{ session('message')['text'] ?? 'Tidak ada keterangan' }}`,
       })
     </script>
   @endif

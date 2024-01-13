@@ -27,7 +27,7 @@ class DudiSeeder extends Seeder
             "rabu" => "08:00 - 16:00",
             "kamis" => "08:00 - 16:00",
             "jumat" => "08:00 - 16:00",
-            "saptu" => null,
+            "sabtu" => null,
             "minggu" => null,
             // jam istirahat
             "ji_senin" => "12:00 - 13:00",
@@ -35,7 +35,7 @@ class DudiSeeder extends Seeder
             "ji_rabu" => "12:00 - 13:00",
             "ji_kamis" => "12:00 - 13:00",
             "ji_jumat" => "11:00 - 13:00",
-            "ji_saptu" => null,
+            "ji_sabtu" => null,
             "ji_minggu" => null,
         ]);
     }

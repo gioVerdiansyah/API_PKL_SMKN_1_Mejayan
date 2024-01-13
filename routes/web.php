@@ -11,7 +11,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Kakomli\DudiController;
 use App\Http\Controllers\Kakomli\HomeController;
+use App\Http\Controllers\Kakomli\SiswaController;
 use App\Http\Controllers\PrintController;
+use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -75,6 +77,12 @@ Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::resource('/dudi', DudiController::class);
+    Route::get('/export-column-dudi', [DudiController::class, 'generateKolom'])->name('dudi.download_list_table');
+    Route::post('/import-data-dudi', [DudiController::class, 'importData'])->name('dudi.import_data');
+
+    Route::resource('/siswa', SiswaController::class);
+    Route::get('/export-column-siswa', [SiswaController::class, 'generateKolom'])->name('siswa.download_list_table');
+    Route::post('/import-data-siswa', [SiswaController::class, 'importData'])->name('siswa.import_data');
 });
 
 // Admin INI
@@ -86,6 +94,6 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
 
 
 // test
-Route::get('/test', function(){
-    return view('generate_pdf.jurnal_siswa');
+Route::prefix('/test')->group(function(){
+    Route::get('/getColumn', [TestingController::class, 'getColumn']);
 });

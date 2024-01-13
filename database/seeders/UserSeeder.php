@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Guru;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -19,7 +17,6 @@ class UserSeeder extends Seeder
         User::create(
             [
                 'id' => Str::uuid(),
-                'guru_id' => Guru::where('email', config('app.admin_email'))->first()->id,
                 'name' => 'Verdi',
                 'email' => 'e01010010or@gmail.com',
                 'password' => Hash::make('user baru'),

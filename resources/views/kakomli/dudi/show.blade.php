@@ -8,7 +8,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('dudi.index') }}">Dudi</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Detail Dudi</li>
+                    <li class="breadcrumb-item active" aria-current="page">Detail</li>
                 </ol>
             </nav>
         </div>
@@ -156,34 +156,35 @@
             </div>
         </div>
 
-        <div class="col-md12 mt-5 text-start">
-            <button class="btn btn-warning profile-button">Edit</button>
-            <button class="btn btn-danger profile-button">Hapus</button>
+        <div class="col-md12 d-flex mt-5 text-start">
+            <a href="{{ route('dudi.edit', $dudi->id) }}" class="btn btn-warning profile-button me-2">Edit</a>
+            <form nameDudi="{{ $dudi->nama }}" action="{{ route('dudi.destroy', $dudi->id) }}" id="delete" method="POST">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-danger profile-button">Hapus</button>
+            </form>
         </div>
     </div>
-    </div>
-    </div>
     <script>
-        @error('sosmed-group')
+        const form = document.getElementById('delete');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            var nameDudi = form.getAttribute('nameDudi');
             Swal.fire({
-                icon: 'error',
-                title: "Gagal",
-                text: "Sosial media tidak boleh kosong!"
+                title: 'Apakah anda yakin?',
+                text: "Ingin menghapus dudi '" + nameDudi + "'?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Ya, Hapus!",
+                cancelButtonText: "Batal",
+                background: 'var(--bs-body-bg)',
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
             });
-        @enderror
-        document.getElementById('potoProfile').addEventListener('change', function(event) {
-            const inputFile = event.target;
-            const profileImage = document.getElementById('profileImage');
-
-            if (inputFile.files && inputFile.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    profileImage.src = e.target.result;
-                };
-
-                reader.readAsDataURL(inputFile.files[0]);
-            }
         });
     </script>
 @endsection

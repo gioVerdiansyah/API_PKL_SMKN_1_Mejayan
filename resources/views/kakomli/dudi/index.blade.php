@@ -1,13 +1,21 @@
 @extends('layouts.nav-kakomli')
 
 @section('content')
-    <div class="card p-4 mb-4 flex-row justify-content-between align-items-center">
+    <div class="card px-3 mb-4 flex-md-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
                     <li class="breadcrumb-item active" aria-current="page">Data-data Dudi</li>
                 </ol>
             </nav>
+        </div>
+        <div class="d-flex justify-content-center my-3">
+            <form method="get" class="form-inline d-flex flex-row gap-1">
+                <input class="form-control mr-sm-2 py-0" type="search" name="query" placeholder="Search"
+                    aria-label="Search" value="{{ request('query') }}">
+                <button class="btn btn-outline-primary py-0 my-sm-0" type="submit"><i
+                        class="mdi mdi-magnify fs-4"></i></button>
+            </form>
         </div>
         <div class="text-end">
             <a href="{{ route('dudi.create') }}" class="btn btn-outline-primary">Tambah Dudi</a>
@@ -16,7 +24,7 @@
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table"  style="width:100%">
+                <table class="table" style="width:100%">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -51,33 +59,8 @@
                 </table>
             </div>
             <div class="mt-3 align-items-center">
-                {{-- {{ $industris->links('pagination::bootstrap-5') }} --}}
+                {{ $dudi->links('pagination.bootstrap-5') }}
             </div>
         </div>
     </div>
-    <script>
-        if (document.querySelectorAll('.delete').length > 0) {
-            document.querySelectorAll('.delete').forEach(function(form) {
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    var nameDudi = form.getAttribute('nameDudi');
-                    Swal.fire({
-                        title: 'Apakah anda yakin?',
-                        text: "Ingin menghapus dudi '" + nameDudi + "'?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Ya, Hapus!",
-                        cancelButtonText: "Batal",
-                        background: 'var(--bs-body-bg)',
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
-                    });
-                });
-            });
-        }
-    </script>
 @endsection

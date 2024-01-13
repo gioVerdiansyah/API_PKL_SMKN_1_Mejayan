@@ -42,8 +42,4 @@ class Guru extends Authenticatable
     {
         return $this->belongsTo(Jurusan::class, 'jurusan_id');
     }
-
-    public function user(): HasOne{
-        return $this->hasOne(User::class, 'guru_id');
-    }
 }

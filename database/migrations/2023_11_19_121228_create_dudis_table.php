@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('rabu');
             $table->string('kamis');
             $table->string('jumat');
-            $table->string('saptu')->nullable();
+            $table->string('sabtu')->nullable();
             $table->string('minggu')->nullable();
             // jam istirahat
 
@@ -35,7 +35,7 @@ return new class extends Migration
             $table->string('ji_rabu');
             $table->string('ji_kamis');
             $table->string('ji_jumat')->nullable();
-            $table->string('ji_saptu')->nullable();
+            $table->string('ji_sabtu')->nullable();
             $table->string('ji_minggu')->nullable();
             $table->timestamps();
         });
