@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('alamat');
             $table->string('koordinat');
             $table->integer('radius');
+            $table->foreignId('kakomli_id')->constrained()->restrictOnDelete();
 
             $table->string('senin');
             $table->string('selasa');

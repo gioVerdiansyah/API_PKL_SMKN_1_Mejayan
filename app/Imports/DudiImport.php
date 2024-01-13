@@ -26,6 +26,7 @@ class DudiImport implements ToCollection, WithHeadingRow
                 'koordinat' => $row['koordinat'],
                 'radius' => $row['radius'],
                 'alamat' => $row['alamat'],
+                'kakomli_id' =>  auth()->guard('kakomli')->user()->id,
                 'senin' => $row['senin'],
                 'selasa' => $row['selasa'],
                 'rabu' => $row['rabu'],

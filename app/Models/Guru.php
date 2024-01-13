@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Notifications\ResetPasswordGuruNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -26,6 +26,16 @@ class Guru extends Authenticatable
                 $model->{$model->getKeyName()} = Str::uuid()->toString();
             }
         });
+    }
+
+    /**
+     * Get all the column names from the model's table.
+     *
+     * @return array
+     */
+    public function getTableColumns()
+    {
+        return Schema::getColumnListing($this->getTable());
     }
 
     protected $guarded = [], $hidden = [

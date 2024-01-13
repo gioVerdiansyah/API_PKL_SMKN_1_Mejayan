@@ -5,8 +5,10 @@ namespace App\Imports;
 use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\User;
-use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class SiswaImport implements ToCollection, WithHeadingRow
@@ -20,14 +22,13 @@ class SiswaImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            $jurusan = Jurusan::where('jurusan', $row['jurusan_id'])->first();
             $kelas = Kelas::where('kelas', $row['kelas_id'])->first();
 
             $user = new User;
             $user->name = $row['name'];
             $user->email = $row['email'];
-            $user->password = $row['password'] ?? 'password';
-            $user->jurusan_id = $jurusan->id ?? 1;
+            $user->password = Hash::make($row['password'] ?? 'password');
+            $user->jurusan_id = Auth::guard('kakomli')->user()->jurusan_id;
             $user->kelas_id = $kelas->id ?? 1;
             $user->absen = $row['absen'];
             $user->nis = $row['nis'];

@@ -96,9 +96,29 @@
                             <span class="link-title ms-3">Data Dudi</span>
                         </a>
                     </li>
+                    <li class="nav-item {{ request()->routeIs('pengurus-pkl.index') ? 'active' : '' }}">
+                        <a href="{{ route('pengurus-pkl.index') }}" class="nav-link">
+                            <i class="fa-solid fa-user-tie"></i>
+                            <span class="link-title ms-3">Pengurus PKL</span>
+                        </a>
+                    </li>
 
-                    <li class="nav-item nav-category">List</li>
-                    {{-- <li class="nav-item @if (request()->routeIs('mou.create') or request()->routeIs('mou.edit') or request()->routeIs('testimoni.create') or request()->routeIs('testimoni.edit')) active @endif"> --}}
+                    <li class="nav-item nav-category">Pengelolaan PKl</li>
+                    <li class="nav-item {{ request()->routeIs('siswa.index') ? 'active' : '' }}">
+                        <a href="{{ route('siswa.index') }}" class="nav-link">
+                            <i class="link-icon" data-feather="settings"></i>
+                            <span class="link-title">Kelompok Siswa</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('siswa.index') ? 'active' : '' }}">
+                        <a href="{{ route('siswa.index') }}" class="nav-link">
+                            <i class="link-icon" data-feather="grid"></i>
+                            <span class="link-title">Pengurus Kelompok</span>
+                        </a>
+                    </li>
+
+                    {{-- <li class="nav-item nav-category">List</li>
+                    <li class="nav-item @if (request()->routeIs('mou.create') or request()->routeIs('mou.edit') or request()->routeIs('testimoni.create') or request()->routeIs('testimoni.edit')) active @endif">
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#list" role="button"
                             aria-expanded="false" aria-controls="berita">
@@ -113,7 +133,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </li>
+                    </li> --}}
                     {{-- Sidebar ends here --}}
                 </ul>
             </div>

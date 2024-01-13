@@ -135,4 +135,10 @@ return [
 
     'password_timeout' => 10800,
 
+    'check' => function (): bool {
+        if (Auth::guard('kakomli')->user()->email == config('app.admin_email')) {
+            return true;
+        }
+        return false;
+    }
 ];

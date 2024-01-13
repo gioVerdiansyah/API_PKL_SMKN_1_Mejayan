@@ -19,7 +19,7 @@ class DudiController extends Controller
      */
     public function index(Request $request)
     {
-        $dudi = Dudi::latest();
+        $dudi = Dudi::latest()->where('kakomli_id', auth()->guard('kakomli')->user()->id);
         if ($request->has('query') && !empty($request->input('query'))) {
             $input = $request->input('query');
             $dudi->where('nama', 'LIKE', '%' . $input . '%')
@@ -54,6 +54,7 @@ class DudiController extends Controller
             $dudi->koordinat = $request->koordinat;
             $dudi->radius = $request->radius;
             $dudi->alamat = $request->alamat;
+            $dudi->jurusan_id = auth()->guard('kakomli')->user()->jurusan_id;
             $dudi->senin = $request->senin;
             $dudi->selasa = $request->selasa;
             $dudi->rabu = $request->rabu;

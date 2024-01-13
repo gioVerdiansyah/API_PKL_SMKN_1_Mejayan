@@ -41,7 +41,6 @@
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
-                            <th>Jurusan</th>
                             <th>Kelas</th>
                             <th>NIS</th>
                             <th>Jenis kelamin</th>
@@ -53,7 +52,6 @@
                             <tr>
                                 <th>{{ ++$i }}</th>
                                 <td style="white-space: initial">{{ $data->name }}</td>
-                                <td>{{ $data->jurusan->jurusan }}</td>
                                 <td>{{ $data->kelas->kelas }}</td>
                                 <td>{{ $data->nis }}</td>
                                 <td>{{ $data->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
