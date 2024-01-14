@@ -11,12 +11,15 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Kakomli\DudiController;
 use App\Http\Controllers\Kakomli\HomeController;
+use App\Http\Controllers\Kakomli\PengelolaanPkl\KelompokSiswaController;
 use App\Http\Controllers\Kakomli\PengurusPklController;
+use App\Http\Controllers\Kakomli\RekapPendataanController;
 use App\Http\Controllers\Kakomli\SiswaController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -89,6 +92,20 @@ Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
     Route::resource('/pengurus-pkl', PengurusPklController::class)->except('show');
     Route::get('/export-column-pengurus-pkl', [PengurusPklController::class, 'generateKolom'])->name('pengurus-pkl.download_list_table');
     Route::post('/import-data-pengurus-pkl', [PengurusPklController::class, 'importData'])->name('pengurus-pkl.import_data');
+
+    Route::prefix('/pengelolaan_pkl')->group(function(){
+        Route::resource('/kelompok-siswa', KelompokSiswaController::class);
+    });
+
+    Route::prefix('/rekap-pendataan')->group(function(){
+        Route::get('/list-dudi', [RekapPendataanController::class, 'showDownloadPage'])->name('rekap_pendataan.dudi.show_download');
+        Route::get('/list-dudi-download', [RekapPendataanController::class, 'downloadListDudi'])->name('rekap_pendataan.dudi.download');
+        Route::get('/list-dudi-print', [RekapPendataanController::class, 'printListDudi'])->name('rekap_pendataan.dudi.print');
+
+        Route::get('/pemetaan-dudi', [RekapPendataanController::class, 'showDownloadPagePemetaan'])->name('rekap_pendataan.pemetaan_dudi.show_download');
+        Route::get('/pemetaan-dudi-download', [RekapPendataanController::class, 'downloadPemetaanDudi'])->name('rekap_pendataan.pemetaan_dudi.download');
+        Route::get('/pemetaan-dudi-print', [RekapPendataanController::class, 'printPemetaanDudi'])->name('rekap_pendataan.pemetaan_dudi.print');
+    });
 });
 
 // Admin INI
@@ -114,4 +131,6 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
 // test
 Route::prefix('/test')->group(function(){
     Route::get('/getColumn', [TestingController::class, 'getColumn']);
+    Route::get('/table-dudi-list', [TestingController::class, 'tableDudiList']);
+    Route::get('/table-pemetaan-dudi', [TestingController::class, 'tablePemetaanDudi']);
 });

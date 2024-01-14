@@ -19,7 +19,7 @@ class DudiController extends Controller
      */
     public function index(Request $request)
     {
-        $dudi = Dudi::latest()->where('kakomli_id', auth()->guard('kakomli')->user()->id);
+        $dudi = Dudi::latest()->where('jurusan_id', auth()->guard('kakomli')->user()->jurusan_id);
         if ($request->has('query') && !empty($request->input('query'))) {
             $input = $request->input('query');
             $dudi->where('nama', 'LIKE', '%' . $input . '%')

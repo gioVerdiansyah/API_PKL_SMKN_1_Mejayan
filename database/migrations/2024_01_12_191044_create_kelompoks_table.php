@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kelompoks', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('nama_kelompok');
-            $table->foreignId('kakomli_id')->constrained()->restrictOnDelete();
-            $table->foreignId('dudi_id')->constrained()->restrictOnDelete();
+            $table->foreignUuid('kakomli_id')->constrained()->restrictOnDelete();
+            $table->foreignUuid('dudi_id')->constrained()->restrictOnDelete();
             $table->foreignUuid('guru_id')->constrained()->restrictOnDelete();
             $table->timestamps();
         });

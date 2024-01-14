@@ -65,10 +65,9 @@ class User extends Authenticatable
     public function jurnal(): HasMany{
         return $this->hasMany(Jurnal::class, 'id');
     }
-
-    public function dudi(): BelongsTo
+    public function anggota(): HasOne
     {
-        return $this->belongsTo(Dudi::class, 'dudi_id');
+        return $this->hasOne(AnggotaKelompok::class, 'id');
     }
     public function jurusan(): BelongsTo
     {

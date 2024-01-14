@@ -15,4 +15,7 @@ class Jurusan extends Model
     public function kakomli():HasOne{
         return $this->hasOne(Kakomli::class, 'id');
     }
+    public function dudi():HasOne{
+        return $this->hasOne(Dudi::class, 'id');
+    }
 }

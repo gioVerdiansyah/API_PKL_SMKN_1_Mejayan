@@ -84,38 +84,52 @@
                     </li>
 
                     <li class="nav-item nav-category">Data-Data</li>
-                    <li class="nav-item {{ request()->routeIs('siswa.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->routeIs('siswa.*') ? 'active' : '' }}">
                         <a href="{{ route('siswa.index') }}" class="nav-link">
                             <i class="link-icon" data-feather="users"></i>
                             <span class="link-title">Data Siswa</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('dudi.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->routeIs('dudi.*') ? 'active' : '' }}">
                         <a href="{{ route('dudi.index') }}" class="nav-link">
                             <i class="mdi mdi-factory"></i>
-                            <span class="link-title ms-3">Data Dudi</span>
+                            <span class="link-title ms-3">Data DuDi</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('pengurus-pkl.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->routeIs('pengurus-pkl.*') ? 'active' : '' }}">
                         <a href="{{ route('pengurus-pkl.index') }}" class="nav-link">
                             <i class="fa-solid fa-user-tie"></i>
                             <span class="link-title ms-3">Pengurus PKL</span>
                         </a>
                     </li>
 
-                    <li class="nav-item nav-category">Pengelolaan PKl</li>
-                    <li class="nav-item {{ request()->routeIs('siswa.index') ? 'active' : '' }}">
-                        <a href="{{ route('siswa.index') }}" class="nav-link">
+                    <li class="nav-item nav-category">Pengelolaan PKL</li>
+                    <li class="nav-item {{ request()->routeIs('kelompok-siswa.*') ? 'active' : '' }}">
+                        <a href="{{ route('kelompok-siswa.index') }}" class="nav-link">
                             <i class="link-icon" data-feather="settings"></i>
                             <span class="link-title">Kelompok Siswa</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('siswa.index') ? 'active' : '' }}">
+
+                    <li class="nav-item nav-category">Rekap Pendataan</li>
+                    <li class="nav-item {{ request()->routeIs('rekap_pendataan.dudi.*') ? 'active' : '' }}">
+                        <a href="{{ route('rekap_pendataan.dudi.show_download') }}" class="nav-link">
+                            <i class="link-icon" data-feather="book"></i>
+                            <span class="link-title">Rekap List DuDi</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('rekap_pendataan.pemetaan_dudi.*') ? 'active' : '' }}">
+                        <a href="{{ route('rekap_pendataan.pemetaan_dudi.show_download') }}" class="nav-link">
+                            <i class="link-icon" data-feather="book-open"></i>
+                            <span class="link-title">Pemetaan DuDi</span>
+                        </a>
+                    </li>
+                    {{-- <li class="nav-item {{ request()->routeIs('siswa.index') ? 'active' : '' }}">
                         <a href="{{ route('siswa.index') }}" class="nav-link">
                             <i class="link-icon" data-feather="grid"></i>
                             <span class="link-title">Pengurus Kelompok</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     {{-- <li class="nav-item nav-category">List</li>
                     <li class="nav-item @if (request()->routeIs('mou.create') or request()->routeIs('mou.edit') or request()->routeIs('testimoni.create') or request()->routeIs('testimoni.edit')) active @endif">

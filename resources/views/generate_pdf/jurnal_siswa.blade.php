@@ -1,3 +1,9 @@
+<style>
+    @page {
+        size: landscape;
+    }
+</style>
+
 <div style="margin: 0;">
     <h1 style="text-align: center;">Rekap Jurnal</h1>
     <div style="margin-bottom: 10px;">

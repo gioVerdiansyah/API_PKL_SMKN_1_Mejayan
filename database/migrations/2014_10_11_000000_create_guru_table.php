@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string("email");
             $table->string('password');
             $table->string('photo_guru')->default('images/mobile/default_photo.png');
-            $table->foreignId('kakomli_id')->constrained()->restrictOnDelete();
+            $table->foreignUuid('kakomli_id')->constrained()->restrictOnDelete();
             $table->text('deskripsi')->nullable();
             $table->rememberToken();
             $table->timestamps();

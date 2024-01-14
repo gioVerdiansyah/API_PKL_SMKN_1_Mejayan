@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('dudis', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('nama');
             $table->string('pemimpin');
             $table->string('no_telp')->nullable();
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('alamat');
             $table->string('koordinat');
             $table->integer('radius');
-            $table->foreignId('kakomli_id')->constrained()->restrictOnDelete();
+            $table->foreignId('jurusan_id')->constrained()->restrictOnDelete();
 
             $table->string('senin');
             $table->string('selasa');
