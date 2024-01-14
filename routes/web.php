@@ -85,7 +85,7 @@ Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
     Route::get('/export-column-dudi', [DudiController::class, 'generateKolom'])->name('dudi.download_list_table');
     Route::post('/import-data-dudi', [DudiController::class, 'importData'])->name('dudi.import_data');
 
-    Route::resource('/siswa', SiswaController::class);
+    Route::resource('/siswa-siswi', SiswaController::class)->names('siswa');
     Route::get('/export-column-siswa', [SiswaController::class, 'generateKolom'])->name('siswa.download_list_table');
     Route::post('/import-data-siswa', [SiswaController::class, 'importData'])->name('siswa.import_data');
 
@@ -98,13 +98,13 @@ Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
     });
 
     Route::prefix('/rekap-pendataan')->group(function(){
-        Route::get('/list-dudi', [RekapPendataanController::class, 'showDownloadPage'])->name('rekap_pendataan.dudi.show_download');
-        Route::get('/list-dudi-download', [RekapPendataanController::class, 'downloadListDudi'])->name('rekap_pendataan.dudi.download');
-        Route::get('/list-dudi-print', [RekapPendataanController::class, 'printListDudi'])->name('rekap_pendataan.dudi.print');
+        Route::get('/list-DuDi', [RekapPendataanController::class, 'showDownloadPage'])->name('rekap_pendataan.dudi.show_download');
+        Route::get('/list-DuDi-download', [RekapPendataanController::class, 'downloadListDudi'])->name('rekap_pendataan.dudi.download');
+        Route::get('/list-DuDi-print', [RekapPendataanController::class, 'printListDudi'])->name('rekap_pendataan.dudi.print');
 
-        Route::get('/pemetaan-dudi', [RekapPendataanController::class, 'showDownloadPagePemetaan'])->name('rekap_pendataan.pemetaan_dudi.show_download');
-        Route::get('/pemetaan-dudi-download', [RekapPendataanController::class, 'downloadPemetaanDudi'])->name('rekap_pendataan.pemetaan_dudi.download');
-        Route::get('/pemetaan-dudi-print', [RekapPendataanController::class, 'printPemetaanDudi'])->name('rekap_pendataan.pemetaan_dudi.print');
+        Route::get('/pemetaan-DuDi', [RekapPendataanController::class, 'showDownloadPagePemetaan'])->name('rekap_pendataan.pemetaan_dudi.show_download');
+        Route::get('/pemetaan-DuDi-download', [RekapPendataanController::class, 'downloadPemetaanDudi'])->name('rekap_pendataan.pemetaan_dudi.download');
+        Route::get('/pemetaan-DuDi-print', [RekapPendataanController::class, 'printPemetaanDudi'])->name('rekap_pendataan.pemetaan_dudi.print');
     });
 });
 

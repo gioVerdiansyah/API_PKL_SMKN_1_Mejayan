@@ -39,15 +39,15 @@
                 <th scope="col">PEMBIMBING</th>
             </tr>
             <tr class="table-light">
-                <th scope="col">1</th>
-                <th scope="col">2</th>
-                <th scope="col">3</th>
-                <th scope="col">4</th>
-                <th scope="col">5</th>
-                <th scope="col">6</th>
-                <th scope="col">7</th>
-                <th scope="col">8</th>
-                <th scope="col">9</th>
+                <th scope="col" class="text-center">1</th>
+                <th scope="col" class="text-center">2</th>
+                <th scope="col" class="text-center">3</th>
+                <th scope="col" class="text-center">4</th>
+                <th scope="col" class="text-center">5</th>
+                <th scope="col" class="text-center">6</th>
+                <th scope="col" class="text-center">7</th>
+                <th scope="col" class="text-center">8</th>
+                <th scope="col" class="text-center">9</th>
             </tr>
         </thead>
         <tbody>
