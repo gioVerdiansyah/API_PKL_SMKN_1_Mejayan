@@ -17,9 +17,9 @@ class KelolaJurnalController extends Controller
 $query->where('guru_id', $guru_id);
             }])->whereDate('created_at', today())->get();
 
-            return response()->json(['jurnal' => ['success' => true, 'data' => $jurnal]]);
+            return response()->json(['success' => true, 'data' => $jurnal]);
         } catch (\Exception $e) {
-            return response()->json(['jurnal' => ['success' => false, 'message' => 'Ada kesalahaan server!']]);
+            return response()->json(['success' => false, 'message' => 'Ada kesalahaan server!']);
         }
     }
     public function getNextPrevJurnal(string $guru_id, int $day, int $status = null)
@@ -37,9 +37,9 @@ $query->where('guru_id', $guru_id);
 
             $jurnal = $jurnal->whereDate('created_at', today()->subDays($day))->get();
 
-            return response()->json(['jurnal' => ['success' => true, 'data' => $jurnal]]);
+            return response()->json(['success' => true, 'data' => $jurnal]);
         } catch (\Exception $e) {
-            return response()->json(['jurnal' => ['success' => false, 'message' => 'Ada kesalahaan server!']]);
+            return response()->json(['success' => false, 'message' => 'Ada kesalahaan server!']);
         }
     }
 
@@ -49,7 +49,7 @@ $query->where('guru_id', $guru_id);
             $jurnal = Jurnal::where('id', $request->jurnal_id)->first();
 
             if(!$jurnal){
-                return response()->json(['jurnal' => ['success' => false, 'message' => 'ID jurnal tidak ditemukan']]);
+                return response()->json(['success' => false, 'message' => 'ID jurnal tidak ditemukan']);
             }
 
             $jurnal->status = "{$request->status}";
@@ -59,10 +59,10 @@ $query->where('guru_id', $guru_id);
             $jurnal->save();
 
             DB::commit();
-            return response()->json(['jurnal' => ['success' => true, 'message' => "Jurnal berhasil di " . (($request->status == 1) ? 'setujui' : 'tolak')]]);
+            return response()->json(['success' => true, 'message' => "Jurnal berhasil di " . (($request->status == 1) ? 'setujui' : 'tolak')]);
         }catch(\Exception $e){
             DB::rollBack();
-            return response()->json(['jurnal' => ['success' => false, 'message' => 'Error: ' . $e]]);
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e]);
         }
     }
 
@@ -75,9 +75,9 @@ $query->where('guru_id', $guru_id);
             }
             $user = User::whereNotIn('id', $user_id)->get();
 
-            return response()->json(['jurnal' => ['success' => true, 'data' => $user]]);
+            return response()->json(['success' => true, 'data' => $user]);
         }catch(\Exception $e){
-            return response()->json(['jurnal' => ['success' => false, 'message' => "Ada kesalahan server"]]);
+            return response()->json(['success' => false, 'message' => "Ada kesalahan server"]);
         }
     }
 }

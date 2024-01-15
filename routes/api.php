@@ -4,7 +4,6 @@ use App\Http\Controllers\Api\CheckLoginController;
 use App\Http\Controllers\Api\Guru\KelolaAbsensiController;
 use App\Http\Controllers\Api\Guru\KelolaIzinController;
 use App\Http\Controllers\Api\Guru\KelolaJurnalController;
-use App\Http\Controllers\Api\Guru\RegisterController;
 use App\Http\Controllers\Api\Siswa\AbsensiController;
 use App\Http\Controllers\Api\Siswa\EditProfileController;
 use App\Http\Controllers\Api\Siswa\IzinController;
@@ -30,7 +29,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware("verifyAPIKey")->group(function () {
-    Route::post('/register', RegisterController::class);
     Route::post('/login', LoginController::class);
     Route::get('/check-login', [CheckLoginController::class, 'index']);
     Route::post('/absensi/hadir', [AbsensiController::class, 'absen']);
@@ -53,9 +51,9 @@ Route::middleware("verifyAPIKey")->group(function () {
         Route::post('/login', \App\Http\Controllers\Api\Guru\LoginController::class);
 
         // list absensi
-        Route::get('/{guru_id}/absensi/get', [KelolaAbsensiController::class, 'getAbsen']);
+        Route::get('/{guru_id}/absensi/get/{nama_kelompok?}', [KelolaAbsensiController::class, 'getAbsen']);
         Route::get('/{guru_id}/absensi/pulang', [KelolaAbsensiController::class, 'getAbsenPulang']);
-        Route::get('/{guru_id}/absen/reject', [KelolaAbsensiController::class, 'absenReject']);
+        Route::get('/{guru_id}/absen/reject/{nama_kelompok?}', [KelolaAbsensiController::class, 'absenReject']);
 
         // list jurnal
         Route::get('/{guru_id}/jurnal/get', [KelolaJurnalController::class, 'getJurnal']);

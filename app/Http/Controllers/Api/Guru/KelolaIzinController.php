@@ -24,9 +24,9 @@ class KelolaIzinController extends Controller
 
             $izin = $izin->paginate(1);
 
-            return response()->json(['izin' => ['success' => true, 'data' => $izin]]);
+            return response()->json(['success' => true, 'data' => $izin]);
         } catch (\Exception $e) {
-            return response()->json(['izin' => ['success' => false, 'message' => "Ada kesalahaan server"]]);
+            return response()->json(['success' => false, 'message' => "Ada kesalahaan server"]);
         }
     }
 
@@ -37,7 +37,7 @@ class KelolaIzinController extends Controller
             $izin = Izin::where('id', $request->izin_id)->first();
 
             if (!$izin) {
-                return response()->json(['izin' => ['success' => false, 'message' => 'ID izin tidak ditemukan']]);
+                return response()->json(['success' => false, 'message' => 'ID izin tidak ditemukan']);
             }
 
             $izin->status = "{$request->status}";
@@ -47,10 +47,10 @@ class KelolaIzinController extends Controller
             $izin->save();
 
             DB::commit();
-            return response()->json(['izin' => ['success' => true, 'message' => "Izin berhasil di " . (($request->status == 1) ? 'setujui' : 'tolak')]]);
+            return response()->json(['success' => true, 'message' => "Izin berhasil di " . (($request->status == 1) ? 'setujui' : 'tolak')]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['izin' => ['success' => false, 'message' => 'Error: ' . $e]]);
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e]);
         }
     }
 }

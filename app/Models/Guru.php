@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Notifications\ResetPasswordGuruNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -54,7 +55,12 @@ class Guru extends Authenticatable
         return $this->belongsTo(Jurusan::class, 'jurusan_id');
     }
 
-    public function kelompok(): HasOne{
-        return $this->hasOne(Kelompok::class, 'id');
+    public function kelompok(): HasMany{
+        return $this->hasMany(Kelompok::class, 'id');
+    }
+
+    public function absensi()
+    {
+        return $this->hasManyThrough(Absensi::class, Kelompok::class);
     }
 }

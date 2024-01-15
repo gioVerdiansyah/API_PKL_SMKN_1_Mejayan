@@ -26,20 +26,19 @@ class LoginController extends Controller
         if ($this->attemptLogin($request, $loginField)) {
             // if auth success, create token
             $token = Auth::guard('guru')->user()->createToken('authToken')->plainTextToken;
+            $guru = Guru::with('jurusan')->where('email', $request->email)->orWhere('nama', $request->email)->first();
 
             return response()->json([
-                'login' => [
                     'success' => true,
-                    'guru' => Guru::with('jurusan')->where('email', $request->email)->orWhere('nama', $request->email)->first(),
+                    'data' => [
+                        'guru' => $guru,
+                    ],
                     'token' => $token
-                ]
             ], 200);
         } else {
             return response()->json([
-                'login' => [
                     'success' => false,
                     'message' => 'Email atau Password Anda salah'
-                ]
             ], 401);
         }
     }
@@ -48,7 +47,7 @@ class LoginController extends Controller
     {
         $user = Guru::where('email', $request->email)->orWhere('nama', $request->email)->first();
 
-        if ($user && $user->status === '1' && Hash::check($request->password, $user->password)) {
+        if ($user && Hash::check($request->password, $user->password)) {
             $this->guard()->login($user, true);
             return true;
         }
