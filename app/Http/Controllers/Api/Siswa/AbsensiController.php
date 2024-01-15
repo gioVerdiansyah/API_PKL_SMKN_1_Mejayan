@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AbsenRequest;
 use App\Http\Requests\AbsenSalahRequest;
 use App\Models\Absensi;
+use App\Models\Dudi;
+use App\Models\Guru;
 use App\Models\Izin;
+use App\Models\Kelompok;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -19,28 +22,34 @@ class AbsensiController extends Controller
     {
         try {
             DB::beginTransaction();
-            $user = User::with(['detailUser.detailPkl', 'detailUser.detailPkl.jamPkl'])->where('id', $request->user_id)->first();
+            $user = User::select('id')->where('id', $request->user_id)->first();
             if (!$user) {
-                return response()->json(['absen' => ['success' => false, 'message' => 'User tidak ditemukan']], 404);
+                return response()->json(['success' => false, 'message' => 'User tidak ditemukan'], 404);
             }
             $user_id = $user->id;
 
+            $kelompok = Kelompok::select('dudi_id')->with([
+                'anggota' => function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                }
+            ])->first();
+            $dudi = Dudi::where('id', $kelompok->dudi_id)->first();
 
             $absenSudahAda = Absensi::where('user_id', $user_id)
                 ->whereDate('created_at', today())->where('status', '!=', '5')
                 ->exists();
 
             if ($absenSudahAda) {
-                return response()->json(['absen' => ['success' => false, 'message' => 'Anda sudah absen!']], 403);
+                return response()->json(['success' => false, 'message' => 'Anda sudah absen!'], 403);
             }
 
             $absenIzin = Izin::where('user_id', $user_id)->whereDate('created_at', today())->exists();
             if ($absenIzin) {
-                return response()->json(['absen' => ['success' => false, 'message' => "Anda tidak bisa absen karena anda sudah melakukan izin"]], 403);
+                return response()->json(['success' => false, 'message' => "Anda tidak bisa absen karena anda sudah melakukan izin"], 403);
             }
 
             $coorUser = ['latitude' => $request->lat, 'longitude' => $request->lon];
-            $officeCoordinates = explode(', ', $user['detailUser']['detailPkl']['koordinat']);
+            $officeCoordinates = explode(', ', $dudi['koordinat']);
             $officeCoordinates = ['latitude' => $officeCoordinates[0], 'longitude' => $officeCoordinates[1]];
 
             $jarak = $this->hitungJarak($coorUser, $officeCoordinates);
@@ -50,9 +59,9 @@ class AbsensiController extends Controller
             $now = Carbon::now()->locale('id');
             $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
 
-            $jamMasuk = $user['detailUser']['detailPkl']['jamPkl']["$hariIni"];
+            $jamMasuk = $dudi["$hariIni"];
             if (is_null($jamMasuk)) {
-                return response()->json(["absen" => ["success" => false, "message" => "Anda tidak dapat absen pada hari $hariIni"]], 403);
+                return response()->json(["success" => false, "message" => "Anda tidak dapat absen pada hari $hariIni"], 403);
             }
             $jamMasuk = explode(" - ", $jamMasuk)[0];
             $jamMasukTimestamp = strtotime($jamMasuk);
@@ -70,7 +79,7 @@ class AbsensiController extends Controller
                                 'datang' => Carbon::now()
                             ]);
                             DB::commit();
-                            return response()->json(['absen' => ['success' => true, 'status' => 4, 'message' => 'Berhasil absen WFH!']], 201);
+                            return response()->json(['success' => true, 'status' => 4, 'message' => 'Berhasil absen WFH!'], 201);
                         } else {
                             Absensi::create([
                                 'user_id' => $user_id,
@@ -78,7 +87,7 @@ class AbsensiController extends Controller
                                 'datang' => Carbon::now()
                             ]);
                             DB::commit();
-                            return response()->json(['absen' => ['success' => true, 'status' => 4, 'message' => 'Anda telat absen WFH!']], 201);
+                            return response()->json(['success' => true, 'status' => 4, 'message' => 'Anda telat absen WFH!'], 201);
                         }
                     }
                     if ($jarak <= $jarakBatas) {
@@ -89,7 +98,7 @@ class AbsensiController extends Controller
                                 'datang' => Carbon::now()
                             ]);
                             DB::commit();
-                            return response()->json(['absen' => ['success' => true, 'status' => 2, 'message' => 'Anda telat absen!']], 201);
+                            return response()->json(['success' => true, 'status' => 2, 'message' => 'Anda telat absen!'], 201);
                         } else {
                             Absensi::create([
                                 'user_id' => $user_id,
@@ -97,10 +106,10 @@ class AbsensiController extends Controller
                                 'datang' => Carbon::now()
                             ]);
                             DB::commit();
-                            return response()->json(['absen' => ['success' => true, 'status' => 1, 'message' => 'Berhasil absen tepat waktu!']], 201);
+                            return response()->json(['success' => true, 'status' => 1, 'message' => 'Berhasil absen tepat waktu!'], 201);
                         }
                     } else {
-                        return response()->json(['absen' => ['success' => false, 'message' => 'Anda harus berada di kantor untuk melakukan absen']], 403);
+                        return response()->json(['success' => false, 'message' => 'Anda harus berada di kantor untuk melakukan absen'], 403);
                     }
                 }else{
                     Absensi::create([
@@ -109,14 +118,14 @@ class AbsensiController extends Controller
                         'datang' => Carbon::now()
                     ]);
                     DB::commit();
-                    return response()->json(['absen' => ['success' => true, 'status' => 4, 'message' => 'Anda dinyatakan ALPHA']], 201);
+                    return response()->json(['success' => true, 'status' => 4, 'message' => 'Anda dinyatakan ALPHA'], 201);
                 }
             } else {
-                return response()->json(['absen' => ['success' => false, 'message' => 'Absen di mulai 1 jam sebelum jam masuk!']], 403);
+                return response()->json(['success' => false, 'message' => 'Absen di mulai 1 jam sebelum jam masuk!'], 403);
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['absen' => ['success' => false, "message" => "Error: {$e->getMessage()}"]], 500);
+            return response()->json(['success' => false, "message" => "Error: {$e->getMessage()}"], 500);
         }
     }
 
@@ -144,22 +153,29 @@ class AbsensiController extends Controller
     {
         try {
             DB::beginTransaction();
-            $user = User::with(['detailUser.detailPkl', 'detailUser.detailPkl.jamPkl'])->where('id', $request->user_id)->first();
+            $user = User::where('id', $request->user_id)->first();
             if (!$user) {
-                return response()->json(['absen' => ['success' => false, 'message' => 'User tidak ditemukan']], 404);
+                return response()->json(['success' => false, 'message' => 'User tidak ditemukan'], 404);
             }
+
+            $kelompok = Kelompok::select('dudi_id')->with([
+                'anggota' => function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                }
+            ])->first();
+            $dudi = Dudi::where('id', $kelompok->dudi_id)->first();
 
             $absen = Absensi::whereDate('created_at', today())->where('status', '!=', '5')->first();
             if (!$absen) {
-                return response()->json(['absen' => ['success' => false, 'message' => "ID Absen tidak ditemukan, mungkin Anda belum absen!"]]);
+                return response()->json(['success' => false, 'message' => "ID Absen tidak ditemukan, mungkin Anda belum absen!"]);
             }
 
             $now = Carbon::now()->locale('id');
             $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
 
-            $jamMasuk = $user['detailUser']['detailPkl']['jamPkl']["$hariIni"];
+            $jamMasuk = $dudi["$hariIni"];
             if (is_null($jamMasuk)) {
-                return response()->json(["absen" => ["success" => false, "message" => "Anda tidak dapat absen pada hari $hariIni"]], 403);
+                return response()->json(["success" => false, "message" => "Anda tidak dapat absen pada hari $hariIni"], 403);
             }
             $jamMasuk = explode(" - ", $jamMasuk)[0];
             $jamMasukTimestamp = strtotime($jamMasuk);
@@ -167,27 +183,26 @@ class AbsensiController extends Controller
 
             $selisihSatuJam = 3600;
 
-
             if ($jamSekarangTimestamp >= ($jamMasukTimestamp - $selisihSatuJam)) {
                 switch ($request->status) {
                     case '4':
                         $absen->status = $request->status;
                         $absen->save();
                         DB::commit();
-                        return response()->json(['absen' => ['success' => true, 'message' => "Berhasil mengubah absen menjadi WFH"]]);
+                        return response()->json(['success' => true, 'message' => "Berhasil mengubah absen menjadi WFH"]);
                     case '1':
                         $absen->status = $request->status;
                         $absen->save();
                         DB::commit();
-                        return response()->json(['absen' => ['success' => true, 'message' => "Berhasil mengubah absen menjadi hadir"]]);
+                        return response()->json(['success' => true, 'message' => "Berhasil mengubah absen menjadi hadir"]);
                     default:
-                        return response()->json(['absen' => ['success' => false, 'message' => "Status Absensi tidak valid!"]]);
+                        return response()->json(['success' => false, 'message' => "Status Absensi tidak valid!"]);
                 }
             } else {
-                return response()->json(['absen' => ['success' => false, 'message' => 'Absen di mulai 1 jam sebelum jam masuk!']], 403);
+                return response()->json(['success' => false, 'message' => 'Absen di mulai 1 jam sebelum jam masuk!'], 403);
             }
         } catch (\Exception $e) {
-            return response()->json(['absen' => ['success' => false, "Error: $e"]]);
+            return response()->json(['success' => false, "Error: $e"]);
         }
     }
 
@@ -195,10 +210,10 @@ class AbsensiController extends Controller
     {
         try {
             DB::beginTransaction();
-            $user = User::with(['detailUser.detailPkl', 'detailUser.detailPkl.jamPkl'])->where('id', $request->user_id)->first();
+            $user = User::where('id', $request->user_id)->first();
 
             if (!$user) {
-                return response()->json(['absen' => ['success' => false, 'message' => 'User tidak ditemukan']], 404);
+                return response()->json(['success' => false, 'message' => 'User tidak ditemukan'], 404);
             }
             $user_id = $user->id;
 
@@ -208,7 +223,7 @@ class AbsensiController extends Controller
                 ->exists();
 
             if ($absenPulang) {
-                return response()->json(['absen' => ['success' => false, 'message' => 'Anda sudah absen pulang!']], 403);
+                return response()->json(['success' => false, 'message' => 'Anda sudah absen pulang!'], 403);
             }
 
             $absenAlpha = Absensi::where('user_id', $user_id)
@@ -217,7 +232,7 @@ class AbsensiController extends Controller
                 ->exists();
 
             if ($absenAlpha) {
-                return response()->json(['absen' => ['success' => false, 'message' => 'Anda tidak bisa absen pulang karena anda dinyatakan alpha!']], 403);
+                return response()->json(['success' => false, 'message' => 'Anda tidak bisa absen pulang karena anda dinyatakan alpha!'], 403);
             }
 
             $absenHadir = Absensi::where('user_id', $user_id)
@@ -226,7 +241,7 @@ class AbsensiController extends Controller
                 ->exists();
 
             if (!$absenHadir) {
-                return response()->json(['absen' => ['success' => false, 'message' => 'Anda belum absen hadir pada hari ini!']], 403);
+                return response()->json(['success' => false, 'message' => 'Anda belum absen hadir pada hari ini!'], 403);
             }
 
             $absenCutiIzinSakit = Izin::where('user_id', $user_id)
@@ -234,7 +249,7 @@ class AbsensiController extends Controller
                 ->exists();
 
             if ($absenCutiIzinSakit) {
-                return response()->json(['absen' => ['success' => false, 'message' => 'Anda tidak bisa absen pulang karena [\'Cuti\', \'Izin\', \'Sakit\']!']], 403);
+                return response()->json(['success' => false, 'message' => 'Anda tidak bisa absen pulang karena [\'Cuti\', \'Izin\', \'Sakit\']!'], 403);
             }
 
             $absenPulang = Absensi::where('user_id', $user_id)->whereDate('created_at', today())->first();
@@ -243,10 +258,10 @@ class AbsensiController extends Controller
             $absenPulang->save();
 
             DB::commit();
-            return response()->json(['absen' => ['success' => true, 'status' => 1, 'message' => 'Berhasil absen pulang!']], 201);
+            return response()->json(['success' => true, 'status' => 1, 'message' => 'Berhasil absen pulang!'], 201);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['absen' => ['success' => false, "message" => "Error: {$e->getMessage()}"]], 500);
+            return response()->json(['success' => false, "message" => "Error: {$e->getMessage()}"], 500);
         }
     }
 }

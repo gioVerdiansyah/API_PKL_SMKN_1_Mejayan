@@ -1,0 +1,114 @@
+.dashboard-template {
+    height: 100%;
+}
+
+.card-dashboard {
+    height: 100%;
+}
+
+.card-dashboard .card-detail {
+    background-color: rgba(58, 173, 245, 0.541);
+}
+
+.card-dashboard .card-detail .card-body {
+    position: relative;
+}
+
+.card-dashboard .card-detail .card-body .icon {
+    position: absolute;
+    display: flex;
+    align-items: flex-end;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    font-size: 5px;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.card-dashboard .card-detail .card-body .icon svg {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    right: 170px;
+    bottom: -50px;
+    transform: rotate(40deg);
+    color: rgba(255, 255, 255, 0.541);
+}
+
+.card-dashboard .card-detail .card-body .text-text {
+    position: relative;
+    color: #141414;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    z-index: 4;
+}
+
+.card-dashboard .card-detail .card-body .text-text .card-title {
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: #f4f4f4;
+}
+
+.card-dashboard .card-detail .card-body .text-text .card-text {
+    font-size: 130px;
+    font-family: "Barlow", sans-serif;
+    color: #f4f4f4;
+}
+
+@media only screen and (max-width: 767px) {
+    .dashboard-template {
+        height: 30%;
+        gap: 20px 0px;
+    }
+
+    .card-dashboard .card-detail .card-body .icon {
+        position: absolute;
+        display: flex;
+        align-items: flex-end;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        font-size: 5px;
+        overflow: hidden;
+        z-index: 2;
+    }
+
+    .card-dashboard .card-detail .card-body .icon svg {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        left: -20px;
+        bottom: -5px;
+        transform: rotate(40deg);
+        color: rgba(255, 255, 255, 0.541);
+    }
+
+    .card-dashboard .card-detail .card-body .text-text {
+        position: relative;
+        color: #141414;
+        height: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        z-index: 4;
+    }
+    
+    .card-dashboard .card-detail .card-body .text-text .card-title {
+        font-size: 20px;
+        letter-spacing: 1px;
+        color: #f4f4f4;
+    }
+    
+    .card-dashboard .card-detail .card-body .text-text .card-text {
+        font-size: 130px;
+        font-family: "Barlow", sans-serif;
+        color: #f4f4f4;
+    }
+}

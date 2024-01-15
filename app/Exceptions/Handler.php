@@ -32,7 +32,7 @@ class Handler extends ExceptionHandler
     {
         if ($request->is('api/*')) {
             return response()->json([
-                'error' => 'Something went wrong.',
+                'success' => false,
                 'message' => $exception->getMessage(),
             ], 500);
         }

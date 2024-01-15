@@ -63,7 +63,7 @@ class JurnalController extends Controller
             return response()->json(['jurnal' => ['success' => false, 'message' => "Error: Error: {$e->getMessage()}"]], 500);
         }
     }
-    public function jurnalShow(int $id){
+    public function jurnalShow(string $id){
         try{
             $jurnal = Jurnal::where('id', $id)->first();
 
@@ -77,7 +77,7 @@ class JurnalController extends Controller
         }
     }
 
-    public function editJurnal(Request $request, int $id)
+    public function editJurnal(Request $request, string $id)
     {
         try {
             DB::beginTransaction();

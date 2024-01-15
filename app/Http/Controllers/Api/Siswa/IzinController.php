@@ -69,7 +69,7 @@ class IzinController extends Controller
         }
     }
 
-    public function izinShow(int $id)
+    public function izinShow(string $id)
     {
         try{
             $dataIzin = Izin::with('user')->where('id', $id)->first();
@@ -84,7 +84,7 @@ class IzinController extends Controller
         }
     }
 
-    public function editIzin(Request $request, int $id)
+    public function editIzin(Request $request, string $id)
     {
         try {
             DB::beginTransaction();

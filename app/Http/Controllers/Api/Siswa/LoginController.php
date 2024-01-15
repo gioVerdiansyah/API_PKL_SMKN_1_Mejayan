@@ -3,6 +3,10 @@ namespace App\Http\Controllers\Api\Siswa;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserAuthRequest;
+use App\Models\AnggotaKelompok;
+use App\Models\Dudi;
+use App\Models\Guru;
+use App\Models\Kelompok;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,20 +29,29 @@ class LoginController extends Controller
         if ($this->attemptLogin($request, $loginField)) {
             // if auth success, create token
             $token = auth()->user()->createToken('authToken')->plainTextToken;
+            $user = User::with(['jurusan', 'kelas'])->where('id', auth()->user()->first()->id)->first();
+            $kelompok = Kelompok::with([
+                'anggota' => function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                }
+            ])->first();
+            $dudi = Dudi::where('id', $kelompok->dudi_id)->first();
+            $guru = Guru::where('id', $kelompok->guru_id)->first();
 
             return response()->json([
-                'login' => [
-                    'success' => true,
-                    'user' => User::with(['detailUser', 'detailUser.detailPkl', 'detailUser.jurusan', 'detailUser.kelas', 'detailUser.detailPkl.jamPkl'])->where('id', auth()->user()->first()->id)->first(),
+                'success' => true,
+                'data' => [
+                    'user' => $user,
+                    'guru' => $guru,
+                    'dudi' => $dudi,
                     'token' => $token
-                ]
+                ],
+                'message' => "Berhasil mendapatkan data!!!"
             ], 200);
         } else {
             return response()->json([
-                'login' => [
-                    'success' => false,
-                    'message' => 'Email atau Password Anda salah'
-                ]
+                'success' => false,
+                'message' => 'Email atau Password Anda salah'
             ], 401);
         }
     }
