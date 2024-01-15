@@ -6,13 +6,13 @@ use App\Http\Controllers\Api\Guru\KelolaIzinController;
 use App\Http\Controllers\Api\Guru\KelolaJurnalController;
 use App\Http\Controllers\Api\Guru\RegisterController;
 use App\Http\Controllers\Api\Siswa\AbsensiController;
+use App\Http\Controllers\Api\Siswa\EditProfileController;
 use App\Http\Controllers\Api\Siswa\IzinController;
 use App\Http\Controllers\Api\Siswa\JurnalController;
 use App\Http\Controllers\Api\Siswa\LoginController;
-use App\Http\Controllers\Api\Siswa\UbahPassController;
-use App\Http\Controllers\PrintController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -44,7 +44,7 @@ Route::middleware("verifyAPIKey")->group(function () {
     Route::get('/jurnal/get/{id}', [JurnalController::class,'jurnalGet']);
     Route::get('/jurnal/show/{id}', [JurnalController::class,'jurnalShow']);
     Route::post('/jurnal/edit/{id}', [JurnalController::class,'editJurnal']);
-    Route::put('/ubah-pass', [UbahPassController::class,'ubahPass']);
+    Route::post('/edit-profile/{id}', [EditProfileController::class,'editProfile']);
     Route::get('/absensi/trouble', [AbsensiController::class, 'absenTrouble']);
 
 

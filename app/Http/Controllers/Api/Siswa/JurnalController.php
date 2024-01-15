@@ -18,12 +18,12 @@ class JurnalController extends Controller
 
             $user = User::where('id', $request->user_id)->first();
             if(!$user){
-                return response()->json(['jurnal' => ['success' => false, 'message' => "User tidak ditemukan"]],404);
+                return response()->json(['success' => false, 'message' => "User tidak ditemukan"],404);
             }
 
             $sudahMengisi = Jurnal::where("user_id", $user->id)->whereDate('created_at',today())->exists();
             if($sudahMengisi){
-                return response()->json(['jurnal' => ['success' => false, 'message' => "Anda sudah mengisi jurnal pada hari ini"]],403);
+                return response()->json(['success' => false, 'message' => "Anda sudah mengisi jurnal pada hari ini"],403);
             }
 
             $jurnal = new Jurnal;
@@ -32,7 +32,7 @@ class JurnalController extends Controller
 
 
             if (!$request->hasFile("bukti")) {
-                return response()->json(["jurnal" => ["success" => false, "message" => "Foto Bukti tidak ditemukan!"]], 404);
+                return response()->json(["success" => false, "message" => "Foto Bukti tidak ditemukan!"], 404);
             }
 
             $fileName = $request->file("bukti")->hashName();
@@ -43,24 +43,24 @@ class JurnalController extends Controller
 
             DB::commit();
 
-            return response()->json(["jurnal"=> ["success"=> true,'message' => 'Berhasil mengisi jurnal pada hari ini']],200);
+            return response()->json(["success"=> true,'message' => 'Berhasil mengisi jurnal pada hari ini'],200);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(["jurnal" => ['success' => false, "message" => "Error: {$e->getMessage()}"]],500);
+            return response()->json(['success' => false, "message" => "Error: {$e->getMessage()}"],500);
         }
     }
 
     public function jurnalGet(string $id){
         try{
-            $jurnal = Jurnal::where('user_id', $id)->paginate(2);
+            $jurnal = Jurnal::where('user_id', $id)->orderBy('created_at', 'desc')->paginate(2);
 
             if(!$jurnal){
-                return response()->json(['jurnal' => ['success' => false, 'message' => "ID user tidak ditemukan, cobalah logout lalu login ulang"]], 404);
+                return response()->json(['success' => false, 'message' => "ID user tidak ditemukan, cobalah logout lalu login ulang"], 404);
             }
 
-            return response()->json(['jurnal' => ['success' => true, 'data' => $jurnal]], 200);
+            return response()->json(['success' => true, 'data' => $jurnal], 200);
         }catch(\Exception $e){
-            return response()->json(['jurnal' => ['success' => false, 'message' => "Error: Error: {$e->getMessage()}"]], 500);
+            return response()->json(['success' => false, 'message' => "Error: Error: {$e->getMessage()}"], 500);
         }
     }
     public function jurnalShow(string $id){
@@ -68,12 +68,12 @@ class JurnalController extends Controller
             $jurnal = Jurnal::where('id', $id)->first();
 
             if(!$jurnal){
-                return response()->json(['jurnal' => ['success' => false, 'message' => "ID user tidak ditemukan, cobalah logout lalu login ulang"]], 404);
+                return response()->json(['success' => false, 'message' => "ID user tidak ditemukan, cobalah logout lalu login ulang"], 404);
             }
 
-            return response()->json(['jurnal' => ['success' => true, 'data' => $jurnal]], 200);
+            return response()->json(['success' => true, 'data' => $jurnal], 200);
         }catch(\Exception $e){
-            return response()->json(['jurnal' => ['success' => false, 'message' => "Error: Error: {$e->getMessage()}"]], 500);
+            return response()->json(['success' => false, 'message' => "Error: Error: {$e->getMessage()}"], 500);
         }
     }
 
@@ -85,7 +85,7 @@ class JurnalController extends Controller
             $jurnal = Jurnal::where('id', $id)->first();
 
             if(!$jurnal){
-                return response()->json(['jurnal' => ['success' => false, 'message' => "ID Jurnal tidak ditemukan!"]], 404);
+                return response()->json(['success' => false, 'message' => "ID Jurnal tidak ditemukan!"], 404);
             }
 
             $jurnal->kegiatan = $request->kegiatan;
@@ -108,10 +108,10 @@ class JurnalController extends Controller
 
             DB::commit();
 
-            return response()->json(["jurnal" => ["success" => true, 'message' => 'Berhasil me-edit jurnal']], 200);
+            return response()->json(["success" => true, 'message' => 'Berhasil me-edit jurnal'], 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(["jurnal" => ['success' => false, "message" => "Error: {$e->getMessage()}"]], 500);
+            return response()->json(['success' => false, "message" => "Error: {$e->getMessage()}"], 500);
         }
     }
 }

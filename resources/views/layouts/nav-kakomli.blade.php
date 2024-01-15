@@ -99,7 +99,7 @@
                     <li class="nav-item {{ request()->routeIs('pengurus-pkl.*') ? 'active' : '' }}">
                         <a href="{{ route('pengurus-pkl.index') }}" class="nav-link">
                             <i class="fa-solid fa-user-tie"></i>
-                            <span class="link-title ms-3">Pengurus PKL</span>
+                            <span class="link-title ms-3">Pembimbing PKL</span>
                         </a>
                     </li>
 

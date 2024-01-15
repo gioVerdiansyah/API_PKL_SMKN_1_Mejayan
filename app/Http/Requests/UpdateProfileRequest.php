@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UbahPassUpdateRequest extends FormRequest
+class UpdateProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,10 @@ class UbahPassUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'oldPass' => 'required|string',
-            'newPass' => 'required|string|min:8',
+            'oldPass' => 'nullable|string',
+            'newPass' => 'required_with:oldPass,string,min:8',
+            'confirmPass' => 'required_with:oldPass|same:newPass',
+            'photo_profile' => "nullable|file|image|mimes:png,jpg,jpeg|max:2048"
         ];
     }
 

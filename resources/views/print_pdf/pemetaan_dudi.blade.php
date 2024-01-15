@@ -22,7 +22,7 @@
     <div class="header text-center text-uppercase">
         <h4 class="m-0">DATA PESERTA PRAKTIK KERJA LAPANGAN</h4>
         <h4 class="m-0">JURUSAN {{ $jurusan->full_name }}</h4>
-        <h4 class="m-0">SMK NEGRI 1 MEJAYAN</h4>
+        <h4 class="m-0">SMK NEGERI 1 MEJAYAN</h4>
         <h4 class="m-0">TAHUN PEMBELAJARAN {{ date('Y') }}/{{ date('Y', strtotime('+1 year')) }}</h4>
     </div>
     <table class="table table-bordered mt-3">

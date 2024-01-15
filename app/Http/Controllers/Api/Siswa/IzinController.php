@@ -20,12 +20,12 @@ class IzinController extends Controller
             $user = User::where('name', $request->name)->first();
 
             if (!$user) {
-                return response()->json(['izin' => ['success' => false, 'message' => 'Nama siswa tidak ditemukan']], 404);
+                return response()->json(['success' => false, 'message' => 'Nama siswa tidak ditemukan'], 404);
             }
 
             $sudahIzin = Izin::where('user_id', $user->id)->whereDate('created_at', today())->exists();
             if ($sudahIzin) {
-                return response()->json(['izin' => ['success' => false, "message" => "Anda sudah izin pada hari ini"]], 403);
+                return response()->json(['success' => false, "message" => "Anda sudah izin pada hari ini"], 403);
             }
 
             $izin = new Izin;
@@ -36,7 +36,7 @@ class IzinController extends Controller
             $izin->akhir_izin = Carbon::parse($request->akhir_izin);
 
             if (!$request->hasFile("bukti")) {
-                return response()->json(["izin" => ["success" => false, "message" => "Foto Bukti tidak ditemukan!"]], 404);
+                return response()->json(["success" => false, "message" => "Foto Bukti tidak ditemukan!"], 404);
             }
 
             $nameFile = $request->file('bukti')->hashName();
@@ -46,11 +46,11 @@ class IzinController extends Controller
             $izin->save();
 
             DB::commit();
-            return response()->json(['izin' => ['success' => true, 'message' => "Berhasil izin pada hari ini"]], 201);
+            return response()->json(['success' => true, 'message' => "Berhasil izin pada hari ini"], 201);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(["izin" => ["success" => false, 'message' => "Error: {$e->getMessage()}"]], 500);
+            return response()->json(["success" => false, 'message' => "Error: {$e->getMessage()}"], 500);
         }
     }
 
@@ -59,28 +59,28 @@ class IzinController extends Controller
         try {
             $user = User::where('id', $id)->first();
             if (!$user) {
-                return response()->json(['izin' => ['success' => false, 'message' => 'User Id tidak di temukan']], 404);
+                return response()->json(['success' => false, 'message' => 'User Id tidak di temukan'], 404);
             }
             $dataIzin = Izin::where('user_id', $user->id)->latest()->paginate(3);
 
-            return response()->json(['izin' => ['success' => true, 'message' => 'Berhasil mendapatkan data', 'data' => $dataIzin->toArray()]], 200);
+            return response()->json(['success' => true, 'message' => 'Berhasil mendapatkan data', 'data' => $dataIzin->toArray()], 200);
         } catch (\Exception $e) {
-            return response()->json(['izin' => ['success' => false, 'message' => "Error: {$e->getMessage()}"]], 500);
+            return response()->json(['success' => false, 'message' => "Error: {$e->getMessage()}"], 500);
         }
     }
 
     public function izinShow(string $id)
     {
         try{
-            $dataIzin = Izin::with('user')->where('id', $id)->first();
+            $dataIzin = Izin::with('user')->where('id', $id)->orderBy('created_at', 'desc')->first();
 
             if (!$dataIzin){
-                return response()->json(['izin' => ['success' => false, 'message' => 'Data izin tidak ditemukan']], 404);
+                return response()->json(['success' => false, 'message' => 'Data izin tidak ditemukan'], 404);
             }
 
-            return response()->json(['izin' => ['success' => true, 'message' => 'Berhasil mendapatkan data', 'data' => $dataIzin]], 200);
+            return response()->json(['success' => true, 'message' => 'Berhasil mendapatkan data', 'data' => $dataIzin], 200);
         }catch(\Exception $e){
-            return response()->json(['izin' => ['success' => false, 'message' => "Error: {$e->getMessage()}"]], 500);
+            return response()->json(['success' => false, 'message' => "Error: {$e->getMessage()}"], 500);
         }
     }
 
@@ -91,13 +91,13 @@ class IzinController extends Controller
             $user = User::where('name', $request->name)->first();
 
             if (!$user) {
-                return response()->json(['izin' => ['success' => false, 'message' => $request->all()]], 404);
+                return response()->json(['success' => false, 'message' => $request->all()], 404);
             }
 
             $izin = Izin::where('id', $id)->first();
 
             if(!$izin){
-                return response()->json(['izin' => ['success' => false, 'message' => 'ID Absen tidak ditemukan']], 404);
+                return response()->json(['success' => false, 'message' => 'ID Absen tidak ditemukan'], 404);
             }
 
             $izin->user_id = $user->id;
@@ -120,11 +120,11 @@ class IzinController extends Controller
             $izin->save();
 
             DB::commit();
-            return response()->json(['izin' => ['success' => true, 'message' => "Berhasil me-edit izin"]], 201);
+            return response()->json(['success' => true, 'message' => "Berhasil me-edit izin"], 201);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(["izin" => ["success" => false, 'message' => "Error: {$e->getMessage()}"]], 500);
+            return response()->json(["success" => false, 'message' => "Error: {$e->getMessage()}"], 500);
         }
     }
 }
