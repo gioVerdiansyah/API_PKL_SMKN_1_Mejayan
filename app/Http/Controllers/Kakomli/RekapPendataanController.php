@@ -47,7 +47,7 @@ class RekapPendataanController extends Controller
     }
 
     public function printPemetaanDudi(){
-        $kelompok = Kelompok::with(['dudi', 'guru', 'anggota', 'anggota.user.kelas',])->where('kakomli_id', auth()->guard('kakomli')->user()->id)->orderBy('created_at', 'asc')->get();
+        $kelompok = Kelompok::with(['dudi', 'guru', 'anggota', 'anggota.users.kelas',])->where('kakomli_id', auth()->guard('kakomli')->user()->id)->orderBy('created_at', 'asc')->get();
         $jurusan = Jurusan::where('id', auth()->guard('kakomli')->user()->jurusan_id)->first();
 
         return view('print_pdf.pemetaan_dudi', compact('kelompok', 'jurusan'));

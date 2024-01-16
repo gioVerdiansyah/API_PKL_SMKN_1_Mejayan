@@ -30,4 +30,8 @@ class AnggotaKelompok extends Model
     {
         return $this->belongsTo(User::class, 'id');
     }
+    public function users(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

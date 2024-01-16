@@ -55,12 +55,13 @@ class Guru extends Authenticatable
         return $this->belongsTo(Jurusan::class, 'jurusan_id');
     }
 
-    public function kelompok(): HasMany{
-        return $this->hasMany(Kelompok::class, 'id');
+    public function kelompok(): HasMany
+    {
+        return $this->hasMany(Kelompok::class, 'guru_id');
     }
 
     public function absensi()
     {
-        return $this->hasManyThrough(Absensi::class, Kelompok::class);
+        return $this->hasManyThrough(Absensi::class, Kelompok::class, 'guru_id', 'kelompok_id', 'id', 'id');
     }
 }

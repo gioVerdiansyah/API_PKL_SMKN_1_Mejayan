@@ -51,9 +51,9 @@ Route::middleware("verifyAPIKey")->group(function () {
         Route::post('/login', \App\Http\Controllers\Api\Guru\LoginController::class);
 
         // list absensi
-        Route::get('/{guru_id}/absensi/get/{nama_kelompok?}', [KelolaAbsensiController::class, 'getAbsen']);
+        Route::get('/{guru_id}/absensi/get/{nama_kelompok?}/{hari?}', [KelolaAbsensiController::class, 'getAbsen']);
         Route::get('/{guru_id}/absensi/pulang', [KelolaAbsensiController::class, 'getAbsenPulang']);
-        Route::get('/{guru_id}/absen/reject/{nama_kelompok?}', [KelolaAbsensiController::class, 'absenReject']);
+        Route::get('/{guru_id}/absensi/reject/{nama_kelompok?}', [KelolaAbsensiController::class, 'absenReject']);
 
         // list jurnal
         Route::get('/{guru_id}/jurnal/get', [KelolaJurnalController::class, 'getJurnal']);

@@ -28,15 +28,15 @@
     <table class="table table-bordered mt-3">
         <thead>
             <tr class="table-warning">
-                <th scope="col">KELOMPOK</th>
-                <th scope="col">KELAS</th>
-                <th scope="col">NOMOR INDUK</th>
-                <th scope="col">NAMA SISWA</th>
-                <th scope="col">DUDI TEMPAT PRAKERIN</th>
-                <th scope="col">NAMA PIMPINAN DUDI</th>
-                <th scope="col">NO. TELP/HP DUDI</th>
-                <th scope="col">ALAMAT DUDI</th>
-                <th scope="col">PEMBIMBING</th>
+                <th scope="col" class="text-center">KELOMPOK</th>
+                <th scope="col" class="text-center">KELAS</th>
+                <th scope="col" class="text-center">NOMOR INDUK</th>
+                <th scope="col" class="text-center">NAMA SISWA</th>
+                <th scope="col" class="text-center">DUDI TEMPAT PRAKERIN</th>
+                <th scope="col" class="text-center">NAMA PIMPINAN DUDI</th>
+                <th scope="col" class="text-center">NO. TELP/HP DUDI</th>
+                <th scope="col" class="text-center">ALAMAT DUDI</th>
+                <th scope="col" class="text-center">PEMBIMBING</th>
             </tr>
             <tr class="table-light">
                 <th scope="col" class="text-center">1</th>
@@ -57,15 +57,15 @@
                     $i++;
                 @endphp
                 <tr class="{{ $i % 2 == 0 ? 'table-light' : 'table-secondary' }}">
-                    <td>{{ $item->nama_kelompok }}</td>
-                    <td>{{ $firstAnggota->user->kelas->kelas }}</td>
-                    <td>{{ $firstAnggota->user->nis }}</td>
-                    <td>{{ $firstAnggota->user->name }}</td>
-                    <td>{{ $item->dudi->nama }}</td>
-                    <td>{{ $item->dudi->pemimpin }}</td>
-                    <td>{{ $item->dudi->no_telp }}</td>
-                    <td>{{ $item->dudi->alamat }}</td>
-                    <td>{{ $item->guru->nama }} {{ $item->guru->gelar }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" class="text-center align-middle">{{ $item->nama_kelompok }}</td>
+                    <td>{{ $firstAnggota->users->kelas->kelas }}</td>
+                    <td>{{ $firstAnggota->users->nis }}</td>
+                    <td>{{ $firstAnggota->users->name }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" class="text-center align-middle">{{ $item->dudi->nama }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" class="text-center align-middle">{{ $item->dudi->pemimpin }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" class="text-center align-middle">{{ $item->dudi->no_telp }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" class="text-center align-middle">{{ $item->dudi->alamat }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" class="text-center align-middle">{{ $item->guru->nama }} {{ $item->guru->gelar }}</td>
                 </tr>
                 @foreach ($item->anggota as $j => $anggota)
                     @if ($j > 0)
@@ -73,15 +73,9 @@
                             @php
                                 ++$i;
                             @endphp
-                            <td></td>
-                            <td>{{ $anggota->user->kelas->kelas }}</td>
-                            <td>{{ $anggota->user->nis }}</td>
-                            <td>{{ $anggota->user->name }}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>{{ $anggota->users->kelas->kelas }}</td>
+                            <td>{{ $anggota->users->nis }}</td>
+                            <td>{{ $anggota->users->name }}</td>
                         </tr>
                     @endif
                 @endforeach

@@ -11,8 +11,4 @@ class Kelas extends Model
     use HasFactory;
 
     public $timestamps = false;
-
-    public function detailUser(): HasMany{
-        return $this->hasMany(DetailUser::class, 'id');
-    }
 }

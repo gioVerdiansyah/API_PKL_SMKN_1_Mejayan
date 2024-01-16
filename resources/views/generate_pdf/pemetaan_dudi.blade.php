@@ -55,15 +55,15 @@
     <table style="border-collapse: collapse; width: 100%;" class="table-bordered mt-3">
         <thead>
             <tr style="background-color: #ffc107;">
-                <th scope="col">KELOMPOK</th>
-                <th scope="col">KELAS</th>
-                <th scope="col">NOMOR INDUK</th>
-                <th scope="col">NAMA SISWA</th>
-                <th scope="col">DUDI TEMPAT PRAKERIN</th>
-                <th scope="col">NAMA PIMPINAN DUDI</th>
-                <th scope="col">NO. TELP/HP DUDI</th>
-                <th scope="col">ALAMAT DUDI</th>
-                <th scope="col">PEMBIMBING</th>
+                <th scope="col" style="text-align: center">KELOMPOK</th>
+                <th scope="col" style="text-align: center">KELAS</th>
+                <th scope="col" style="text-align: center">NOMOR INDUK</th>
+                <th scope="col" style="text-align: center">NAMA SISWA</th>
+                <th scope="col" style="text-align: center">DUDI TEMPAT PRAKERIN</th>
+                <th scope="col" style="text-align: center">NAMA PIMPINAN DUDI</th>
+                <th scope="col" style="text-align: center">NO. TELP/HP DUDI</th>
+                <th scope="col" style="text-align: center">ALAMAT DUDI</th>
+                <th scope="col" style="text-align: center">PEMBIMBING</th>
             </tr>
             <tr style="background-color: #f8f9fa;">
                 <th scope="col" style="text-align: center">1</th>
@@ -81,29 +81,23 @@
             @foreach ($kelompok as $i => $item)
                 @php $firstAnggota = $item->anggota->first(); $i++; @endphp
                 <tr style="{{ $i % 2 == 0 ? 'background-color: #f8f9fa;' : 'background-color: #e9ecef;' }}">
-                    <td>{{ $item->nama_kelompok }}</td>
-                    <td>{{ $firstAnggota->user->kelas->kelas }}</td>
-                    <td>{{ $firstAnggota->user->nis }}</td>
-                    <td>{{ $firstAnggota->user->name }}</td>
-                    <td>{{ $item->dudi->nama }}</td>
-                    <td>{{ $item->dudi->pemimpin }}</td>
-                    <td>{{ $item->dudi->no_telp }}</td>
-                    <td>{{ $item->dudi->alamat }}</td>
-                    <td>{{ $item->guru->nama }} {{ $item->guru->gelar }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" style="text-align: center; vertical-align: middle">{{ $item->nama_kelompok }}</td>
+                    <td>{{ $firstAnggota->users->kelas->kelas }}</td>
+                    <td>{{ $firstAnggota->users->nis }}</td>
+                    <td>{{ $firstAnggota->users->name }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" style="text-align: center; vertical-align: middle">{{ $item->dudi->nama }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" style="text-align: center; vertical-align: middle">{{ $item->dudi->pemimpin }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" style="text-align: center; vertical-align: middle">{{ $item->dudi->no_telp }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" style="text-align: center; vertical-align: middle">{{ $item->dudi->alamat }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" style="text-align: center; vertical-align: middle">{{ $item->guru->nama }} {{ $item->guru->gelar }}</td>
                 </tr>
                 @foreach ($item->anggota as $j => $anggota)
                     @if ($j > 0)
                         <tr style="{{ $i % 2 == 0 ? 'background-color: #f8f9fa;' : 'background-color: #e9ecef;' }}">
                             @php ++$i; @endphp
-                            <td></td>
-                            <td>{{ $anggota->user->kelas->kelas }}</td>
-                            <td>{{ $anggota->user->nis }}</td>
-                            <td>{{ $anggota->user->name }}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>{{ $anggota->users->kelas->kelas }}</td>
+                            <td>{{ $anggota->users->nis }}</td>
+                            <td>{{ $anggota->users->name }}</td>
                         </tr>
                     @endif
                 @endforeach
