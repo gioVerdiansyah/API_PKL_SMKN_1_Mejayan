@@ -4,27 +4,37 @@ namespace App\Http\Controllers\Api\Guru;
 
 use App\Http\Controllers\Controller;
 use App\Models\Izin;
+use App\Models\Kelompok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class KelolaIzinController extends Controller
 {
-    public function getIzin(string $guru_id, $status = null)
+    public function getIzin(string $guru_id, string $nama_kelompok = null, $status = '0')
     {
         try {
-            $izin = Izin::with([
-                'user' => function ($query) use ($guru_id) {
-                    $query->where('guru_id', $guru_id);
-                }
-            ]);
+            $listKelompok = Kelompok::where('guru_id', $guru_id)->pluck('nama_kelompok')->toArray();
 
-            if(!is_null($status)){
+            $namaKelompok = $nama_kelompok ?? ($listKelompok[0] ?? '!kelompok');
+
+            $kelompok = Kelompok::with(['anggota',])->where('guru_id', $guru_id)->where('nama_kelompok', $namaKelompok)->first();
+
+            if (!$kelompok) {
+                $kelompok = (object) [
+                    'anggota' => collect([['user_id' => null]]),
+                    'dudi' => []
+                ];
+            }
+
+            $izin = Izin::latest()->with('user')->whereIn('user_id', $kelompok->anggota->pluck('user_id'));
+
+            if ($status !== '0') {
                 $izin = $izin->where('status', $status);
             }
 
             $izin = $izin->paginate(1);
 
-            return response()->json(['success' => true, 'data' => $izin]);
+            return response()->json(['success' => true, 'data' => $izin, 'kelompok' => $listKelompok, 'kelompok_ini' => $namaKelompok, 'status' => $status]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => "Ada kesalahaan server"]);
         }

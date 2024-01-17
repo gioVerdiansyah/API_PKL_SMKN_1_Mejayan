@@ -4,79 +4,86 @@ namespace App\Http\Controllers\Api\Guru;
 
 use App\Http\Controllers\Controller;
 use App\Models\Jurnal;
+use App\Models\Kelompok;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class KelolaJurnalController extends Controller
 {
-    public function getJurnal(string $guru_id)
+    public function getJurnal(string $guru_id, string $nama_kelompok = null, int $hari = 0, string $status = '0')
     {
         try {
-            $jurnal = Jurnal::with(['user' => function($query) use($guru_id) {
-$query->where('guru_id', $guru_id);
-            }])->whereDate('created_at', today())->get();
+            $listKelompok = Kelompok::where('guru_id', $guru_id)->pluck('nama_kelompok')->toArray();
 
-            return response()->json(['success' => true, 'data' => $jurnal]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Ada kesalahaan server!']);
-        }
-    }
-    public function getNextPrevJurnal(string $guru_id, int $day, int $status = null)
-    {
-        try {
-            $jurnal = Jurnal::with([
-                'user' => function ($query) use ($guru_id) {
-                    $query->where('guru_id', $guru_id);
-                }
-            ]);
+            $namaKelompok = $nama_kelompok ?? ($listKelompok[0] ?? '!kelompok');
 
-            if($status){
-                $jurnal = $jurnal->where('status', "$status");
+            $kelompok = Kelompok::with(['anggota',])->where('guru_id', $guru_id)->where('nama_kelompok', $namaKelompok)->first();
+
+            if (!$kelompok) {
+                $kelompok = (object) [
+                    'anggota' => collect([['user_id' => null]]),
+                    'dudi' => []
+                ];
             }
 
-            $jurnal = $jurnal->whereDate('created_at', today()->subDays($day))->get();
+            $jurnal = Jurnal::with('user')->whereIn('user_id', $kelompok->anggota->pluck('user_id'))->whereDate('created_at', today()->subDays($hari));
 
-            return response()->json(['success' => true, 'data' => $jurnal]);
+            if($status !== '0'){
+                $jurnal->where('status', $status);
+            }
+
+            $jurnal = $jurnal->get();
+
+            return response()->json(['success' => true, 'data' => $jurnal, 'kelompok_ini' => $namaKelompok, 'kelompok' => $listKelompok, 'hari' => $hari, 'status' => $status], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Ada kesalahaan server!']);
         }
     }
 
-    public function jurnalAgreement(Request $request){
-        try{
+    public function jurnalAgreement(Request $request)
+    {
+        try {
             DB::beginTransaction();
             $jurnal = Jurnal::where('id', $request->jurnal_id)->first();
 
-            if(!$jurnal){
+            if (!$jurnal) {
                 return response()->json(['success' => false, 'message' => 'ID jurnal tidak ditemukan']);
             }
 
             $jurnal->status = "{$request->status}";
-            if($request->has('keterangan')){
+            if ($request->has('keterangan')) {
                 $jurnal->keterangan = $request->keterangan;
             }
             $jurnal->save();
 
             DB::commit();
             return response()->json(['success' => true, 'message' => "Jurnal berhasil di " . (($request->status == 1) ? 'setujui' : 'tolak')]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Error: ' . $e]);
         }
     }
 
-    public function jurnalReject(){
-        try{
-            $user_id = [];
-            $absen = Jurnal::whereDate('created_at', today())->get();
-            foreach ($absen as $item) {
-                array_push($user_id, $item->user_id);
-            }
-            $user = User::whereNotIn('id', $user_id)->get();
+    public function jurnalReject(string $guru_id, string $nama_kelompok = null)
+    {
+        try {
+            $listKelompok = Kelompok::where('guru_id', $guru_id)->pluck('nama_kelompok')->toArray();
 
-            return response()->json(['success' => true, 'data' => $user]);
-        }catch(\Exception $e){
+            $namaKelompok = $nama_kelompok ?? ($listKelompok[0] ?? '!kelompok');
+
+            $kelompok = Kelompok::with(['anggota'])->where('guru_id', $guru_id)->where('nama_kelompok', $namaKelompok)->first();
+
+            $userJurnal = Jurnal::whereDate('created_at', today())
+                ->whereIn('user_id', $kelompok->anggota->pluck('user_id'))
+                ->pluck('user_id');
+
+            $userBelumJurnal = $kelompok->anggota->pluck('user_id')->diff($userJurnal);
+
+            $users = User::whereIn('id', $userBelumJurnal)->get();
+
+            return response()->json(['success' => true, 'data' => $users]);
+        } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => "Ada kesalahan server"]);
         }
     }

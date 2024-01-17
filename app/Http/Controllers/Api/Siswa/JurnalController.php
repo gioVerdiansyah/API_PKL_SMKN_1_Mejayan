@@ -89,6 +89,7 @@ class JurnalController extends Controller
             }
 
             $jurnal->kegiatan = $request->kegiatan;
+            $jurnal->status = '0';
 
             $path = $jurnal->bukti;
 

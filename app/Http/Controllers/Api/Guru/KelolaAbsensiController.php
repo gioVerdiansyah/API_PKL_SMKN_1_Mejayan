@@ -18,27 +18,6 @@ class KelolaAbsensiController extends Controller
 
             $namaKelompok = $nama_kelompok ?? ($kelompok[0] ?? '!kelompok');
 
-            // $absen = Absensi::with([
-            //     'user.anggota.kelompok' => function ($query) use ($guru_id, $namaKelompok) {
-            //         $query->where('guru_id', $guru_id)->where('nama_kelompok', $namaKelompok);
-            //     }
-            // ])->whereDate('created_at', today())->whereNot('status', 5)->paginate(2);
-
-            // $absen = Absensi::with(['user.anggota.kelompok' => function ($query) use ($guru_id, $namaKelompok) {
-            //     $query->with(['guru' => function ($subQuery) use ($guru_id) {
-            //         $subQuery->where('id', $guru_id);
-            //     }])->where('nama_kelompok', $namaKelompok);
-            // }])->paginate(10);
-
-            // $absen = Guru::find($guru_id)->absensi()
-            //     ->select('absensis.*')
-            //     ->whereHas('user', function ($query) use ($namaKelompok) {
-            //         $query->where('user_id', $namaKelompok);
-            //     })
-            //     ->whereDate('absensis.created_at', today())
-            //     ->whereNot('absensis.status', 5)
-            //     ->paginate(10);
-
             $absen = Kelompok::with([
                 'anggota',
                 'dudi' => function ($query) {
@@ -46,23 +25,16 @@ class KelolaAbsensiController extends Controller
                 }
             ])->where('guru_id', $guru_id)->where('nama_kelompok', $namaKelompok)->first();
 
+            if(!$absen){
+                $absen = (object)[
+                    'anggota' => collect([['user_id' => null]]),
+                    'dudi' => []
+                ];
+            }
+
             $absensi = Absensi::with('user')->whereIn('user_id', $absen->anggota->pluck('user_id'))->whereDate('created_at', today()->subDays($hari))->whereNot('status', '5')->get();
 
             return response()->json(['success' => true, 'data' => $absensi, 'kelompok_ini' => $namaKelompok, 'kelompok' => $kelompok, 'hari' => $hari, 'dudi' => $absen->dudi], 200);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => "Error: {$e->getMessage()}"], 500);
-        }
-    }
-    public function getAbsenPulang(Request $request, string $guru_id)
-    {
-        try {
-            $absen = Absensi::with([
-                'user' => function ($query) use ($guru_id) {
-                    $query->where('guru_id', $guru_id);
-                }
-            ])->whereDate('created_at', today())->where('status', 5)->paginate(1);
-
-            return response()->json(['success' => true, 'data' => $absen], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => "Error: {$e->getMessage()}"], 500);
         }

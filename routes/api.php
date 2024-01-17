@@ -52,17 +52,15 @@ Route::middleware("verifyAPIKey")->group(function () {
 
         // list absensi
         Route::get('/{guru_id}/absensi/get/{nama_kelompok?}/{hari?}', [KelolaAbsensiController::class, 'getAbsen']);
-        Route::get('/{guru_id}/absensi/pulang', [KelolaAbsensiController::class, 'getAbsenPulang']);
         Route::get('/{guru_id}/absensi/reject/{nama_kelompok?}', [KelolaAbsensiController::class, 'absenReject']);
 
         // list jurnal
-        Route::get('/{guru_id}/jurnal/get', [KelolaJurnalController::class, 'getJurnal']);
+        Route::get('/{guru_id}/jurnal/get/{nama_kelompok?}/{hari?}/{status?}', [KelolaJurnalController::class, 'getJurnal']);
+        Route::get('/{guru_id}/jurnal/reject/{nama_kelompok?}', [KelolaJurnalController::class, 'jurnalReject']);
         Route::put('/{guru_id}/jurnal/agreement', [KelolaJurnalController::class, 'jurnalAgreement']);
-        Route::get('/{guru_id}/jurnal/prev_day/{day}/{status?}', [KelolaJurnalController::class, 'getNextPrevJurnal']);
-        Route::get('/{guru_id}/jurnal/reject', [KelolaJurnalController::class, 'jurnalReject']);
 
         // list izin
-        Route::get('/{guru_id}/izin/get/{status?}', [KelolaIzinController::class, 'getIzin']);
+        Route::get('/{guru_id}/izin/get/{nama_kelompok?}/{status?}', [KelolaIzinController::class, 'getIzin']);
         Route::put('/{guru_id}/izin/agreement', [KelolaIzinController::class, 'izinAgreement']);
     });
 });

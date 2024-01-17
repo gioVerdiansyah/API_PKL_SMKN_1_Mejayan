@@ -103,6 +103,7 @@ class IzinController extends Controller
             $izin->user_id = $user->id;
             $izin->tipe_izin = $request->tipe_izin;
             $izin->alasan = $request->alasan;
+            $izin->status = '0';
             $izin->awal_izin = Carbon::parse($request->awal_izin);
             $izin->akhir_izin = Carbon::parse($request->akhir_izin);
 
