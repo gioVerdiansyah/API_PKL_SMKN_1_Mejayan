@@ -49,7 +49,7 @@
                     <p class="text-bold fw-bolder">Daftar Anggota</p>
                     <ol class="d-flex flex-wrap" id="list-siswa">
                         @foreach ($kelompok->anggota as $item)
-                            <li>{{ $item->user->name }}</li>
+                            <li>{{ $item->users->name }}</li>
                         @endforeach
                     </ol>
                 </div>

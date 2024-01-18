@@ -8,9 +8,9 @@
     <h1 style="text-align: center;">Rekap Jurnal</h1>
     <div style="margin-bottom: 10px;">
         <p style="margin: 0"><span style="font-weight: bold;">Nama:</span> {{ $user->name }}</p>
-        <p style="margin: 0"><span style="font-weight: bold;">Absen:</span> {{ $user->detailUser->absen }}</p>
-        <p style="margin: 0"><span style="font-weight: bold;">Kelas:</span> {{ $user->detailUser->kelas->kelas }}</p>
-        <p style="margin: 0"><span style="font-weight: bold;">Tempat Dudi:</span> {{ $user->detailUser->detailPkl->tempat_dudi }}</p>
+        <p style="margin: 0"><span style="font-weight: bold;">Absen:</span> {{ $user->absen }}</p>
+        <p style="margin: 0"><span style="font-weight: bold;">Kelas:</span> {{ $user->kelas->kelas }}</p>
+        <p style="margin: 0"><span style="font-weight: bold;">Tempat Dudi:</span> {{ $user->dudi->tempat_dudi }}</p>
     </div>
     <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
         <thead>

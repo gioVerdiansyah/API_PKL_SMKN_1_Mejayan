@@ -67,6 +67,7 @@ Route::post('/absen/trouble', [AbsensiTroubleController::class, 'absenTroublesSt
 Route::get('/print/jurnal/{id}', [PrintController::class, 'showPrintJurnalSiswa']);
 Route::post('/print/jurnal', [PrintController::class, 'printJurnalSiswa'])->name('print_jurnal');
 Route::get('/guru/{guru_id}/absen/print', [PrintController::class, 'showPrintAbensiSiswa']);
+Route::post('/guru/{guru_id}/absen/print', [PrintController::class, 'printAbsensiSiswa'])->name('cetak_rekap_absensi');
 Route::get('/guru/{guru_id}/absen/cetak', [PrintController::class, 'absenPrint'])->name('print_absensi');
 
 // Auth Kaomli

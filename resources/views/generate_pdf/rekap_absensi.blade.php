@@ -8,17 +8,18 @@
         <h3 style="margin: 5px 0;font-family: sans-serif;font-weight: 500">DAFTAR HADIR</h3>
         <h3 style="margin: 5px 0;font-family: sans-serif;font-weight: 500">PESERTA PRAKTIK KERJA LAPANGAN (PKL) SMKN 1
             MEJAYAN</h3>
-        <h3 style="margin: 5px 0;font-family: sans-serif;font-weight: 500">DI KAHFIDLKFNDJKFN</h3>
-        <h3 style="margin: 5px 0;font-family: sans-serif;font-weight: 500">BULAN: JULI 2024</h3>
+        <h3 style="margin: 5px 0;font-family: sans-serif;font-weight: 500; text-transform: uppercase">DI
+            {{ $kelompok->dudi->nama }}</h3>
+        <h3 style="margin: 5px 0;font-family: sans-serif;font-weight: 500; text-transform: uppercase">BULAN:
+            {{ $absensiBulan }}</h3>
     </div>
-    <div style="display: flex;flex-direction: row">
+    <div style="display: flex; flex-direction: row;width: 10%">
+        <!-- Header Section -->
         <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
             <thead>
                 <tr>
                     <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">
-                        @php
-                            echo explode(' - ', $dataAbsensi[0]->user->detailUser->detailPkl->jamPkl->senin)[0] ?? '08:00';
-                        @endphp
+                        {{ explode(' - ', $kelompok->dudi->senin)[0] ?? '08:00' }}
                     </th>
                 </tr>
                 <tr>
@@ -26,20 +27,25 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($dataAbsensi as $data)
+                <!-- Date Rows -->
+                @foreach ($absensi as $data)
                     <tr>
-                        <th style="border: 1px solid #ddd; padding: 8px;">
-                            {{ \Carbon\Carbon::parse($data->created_at)->format('d/m/Y') }}</th>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                            {{ \Carbon\Carbon::parse($data->created_at)->format('d/m/Y') }}
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-        @foreach ($dataAbsensi as $i => $data)
+
+        <!-- User Data Section -->
+        @foreach ($listUser as $i => $data)
             <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
                 <thead>
                     <tr>
-                        <th colspan="3" style="border: 1px solid #ddd; padding: 8px; text-align: center;">
-                            {{ $data->user->name }}</th>
+                        <th colspan="4" style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                            {{ $data->name }}
+                        </th>
                     </tr>
                     <tr>
                         <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Datang</th>
@@ -48,30 +54,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center">
-                            {{ \Carbon\Carbon::parse($data->datang)->format('H:i') }}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center">
-                            @php
-                                $currentDate = date('Y-m-d');
-                                $arrivalTime = new DateTime("$currentDate 08:30:00");
-                                $expectedArrival = new DateTime("$currentDate 08:00:00");
-
-                                $tardiness = $arrivalTime->diff($expectedArrival);
-
-                                echo $tardiness->format('%H:%I');
-                            @endphp
-                        </td>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center">
-                            {{ \Carbon\Carbon::parse($data->pulang)->format('H:i') }}</td>
-                    </tr>
+                    <!-- User-specific Data Rows -->
+                    @foreach ($absensi as $absenData)
+                        @if ($absenData->user_id == $data->id)
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                                    {{ \Carbon\Carbon::parse($absenData->datang)->format('H:i') }}
+                                </td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                                    {{ \Carbon\Carbon::parse($absenData->telat)->format('H:i') }}
+                                </td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                                    {{ \Carbon\Carbon::parse($absenData->pulang)->format('H:i') }}
+                                </td>
+                            </tr>
+                        @endif
+                    @endforeach
                 </tbody>
             </table>
         @endforeach
     </div>
-</div>
 
-<script>
+
+
+    {{-- <script>
     window.addEventListener('load', function() {
     window.print({
         landscape: true,
@@ -83,4 +89,4 @@
     }
 });
 
-</script>
+</script> --}}

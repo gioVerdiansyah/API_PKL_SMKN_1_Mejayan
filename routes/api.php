@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\CheckLoginController;
 use App\Http\Controllers\Api\Guru\KelolaAbsensiController;
 use App\Http\Controllers\Api\Guru\KelolaIzinController;
 use App\Http\Controllers\Api\Guru\KelolaJurnalController;
+use App\Http\Controllers\Api\Guru\EditProfileController as EditProfileGuruController;
 use App\Http\Controllers\Api\Siswa\AbsensiController;
 use App\Http\Controllers\Api\Siswa\EditProfileController;
 use App\Http\Controllers\Api\Siswa\IzinController;
@@ -11,10 +12,6 @@ use App\Http\Controllers\Api\Siswa\JurnalController;
 use App\Http\Controllers\Api\Siswa\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-
-
-
 
 
 /*
@@ -62,6 +59,8 @@ Route::middleware("verifyAPIKey")->group(function () {
         // list izin
         Route::get('/{guru_id}/izin/get/{nama_kelompok?}/{status?}', [KelolaIzinController::class, 'getIzin']);
         Route::put('/{guru_id}/izin/agreement', [KelolaIzinController::class, 'izinAgreement']);
+
+        Route::post('/{guru_id}/profile/edit', [EditProfileGuruController::class, 'edit']);
     });
 });
 

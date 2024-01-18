@@ -54,7 +54,7 @@ class AbsensiController extends Controller
 
             $jarak = $this->hitungJarak($coorUser, $officeCoordinates);
 
-            $jarakBatas = 100;
+            $jarakBatas = $dudi->radius;
 
             $now = Carbon::now()->locale('id');
             $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
@@ -69,6 +69,12 @@ class AbsensiController extends Controller
 
             $selisihSatuJam = 3600;
 
+            $jamMasuk = $dudi->{$hariIni};
+            $jamMasuk = substr($jamMasuk, 0, 5);
+            $telat = $now->diff(Carbon::parse($now->format('Y-m-d') . ' ' . $jamMasuk));
+            $waktuTelat = $telat->format('%H:%I');
+            $telatMenit = ($telat->h * 60) + $telat->i;
+
             if ($jamSekarangTimestamp >= ($jamMasukTimestamp - $selisihSatuJam)) {
                 if ($jamSekarangTimestamp < strtotime(config('app.jam_tutup_absen'))) {
                     if ($request->wfh == '1') {
@@ -76,7 +82,7 @@ class AbsensiController extends Controller
                             Absensi::create([
                                 'user_id' => $user_id,
                                 'status' => 4,
-                                'datang' => Carbon::now()
+                                'datang' => $now
                             ]);
                             DB::commit();
                             return response()->json(['success' => true, 'status' => 4, 'message' => 'Berhasil absen WFH!'], 201);
@@ -84,10 +90,11 @@ class AbsensiController extends Controller
                             Absensi::create([
                                 'user_id' => $user_id,
                                 'status' => 5,
-                                'datang' => Carbon::now()
+                                'datang' => $now,
+                                'telat' => $waktuTelat
                             ]);
                             DB::commit();
-                            return response()->json(['success' => true, 'status' => 4, 'message' => 'Anda telat absen WFH!'], 201);
+                            return response()->json(['success' => true, 'status' => 4, 'message' => 'Anda telat absen WFH selama ' . $telatMenit . ' menit'], 201);
                         }
                     }
                     if ($jarak <= $jarakBatas) {
@@ -95,15 +102,16 @@ class AbsensiController extends Controller
                             Absensi::create([
                                 'user_id' => $user_id,
                                 'status' => 2,
-                                'datang' => Carbon::now()
+                                'datang' => $now,
+                                'telat' => $waktuTelat
                             ]);
                             DB::commit();
-                            return response()->json(['success' => true, 'status' => 2, 'message' => 'Anda telat absen!'], 201);
+                            return response()->json(['success' => true, 'status' => 2, 'message' => 'Anda telat absen selama ' . $telatMenit . ' menit'], 201);
                         } else {
                             Absensi::create([
                                 'user_id' => $user_id,
                                 'status' => 1,
-                                'datang' => Carbon::now()
+                                'datang' => $now
                             ]);
                             DB::commit();
                             return response()->json(['success' => true, 'status' => 1, 'message' => 'Berhasil absen tepat waktu!'], 201);
@@ -115,10 +123,11 @@ class AbsensiController extends Controller
                     Absensi::create([
                         'user_id' => $user_id,
                         'status' => 3,
-                        'datang' => Carbon::now()
+                        'datang' => $now,
+                        'telat' => $waktuTelat
                     ]);
                     DB::commit();
-                    return response()->json(['success' => true, 'status' => 4, 'message' => 'Anda dinyatakan ALPHA'], 201);
+                    return response()->json(['success' => true, 'status' => 3, 'message' => 'Anda dinyatakan ALPHA. Absen telah di tutup pukul ' . config('app.jam_tutup_absen')], 201);
                 }
             } else {
                 return response()->json(['success' => false, 'message' => 'Absen di mulai 1 jam sebelum jam masuk!'], 403);
@@ -128,7 +137,6 @@ class AbsensiController extends Controller
             return response()->json(['success' => false, "message" => "Error: {$e->getMessage()}"], 500);
         }
     }
-
     private function hitungJarak($coord1, $coord2)
     {
         $lat1 = deg2rad($coord1['latitude']);

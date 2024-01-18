@@ -32,7 +32,7 @@ class KelolaAbsensiController extends Controller
                 ];
             }
 
-            $absensi = Absensi::with('user')->whereIn('user_id', $absen->anggota->pluck('user_id'))->whereDate('created_at', today()->subDays($hari))->whereNot('status', '5')->get();
+            $absensi = Absensi::with('user')->whereIn('user_id', $absen->anggota->pluck('user_id'))->whereDate('created_at', today()->subDays($hari))->get();
 
             return response()->json(['success' => true, 'data' => $absensi, 'kelompok_ini' => $namaKelompok, 'kelompok' => $kelompok, 'hari' => $hari, 'dudi' => $absen->dudi], 200);
         } catch (\Exception $e) {

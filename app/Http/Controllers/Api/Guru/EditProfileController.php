@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api\Siswa;
+namespace App\Http\Controllers\Api\Guru;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateProfileRequest;
-use App\Models\User;
+use App\Http\Requests\EditProfileGuruRequest;
+use App\Models\Guru;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -12,35 +12,35 @@ use Illuminate\Support\Facades\Storage;
 
 class EditProfileController extends Controller
 {
-    public function editProfile(UpdateProfileRequest $request, string $id)
+    public function edit(EditProfileGuruRequest $request, string $guru_id)
     {
         try {
             DB::beginTransaction();
-            $user = User::where("id", $id)->first();
+            $guru = Guru::where("id", $guru_id)->first();
 
-            if (!$user) {
+            if (!$guru) {
                 return response()->json(['success' => false, 'message' => "User ID tidak ditemukan!"], 403);
             }
 
-            if ($request->hasFile('photo_profile')) {
-                if (strpos($user->photo_guru, 'storage/') !== false) {
-                    Storage::delete(explode('storage/', $user->photo_profile)[1]);
+            if ($request->hasFile('photo_guru')) {
+                if (strpos($guru->photo_guru, 'storage/') !== false) {
+                    Storage::delete(explode('storage/', $guru->photo_guru)[1]);
                 }
-                $fileName = $request->file('photo_profile')->hashName();
-                $path = $request->file('photo_profile')->storeAs('photo_siswa', $fileName);
-                $user->photo_profile = 'storage/' . $path;
+                $fileName = $request->file('photo_guru')->hashName();
+                $path = $request->file('photo_guru')->storeAs('photo_guru', $fileName);
+                $guru->photo_guru = 'storage/' . $path;
             }
 
             if ($request->filled('oldPass') && $request->filled('newPass')) {
-                if (Hash::check($request->oldPass, $user->password)) {
-                    $user->password = Hash::make($request->newPass);
+                if (Hash::check($request->oldPass, $guru->password)) {
+                    $guru->password = Hash::make($request->newPass);
                 } else {
                     return response()->json(['success' => false, 'message' => "Password tidak sama dengan yang dulu"], 403);
                 }
             }
 
-            if ($request->hasFile('photo_profile') || ($request->filled('oldPass') && $request->filled('newPass'))) {
-                $user->save();
+            if ($request->hasFile('photo_guru') || ($request->filled('oldPass') && $request->filled('newPass'))) {
+                $guru->save();
                 DB::commit();
                 return response()->json(['success' => true, 'message' => "Logout dan login kembali untuk melihat perubahan"], 201);
             } else {
