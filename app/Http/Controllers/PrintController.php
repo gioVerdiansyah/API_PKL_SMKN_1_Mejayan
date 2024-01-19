@@ -71,7 +71,10 @@ class PrintController extends Controller
         }
 
         $guru_id = $guru->id;
-        $kelompok = Kelompok::where('guru_id', $guru_id)->pluck('nama_kelompok')->toArray();
+        $kelompok = Kelompok::with([
+            'dudi' => function ($query) {
+                $query->select(['id', 'nama']);
+            }])->where('guru_id', $guru_id)->get();
 
         $absen = Kelompok::with([
             'anggota',
@@ -119,7 +122,7 @@ class PrintController extends Controller
         $kelompok = Kelompok::with([
             'anggota',
             'dudi' => function ($query) {
-                $query->select(['id', 'nama', 'senin']);
+                $query->select(['id', 'nama', 'senin', 'pemimpin']);
             }
         ])->where('guru_id', $guru_id)->where('nama_kelompok', $namaKelompok)->first();
 
@@ -139,8 +142,13 @@ class PrintController extends Controller
         $absensiBulan = $bulanTahun->translatedFormat('F Y');
 
         $listUser = User::whereIn('id', $kelompok->anggota->pluck('user_id'))->get();
-        // dd($absensi);
-        return view('generate_pdf.rekap_absensi', compact('absensi', 'kelompok', 'absensiBulan', 'listUser'));
+        if($request->tipe === "daftar-hadir"){
+            return view('generate_pdf.rekap_daftar_absensi', compact('absensi', 'kelompok', 'absensiBulan', 'listUser'));
+        }
+        // dd($absensi->where('status', '1')->count());
+        $bulannya = $request->bulan;
+        return view('generate_pdf.rekap_absensi_kehadiran', compact('absensi', 'kelompok', 'absensiBulan', 'listUser', 'bulannya'));
+
         // } catch (\Exception $e) {
         //     return response()->json(['success' => false, 'message' => "Error: {$e->getMessage()}"], 500);
         // }

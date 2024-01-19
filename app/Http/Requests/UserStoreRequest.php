@@ -34,7 +34,7 @@ class UserStoreRequest extends FormRequest
             'no_hp' => 'nullable|string|gt:0',
             'no_hp_ortu' => 'nullable|string|gt:0',
             'photo_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'absen' => 'required|integer|digits:2'
+            'absen' => 'required|integer'
         ];
     }
 }

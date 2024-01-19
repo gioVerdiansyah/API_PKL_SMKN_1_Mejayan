@@ -7,16 +7,25 @@
                 @csrf
                 <div class="d-flex">
                     <div class="form-group">
-                        <select name="kelompok" class="form-control" id="tipe">
+                        <label for="tipe" class="form-label">Tipe Rekap</label>
+                        <select name="tipe" class="form-control" id="tipe">
+                            <option value="daftar-hadir">Daftar Hadir</option>
+                            <option value="kehadiran">Kehadiran</option>
+                        </select>
+                    </div>
+                    <div class="form-group mx-3">
+                        <label for="kelompok" class="form-label">Kelompok</label>
+                        <select name="kelompok" class="form-control" id="kelompok">
                             @forelse ($kelompok as $items)
-                                <option value="{{ $items }}">{{ $items }}</option>
+                                <option value="{{ $items->nama_kelompok }}">{{ $items->nama_kelompok }} / {{ $items->dudi->nama }}</option>
                             @empty
                                 <option disabled>Kelompok tidak ada</option>
                             @endforelse
                         </select>
                     </div>
-                    <div class="form-group ml-3">
-                        <select name="bulan" class="form-control" id="tipe">
+                    <div class="form-group">
+                        <label for="bulan-bulan" class="form-label">Per Bulan</label>
+                        <select name="bulan" class="form-control" id="bulan-bulan">
                             @forelse ($dataBulan as $items)
                                 <option value="{{ $items['bulan'] }}">{{ $items['nama_bulan'] }}</option>
                             @empty
