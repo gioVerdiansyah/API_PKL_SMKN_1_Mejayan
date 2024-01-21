@@ -1,4 +1,4 @@
-@extends('layouts.nav-kakomli')
+@extends('layouts.nav-admin')
 
 @section('content')
     <div class="card px-3 mb-4 flex-md-row justify-content-between align-items-center">
@@ -10,6 +10,16 @@
             </nav>
         </div>
         <div class="d-flex align-items-center">
+            <div class="col-md-6 col-12 me-3 col-lg-4 pk-0">
+                <select name="jurusan" class="form-select" id="jurusan">
+                    <option selected>Semua</option>
+                    @foreach ($jurusans as $jurusan)
+                        <option value="{{ $jurusan->id }}" {{ request('jurusan') == $jurusan->id ? 'selected' : '' }}>
+                            {{ $jurusan->jurusan }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
             <div class="d-flex justify-content-center my-3">
                 <form method="get" class="form-inline d-flex flex-row gap-1">
                     <input class="form-control mr-sm-2 py-0" type="search" name="query" placeholder="Search"
@@ -65,4 +75,22 @@
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById('jurusan').addEventListener('change', function() {
+            var selectedCategoryId = this.value;
+            var currentUrl = window.location.href;
+            var newUrl;
+            if (selectedCategoryId === "Semua") {
+                newUrl = currentUrl.replace(/jurusan=[^&]*/, '');
+            } else {
+                var ctParam = 'jurusan=' + selectedCategoryId;
+                if (currentUrl.includes('jurusan=')) {
+                    newUrl = currentUrl.replace(/jurusan=[^&]*/, ctParam);
+                } else {
+                    newUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + ctParam;
+                }
+            }
+            window.location.href = newUrl;
+        });
+    </script>
 @endsection

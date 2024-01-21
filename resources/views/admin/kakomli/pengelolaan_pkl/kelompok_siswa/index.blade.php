@@ -1,11 +1,11 @@
-@extends('layouts.nav-kakomli')
+@extends('layouts.nav-admin')
 
 @section('content')
     <div class="card px-3 mb-4 flex-md-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
-                    <li class="breadcrumb-item active" aria-current="page">Data-data siswa</li>
+                    <li class="breadcrumb-item active" aria-current="page">Data-data Kelompok Siswa PKL</li>
                 </ol>
             </nav>
         </div>
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="text-end">
-            <a href="{{ route('siswa.create') }}" class="btn btn-outline-primary">Tambah Siswa</a>
+            <a href="{{ route('kelompok-siswa.create') }}" class="btn btn-outline-primary">Tambah Kelompok</a>
         </div>
     </div>
     <div class="card">
@@ -30,23 +30,23 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama</th>
-                            <th>Kelas</th>
-                            <th>NIS</th>
-                            <th>Jenis kelamin</th>
+                            <th>Nama Kelompok</th>
+                            <th>DuDi</th>
+                            <th>Pengurus/Pembimbing</th>
+                            <th>Banyak Anggota</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($siswa as $i => $data)
+                        @forelse ($kelompok as $i => $data)
                             <tr>
                                 <th>{{ ++$i }}</th>
-                                <td style="white-space: initial">{{ $data->name }}</td>
-                                <td>{{ $data->kelas->kelas }}</td>
-                                <td>{{ $data->nis }}</td>
-                                <td>{{ $data->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
+                                <td style="white-space: initial">{{ $data->nama_kelompok }}</td>
+                                <td>{{ $data->dudi->nama }}</td>
+                                <td>{{ $data->guru->nama }}</td>
+                                <td>{{ count($data->anggota) }}</td>
                                 <td class="d-flex align-items-center gap-2">
-                                    <a href="{{ route('siswa.show', $data->id) }}" class="btn btn-primary px-2 py-1"><i
+                                    <a href="{{ route('kelompok-siswa.show', $data->id) }}" class="btn btn-primary px-2 py-1"><i
                                             class="link-icon" width="15" data-feather="file-text"></i></a>
                                 </td>
                             </tr>
@@ -61,7 +61,7 @@
                 </table>
             </div>
             <div class="mt-3 align-items-center">
-                {{ $siswa->links('pagination.bootstrap-5') }}
+                {{ $kelompok->links('pagination.bootstrap-5') }}
             </div>
         </div>
     </div>

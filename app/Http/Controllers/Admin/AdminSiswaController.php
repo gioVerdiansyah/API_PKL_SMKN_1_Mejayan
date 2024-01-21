@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Kakomli;
+namespace App\Http\Controllers\Admin;
 
 use App\Exports\SiswaExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Imports\SiswaImport;
+use App\Imports\Admin\AdminSiswaImport;
 use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\User;
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
-class SiswaController extends Controller
+class AdminSiswaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -33,9 +33,13 @@ class SiswaController extends Controller
                 ->orWhere('nis', 'LIKE', $input);
         }
 
+        if ($request->has('jurusan') && !empty($request->input('jurusan'))) {
+            $siswa->where('jurusan_id', "$request->jurusan");
+        }
+
         $siswa = $siswa->paginate(10);
 
-        return view('kakomli.siswa.index', compact('siswa', 'jurusans'));
+        return view('admin.kakomli.siswa.index', compact('siswa', 'jurusans'));
     }
 
     /**
@@ -45,7 +49,7 @@ class SiswaController extends Controller
     {
         $jurusan = Jurusan::all();
         $kelas = Kelas::all();
-        return view('kakomli.siswa.create', compact('jurusan', 'kelas'));
+        return view('admin.kakomli.siswa.create', compact('jurusan', 'kelas'));
     }
 
     /**
@@ -107,7 +111,7 @@ class SiswaController extends Controller
             ]);
         }
 
-        return view('kakomli.siswa.show', compact('siswa'));
+        return view('admin.kakomli.siswa.show', compact('siswa'));
     }
 
     /**
@@ -126,7 +130,7 @@ class SiswaController extends Controller
             ]);
         }
 
-        return view('kakomli.siswa.edit', compact('siswa','jurusan', 'kelas'));
+        return view('admin.kakomli.siswa.edit', compact('siswa','jurusan', 'kelas'));
     }
 
     /**
@@ -261,7 +265,7 @@ class SiswaController extends Controller
         try {
             $file = $request->file('file_excel');
 
-            Excel::import(new SiswaImport, $file);
+            Excel::import(new AdminSiswaImport, $file);
 
             return to_route('siswa.index')->with('message', [
                 'icon' => 'success',

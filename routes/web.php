@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AbsensiTroubleController;
+use App\Http\Controllers\Admin\AdminDudiController;
+use App\Http\Controllers\Admin\AdminPengurusPklController;
+use App\Http\Controllers\Admin\AdminSiswaController;
 use App\Http\Controllers\Admin\KakomliController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\Guru\EditProfileController;
@@ -11,16 +14,20 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Kakomli\DudiController;
+use App\Http\Controllers\Kakomli\EditProfileController as EditProfileKakomliController;
 use App\Http\Controllers\Kakomli\HomeController;
 use App\Http\Controllers\Kakomli\PengelolaanPkl\KelompokSiswaController;
 use App\Http\Controllers\Kakomli\PengurusPklController;
 use App\Http\Controllers\Kakomli\RekapPendataanController;
 use App\Http\Controllers\Kakomli\SiswaController;
-use App\Http\Controllers\Kakomli\EditProfileController as EditProfileKakomliController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+
+
+
 
 
 
@@ -120,17 +127,17 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
     Route::get('/data_kakomli', [AdminController::class, 'dataKakomli'])->name('admin.persetujuan');
     Route::resource('/kakomli', KakomliController::class)->except('show');
 
-    Route::resource('/dudi', DudiController::class)->names('admin.dudi');
-    Route::get('/export-column-dudi', [DudiController::class, 'generateKolom'])->name('admin.dudi.download_list_table');
-    Route::post('/import-data-dudi', [DudiController::class, 'importData'])->name('admin.dudi.import_data');
+    Route::resource('/dudi', AdminDudiController::class)->names('admin.dudi');
+    Route::get('/export-column-dudi', [AdminDudiController::class, 'generateKolom'])->name('admin.dudi.download_list_table');
+    Route::post('/import-data-dudi', [AdminDudiController::class, 'importData'])->name('admin.dudi.import_data');
 
-    Route::resource('/siswa', SiswaController::class)->names('admin.siswa');
-    Route::get('/export-column-siswa', [SiswaController::class, 'generateKolom'])->name('admin.siswa.download_list_table');
-    Route::post('/import-data-siswa', [SiswaController::class, 'importData'])->name('admin.siswa.import_data');
+    Route::resource('/siswa', AdminSiswaController::class)->names('admin.siswa');
+    Route::get('/export-column-siswa', [AdminSiswaController::class, 'generateKolom'])->name('admin.siswa.download_list_table');
+    Route::post('/import-data-siswa', [AdminSiswaController::class, 'importData'])->name('admin.siswa.import_data');
 
-    Route::resource('/pengurus-pkl', PengurusPklController::class)->names('admin.pengurus-pkl');
-    Route::get('/export-column-pengurus-pkl', [PengurusPklController::class, 'generateKolom'])->name('admin.pengurus_pkl.download_list_table');
-    Route::post('/import-data-pengurus-pkl', [SiswaController::class, 'importData'])->name('admin.pengurus_pkl.import_data');
+    Route::resource('/pengurus-pkl', AdminPengurusPklController::class)->names('admin.pengurus-pkl');
+    Route::get('/export-column-pengurus-pkl', [AdminPengurusPklController::class, 'generateKolom'])->name('admin.pengurus_pkl.download_list_table');
+    Route::post('/import-data-pengurus-pkl', [AdminSiswaController::class, 'importData'])->name('admin.pengurus_pkl.import_data');
 });
 
 
