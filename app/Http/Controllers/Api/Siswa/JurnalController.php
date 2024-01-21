@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Api\Siswa;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JurnalStoreRequest;
+use App\Models\Absensi;
+use App\Models\Dudi;
 use App\Models\Jurnal;
+use App\Models\Kelompok;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -20,6 +24,28 @@ class JurnalController extends Controller
             if(!$user){
                 return response()->json(['success' => false, 'message' => "User tidak ditemukan"],404);
             }
+
+            $now = Carbon::now()->locale('id');
+            $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
+
+            $kelompok = Kelompok::with('dudi')->whereHas('anggota', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->first();
+            $dudi = Dudi::where('id', $kelompok->dudi_id)->first();
+
+            $jamMasuk = $dudi[$hariIni];
+            if (is_null($jamMasuk)) {
+                return response()->json(["success" => false, "message" => "Anda tidak dapat mengisi jurnal pada hari $hariIni"], 403);
+            }
+
+            $absenAlpha = Absensi::where('user_id', $user->id)
+                ->whereDate('created_at', today())->where('status', '3')
+                ->exists();
+
+            if ($absenAlpha) {
+                return response()->json(['success' => false, 'message' => 'Anda tidak dapat mengisi jurnal karena anda di nyatakan ALPHA pada hari ini!'], 403);
+            }
+
 
             $sudahMengisi = Jurnal::where("user_id", $user->id)->whereDate('created_at',today())->exists();
             if($sudahMengisi){
@@ -52,13 +78,18 @@ class JurnalController extends Controller
 
     public function jurnalGet(string $id){
         try{
-            $jurnal = Jurnal::where('user_id', $id)->orderBy('created_at', 'desc')->paginate(2);
+            $jurnal = Jurnal::where('user_id', $id);
+
+
+            $jurnal = $jurnal->orderBy('created_at', 'desc')->paginate(10);
 
             if(!$jurnal){
                 return response()->json(['success' => false, 'message' => "ID user tidak ditemukan, cobalah logout lalu login ulang"], 404);
             }
 
-            return response()->json(['success' => true, 'data' => $jurnal], 200);
+            $doesntFillJurnal = $jurnal->where('status', 2)->count();
+
+            return response()->json(['success' => true, 'data' => $jurnal, 'doenst_jurnal' => $doesntFillJurnal], 200);
         }catch(\Exception $e){
             return response()->json(['success' => false, 'message' => "Error: Error: {$e->getMessage()}"], 500);
         }

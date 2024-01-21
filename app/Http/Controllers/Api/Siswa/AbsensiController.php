@@ -28,15 +28,22 @@ class AbsensiController extends Controller
             }
             $user_id = $user->id;
 
-            $kelompok = Kelompok::select('dudi_id')->with([
-                'anggota' => function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
-                }
-            ])->first();
+            $kelompok = Kelompok::with('dudi')->whereHas('anggota', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->first();
             $dudi = Dudi::where('id', $kelompok->dudi_id)->first();
 
             $absenSudahAda = Absensi::where('user_id', $user_id)
-                ->whereDate('created_at', today())->where('status', '!=', '5')
+                ->whereDate('created_at', today())->where('status', '3')
+                ->exists();
+
+            if ($absenSudahAda) {
+                return response()->json(['success' => false, 'message' => 'Anda tidak bisa Absen karena sudah dinyatakan ALPHA!'], 403);
+            }
+
+
+            $absenSudahAda = Absensi::where('user_id', $user_id)
+                ->whereDate('created_at', today())->whereNotIn('status', ['3','6'])
                 ->exists();
 
             if ($absenSudahAda) {
@@ -59,9 +66,9 @@ class AbsensiController extends Controller
             $now = Carbon::now()->locale('id');
             $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
 
-            $jamMasuk = $dudi["$hariIni"];
+            $jamMasuk = $dudi[$hariIni];
             if (is_null($jamMasuk)) {
-                return response()->json(["success" => false, "message" => "Anda tidak dapat absen pada hari $hariIni"], 403);
+                return response()->json(["success" => false, "message" => $kelompok], 403);
             }
             $jamMasuk = explode(" - ", $jamMasuk)[0];
             $jamMasukTimestamp = strtotime($jamMasuk);
@@ -81,20 +88,20 @@ class AbsensiController extends Controller
                         if ($jamSekarangTimestamp > $jamMasukTimestamp) {
                             Absensi::create([
                                 'user_id' => $user_id,
-                                'status' => 4,
-                                'datang' => $now
-                            ]);
-                            DB::commit();
-                            return response()->json(['success' => true, 'status' => 4, 'message' => 'Berhasil absen WFH!'], 201);
-                        } else {
-                            Absensi::create([
-                                'user_id' => $user_id,
                                 'status' => 5,
                                 'datang' => $now,
                                 'telat' => $waktuTelat
                             ]);
                             DB::commit();
-                            return response()->json(['success' => true, 'status' => 4, 'message' => 'Anda telat absen WFH selama ' . $telatMenit . ' menit'], 201);
+                            return response()->json(['success' => true, 'status' => 5, 'message' => 'Anda telat absen WFH selama ' . $telatMenit . ' menit'], 201);
+                        } else {
+                            Absensi::create([
+                                'user_id' => $user_id,
+                                'status' => 4,
+                                'datang' => $now
+                            ]);
+                            DB::commit();
+                            return response()->json(['success' => true, 'status' => 4, 'message' => 'Berhasil absen WFH!'], 201);
                         }
                     }
                     if ($jarak <= $jarakBatas) {
@@ -119,7 +126,7 @@ class AbsensiController extends Controller
                     } else {
                         return response()->json(['success' => false, 'message' => 'Anda harus berada di kantor untuk melakukan absen'], 403);
                     }
-                }else{
+                } else {
                     Absensi::create([
                         'user_id' => $user_id,
                         'status' => 3,
@@ -166,24 +173,27 @@ class AbsensiController extends Controller
                 return response()->json(['success' => false, 'message' => 'User tidak ditemukan'], 404);
             }
 
-            $kelompok = Kelompok::select('dudi_id')->with([
-                'anggota' => function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
-                }
-            ])->first();
+            $kelompok = Kelompok::with('dudi')->whereHas('anggota', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->first();
             $dudi = Dudi::where('id', $kelompok->dudi_id)->first();
 
-            $absen = Absensi::whereDate('created_at', today())->where('status', '!=', '5')->first();
+            $absenIzin = Izin::where('user_id', $user->id)->whereDate('created_at', today())->exists();
+            if ($absenIzin) {
+                return response()->json(['success' => false, 'message' => "Anda tidak bisa me-edit absen karena anda sudah melakukan izin"], 403);
+            }
+
+            $absen = Absensi::where('user_id', $user->id)->whereDate('created_at', today())->whereNotIn('status', ['3','6'])->first();
             if (!$absen) {
-                return response()->json(['success' => false, 'message' => "ID Absen tidak ditemukan, mungkin Anda belum absen!"]);
+                return response()->json(['success' => false, 'message' => "ID Absen tidak ditemukan, mungkin Anda belum absen atau sudah dinyatakan ALPHA atau sudah melakukan izin pada hari ini!"]);
             }
 
             $now = Carbon::now()->locale('id');
             $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
 
-            $jamMasuk = $dudi["$hariIni"];
+            $jamMasuk = $dudi[$hariIni];
             if (is_null($jamMasuk)) {
-                return response()->json(["success" => false, "message" => "Anda tidak dapat absen pada hari $hariIni"], 403);
+                return response()->json(["success" => false, "message" => "Anda tidak dapat me-edit absen pada hari $hariIni"], 403);
             }
             $jamMasuk = explode(" - ", $jamMasuk)[0];
             $jamMasukTimestamp = strtotime($jamMasuk);
@@ -191,26 +201,50 @@ class AbsensiController extends Controller
 
             $selisihSatuJam = 3600;
 
+            $jamMasuk = $dudi->{$hariIni};
+            $jamMasuk = substr($jamMasuk, 0, 5);
+            $telat = $now->diff(Carbon::parse($now->format('Y-m-d') . ' ' . $jamMasuk));
+            $waktuTelat = $telat->format('%H:%I');
+            $telatMenit = ($telat->h * 60) + $telat->i;
+
             if ($jamSekarangTimestamp >= ($jamMasukTimestamp - $selisihSatuJam)) {
                 switch ($request->status) {
-                    case '4':
-                        $absen->status = $request->status;
+                    case 'WFH':
+                        if ($absen->telat === '00:00:00') {
+                            $absen->status = 4;
+                            $absen->save();
+                            DB::commit();
+                            return response()->json(['success' => true, 'status' => 4, 'message' => "Berhasil mengubah absen menjadi WFH"]);
+                        }
+                        $absen->status = 5;
+                        $absen->telat = $waktuTelat;
                         $absen->save();
                         DB::commit();
-                        return response()->json(['success' => true, 'message' => "Berhasil mengubah absen menjadi WFH"]);
-                    case '1':
-                        $absen->status = $request->status;
+                        return response()->json(['success' => true, 'status' => 5, 'message' => "Berhasil mengubah absen menjadi WFH, namun Anda dinyatakan telat selama " . $telatMenit . " menit"]);
+                    case 'Hadir':
+                        if ($absen->telat === '00:00:00') {
+                            $absen->status = 1;
+                            $absen->save();
+                            DB::commit();
+                            return response()->json(['success' => true, 'status' => 1, 'message' => "Berhasil mengubah absen menjadi hadir"]);
+                        }
+                        $absen->status = 2;
+                        $absen->telat = $waktuTelat;
                         $absen->save();
                         DB::commit();
-                        return response()->json(['success' => true, 'message' => "Berhasil mengubah absen menjadi hadir"]);
+                        return response()->json(['success' => true, 'status' => 2, 'message' => "Berhasil mengubah absen menjadi hadir, namun Anda dinyatakan telat selama " . $telatMenit . " menit"]);
+                    case 'Reset':
+                        $absen->delete();
+                        DB::commit();
+                        return response()->json(['success' => true,'status' => 1, 'message' => "Berhasil mereset absensi!!!"]);
                     default:
-                        return response()->json(['success' => false, 'message' => "Status Absensi tidak valid!"]);
+                        return response()->json(['success' => false, 'message' => "Status Absensi tidak ada yang valid!"]);
                 }
             } else {
                 return response()->json(['success' => false, 'message' => 'Absen di mulai 1 jam sebelum jam masuk!'], 403);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, "Error: $e"]);
+            return response()->json(['success' => false, 'message' => "Error: $e"]);
         }
     }
 
@@ -244,8 +278,8 @@ class AbsensiController extends Controller
             }
 
             $absenHadir = Absensi::where('user_id', $user_id)
-            ->whereDate('created_at', today())
-            ->whereIn('status', [1, 2, 4, 5])
+                ->whereDate('created_at', today())
+                ->whereIn('status', [1, 2, 4, 5])
                 ->exists();
 
             if (!$absenHadir) {

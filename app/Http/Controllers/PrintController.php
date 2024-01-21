@@ -15,7 +15,7 @@ class PrintController extends Controller
 {
     public function showPrintJurnalSiswa(string $id)
     {
-        $user = User::with(['detailUser', 'detailUser.jurusan'])->where('id', $id)->first();
+        $user = User::where('id', $id)->first();
         if (!$user) {
             return to_route('home')->with('message', [
                 'icon' => 'error',
@@ -29,8 +29,11 @@ class PrintController extends Controller
     {
         try {
             $jurnal = Jurnal::with('user')->where('user_id', $request->user_id)->get();
-            //! KURANG DUDI
             $user = User::with(['kelas', 'jurusan'])->where('id', $request->user_id)->first();
+
+            $kelompok = Kelompok::with(['dudi', 'guru'])->whereHas('anggota', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->first();
 
             if (!$jurnal || !$user) {
                 return response()->json(['success' => false, 'message' => 'Ada kesalahan server', 'error' => 'ID user / jurnal tidak ditemukan']);
@@ -43,7 +46,7 @@ class PrintController extends Controller
             if (file_exists($path)) {
                 unlink($path);
             }
-            $pdf = PDF::setPaper('A4', 'potrait')->loadView('generate_pdf.jurnal_siswa', ['dataJurnal' => $jurnal, 'user' => $user]);
+                $pdf = PDF::setPaper('A4', 'potrait')->loadView('generate_pdf.jurnal_siswa', ['dataJurnal' => $jurnal, 'user' => $user, 'kelompok' =>  $kelompok]);
             $folder_exist = storage_path($base_path);
             if (!file_exists($folder_exist)) {
                 mkdir($folder_exist, 0755, true);

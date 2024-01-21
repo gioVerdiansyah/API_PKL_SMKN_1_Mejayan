@@ -12,6 +12,8 @@ class Jurnal extends Model
     use HasFactory;
 
     public $incrementing = false, $keyType = "string";
+
+    protected $guarded = [];
     protected static function boot()
     {
         parent::boot();

@@ -29,12 +29,10 @@ class LoginController extends Controller
         if ($this->attemptLogin($request, $loginField)) {
             // if auth success, create token
             $token = auth()->user()->createToken('authToken')->plainTextToken;
-            $user = User::with(['jurusan', 'kelas'])->where('id', auth()->user()->first()->id)->first();
-            $kelompok = Kelompok::with([
-                'anggota' => function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
-                }
-            ])->first();
+            $user = User::with(['jurusan', 'kelas'])->where($loginField, $request->email)->first();
+            $kelompok = Kelompok::with('dudi')->whereHas('anggota', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->first();
             $dudi = Dudi::where('id', $kelompok->dudi_id)->first();
             $guru = Guru::where('id', $kelompok->guru_id)->first();
 
@@ -46,7 +44,7 @@ class LoginController extends Controller
                     'dudi' => $dudi,
                     'token' => $token
                 ],
-                'message' => "Berhasil mendapatkan data!!!"
+                'message' => "Berhasil mendapatkan data!!!",
             ], 200);
         } else {
             return response()->json([

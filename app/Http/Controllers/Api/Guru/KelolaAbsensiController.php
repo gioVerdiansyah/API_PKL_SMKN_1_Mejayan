@@ -49,16 +49,13 @@ class KelolaAbsensiController extends Controller
 
             $kelompok = Kelompok::with(['anggota'])->where('guru_id', $guru_id)->where('nama_kelompok', $namaKelompok)->first();
 
-            // Ambil user_id yang sudah absen pada hari ini dan status tidak sama dengan 5
             $userAbsen = Absensi::whereDate('created_at', today())
-                ->where('status', '!=', '5')
+                ->where('status', '!=', '6')
                 ->whereIn('user_id', $kelompok->anggota->pluck('user_id'))
                 ->pluck('user_id');
 
-            // Dapatkan user_id yang belum absen
             $userBelumAbsen = $kelompok->anggota->pluck('user_id')->diff($userAbsen);
 
-            // Ambil informasi user
             $users = User::whereIn('id', $userBelumAbsen)->get();
 
             return response()->json(['success' => true, 'data' => $users, 'kelompok' => $listKelompok, 'kelompok_ini' => $namaKelompok]);

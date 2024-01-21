@@ -70,7 +70,7 @@ class AbsensiTroubleController extends Controller {
 
                 if(strtolower($request->kategori_absen) == 'hadir' || strtolower($request->kategori_absen) == 'wfh') {
                     $absenSudahAda = Absensi::where('user_id', $user_id)
-                        ->whereDate('created_at', today())->where('status', '!=', '5')
+                        ->whereDate('created_at', today())->where('status', '!=', '6')
                         ->exists();
 
                     if($absenSudahAda) {

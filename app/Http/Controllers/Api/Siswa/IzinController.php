@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Siswa;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\IzinStoreRequest;
+use App\Models\Absensi;
 use App\Models\Izin;
 use App\Models\User;
 use Carbon\Carbon;
@@ -21,6 +22,14 @@ class IzinController extends Controller
 
             if (!$user) {
                 return response()->json(['success' => false, 'message' => 'Nama siswa tidak ditemukan'], 404);
+            }
+
+            $absenSudahAda = Absensi::where('user_id', $user->id)
+                ->whereDate('created_at', today())->where('status', '!=', '6')
+                ->exists();
+
+            if ($absenSudahAda) {
+                return response()->json(['success' => false, 'message' => 'Anda sudah dinyatakan absen, tidak bisa melakukan izin! Edit absensi menjadi \'Reset\' untuk mereset absensi'], 403);
             }
 
             $sudahIzin = Izin::where('user_id', $user->id)->whereDate('created_at', today())->exists();
@@ -44,6 +53,12 @@ class IzinController extends Controller
 
             $izin->bukti = $path;
             $izin->save();
+
+            $absensi = new Absensi;
+            $absensi->user_id = $user->id;
+            $absensi->status = 6;
+            $absensi->datang = now();
+            $absensi->save();
 
             DB::commit();
             return response()->json(['success' => true, 'message' => "Berhasil izin pada hari ini"], 201);

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('izins', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('tipe_izin', ['Sakit','Izin', 'Dispensasi']);
+            $table->enum('tipe_izin', ['Sakit','Izin', 'Dispensasi', 'Cuti']);
             $table->text('alasan');
             $table->date('awal_izin');
             $table->date('akhir_izin');
