@@ -124,6 +124,13 @@
                             <span class="link-title">Pemetaan DuDi</span>
                         </a>
                     </li>
+                    <li class="nav-item nav-category">Profile</li>
+                    <li class="nav-item {{ request()->routeIs('kakomli.edit_profile') ? 'active' : '' }}">
+                        <a href="{{ route('kakomli.edit_profile') }}" class="nav-link">
+                            <i class="link-icon" data-feather="info"></i>
+                            <span class="link-title">Edit Profile</span>
+                        </a>
+                    </li>
                     {{-- <li class="nav-item {{ request()->routeIs('siswa.index') ? 'active' : '' }}">
                         <a href="{{ route('siswa.index') }}" class="nav-link">
                             <i class="link-icon" data-feather="grid"></i>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AbsensiTroubleController;
 use App\Http\Controllers\Admin\KakomliController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Api\Guru\EditProfileController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\Guru\ForgotPasswordGuruController;
 use App\Http\Controllers\Auth\Guru\ResetPasswordGuruController;
@@ -15,10 +16,12 @@ use App\Http\Controllers\Kakomli\PengelolaanPkl\KelompokSiswaController;
 use App\Http\Controllers\Kakomli\PengurusPklController;
 use App\Http\Controllers\Kakomli\RekapPendataanController;
 use App\Http\Controllers\Kakomli\SiswaController;
+use App\Http\Controllers\Kakomli\EditProfileController as EditProfileKakomliController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -81,6 +84,8 @@ Route::post('/kakomli/logout', [LoginController::class, 'logout'])->name('logout
 
 Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/edit-profile', [EditProfileKakomliController::class, 'edit'])->name('kakomli.edit_profile');
+    Route::put('/edit-profile', [EditProfileKakomliController::class, 'update'])->name('kakomli.update_profile');
 
     Route::resource('/dudi', DudiController::class);
     Route::get('/export-column-dudi', [DudiController::class, 'generateKolom'])->name('dudi.download_list_table');

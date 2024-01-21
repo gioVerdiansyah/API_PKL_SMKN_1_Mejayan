@@ -3,7 +3,7 @@
 }
 
 .card-dashboard {
-    height: 100%;
+    height: max-content;
 }
 
 .card-dashboard .card-detail {
@@ -65,7 +65,6 @@
         height: 30%;
         gap: 20px 0px;
     }
-
     .card-dashboard .card-detail .card-body .icon {
         position: absolute;
         display: flex;
@@ -78,7 +77,6 @@
         overflow: hidden;
         z-index: 2;
     }
-
     .card-dashboard .card-detail .card-body .icon svg {
         position: absolute;
         width: 100px;
@@ -88,7 +86,6 @@
         transform: rotate(40deg);
         color: rgba(255, 255, 255, 0.541);
     }
-
     .card-dashboard .card-detail .card-body .text-text {
         position: relative;
         color: #141414;
@@ -99,13 +96,11 @@
         text-align: center;
         z-index: 4;
     }
-    
     .card-dashboard .card-detail .card-body .text-text .card-title {
         font-size: 20px;
         letter-spacing: 1px;
         color: #f4f4f4;
     }
-    
     .card-dashboard .card-detail .card-body .text-text .card-text {
         font-size: 130px;
         font-family: "Barlow", sans-serif;
