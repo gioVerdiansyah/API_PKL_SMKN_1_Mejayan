@@ -13,11 +13,11 @@ class AdminRekapPendataanController extends Controller
 {
     public function showDownloadPage(){
         $jurusan = Jurusan::where('id', auth()->guard('kakomli')->user()->jurusan_id)->first()->jurusan;
-        return view('kakomli.rekap_pendataan.list-dudi', compact('jurusan'));
+        return view('admin.kakomli.rekap_pendataan.list-dudi', compact('jurusan'));
     }
     public function showDownloadPagePemetaan(){
         $jurusan = Jurusan::where('id', auth()->guard('kakomli')->user()->jurusan_id)->first()->jurusan;
-        return view('kakomli.rekap_pendataan.pemetaan_dudi', compact('jurusan'));
+        return view('admin.kakomli.rekap_pendataan.pemetaan_dudi', compact('jurusan'));
     }
 
     public function downloadListDudi(){

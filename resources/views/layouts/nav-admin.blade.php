@@ -86,31 +86,51 @@
                     <li class="nav-item nav-category">Data-Data</li>
                     <li class="nav-item {{ request()->routeIs('admin.persetujuan') ? 'active' : '' }}">
                         <a href="{{ route('kakomli.index') }}" class="nav-link">
-                            <i class="link-icon" data-feather="users"></i>
+                            <i class="link-icon" data-feather="cpu"></i>
                             <span class="link-title">Data Kakomli</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('admin.siswa.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}">
                         <a href="{{ route('admin.siswa.index') }}" class="nav-link">
                             <i class="link-icon" data-feather="users"></i>
                             <span class="link-title">Data Siswa</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('admin.dudi.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->routeIs('admin.dudi.*') ? 'active' : '' }}">
                         <a href="{{ route('admin.dudi.index') }}" class="nav-link">
                             <i class="mdi mdi-factory"></i>
                             <span class="link-title ms-3">Data Dudi</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('admin.pengurus-pkl.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->routeIs('admin.pengurus-pkl.*') ? 'active' : '' }}">
                         <a href="{{ route('admin.pengurus-pkl.index') }}" class="nav-link">
                             <i class="fa-solid fa-user-tie"></i>
                             <span class="link-title ms-3">Pengurus PKL</span>
                         </a>
                     </li>
+                    <li class="nav-item {{ request()->routeIs('admin.kelompok-siswa.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.kelompok-siswa.index') }}" class="nav-link">
+                            <i class="link-icon" data-feather="grid"></i>
+                            <span class="link-title">Kelompok Siswa</span>
+                        </a>
+                    </li>
 
-                    <li class="nav-item nav-category">List</li>
-                    {{-- <li class="nav-item @if (request()->routeIs('mou.create') or request()->routeIs('mou.edit') or request()->routeIs('testimoni.create') or request()->routeIs('testimoni.edit')) active @endif"> --}}
+                    <li class="nav-item nav-category">Rekap Pendataan</li>
+                    <li class="nav-item {{ request()->routeIs('admin.rekap_pendataan.dudi.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.rekap_pendataan.dudi.show_download') }}" class="nav-link">
+                            <i class="link-icon" data-feather="book"></i>
+                            <span class="link-title">Rekap List DuDi</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('admin.rekap_pendataan.pemetaan_dudi.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.rekap_pendataan.pemetaan_dudi.show_download') }}" class="nav-link">
+                            <i class="link-icon" data-feather="book-open"></i>
+                            <span class="link-title">Pemetaan DuDi</span>
+                        </a>
+                    </li>
+
+                    {{-- <li class="nav-item nav-category">List</li>
+                    <li class="nav-item @if (request()->routeIs('mou.create') or request()->routeIs('mou.edit') or request()->routeIs('testimoni.create') or request()->routeIs('testimoni.edit')) active @endif">
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#list" role="button"
                             aria-expanded="false" aria-controls="berita">
@@ -125,7 +145,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </li>
+                    </li> --}}
                     {{-- Sidebar ends here --}}
                 </ul>
             </div>

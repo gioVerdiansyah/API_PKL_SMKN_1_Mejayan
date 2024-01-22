@@ -9,7 +9,7 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('siswa.index') }}">Kelompok Siswa</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.kelompok-siswa.index') }}">Kelompok Siswa</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Edit</li>
                 </ol>
             </nav>
@@ -19,7 +19,7 @@
         <div class="d-flex flex-column align-items-center pb-2">
             <h4 class="mt-2">Edit Kelompok Siswa PKL</h4>
         </div>
-        <form action="{{ route('kelompok-siswa.update', $kelompok->id) }}" method="POST">
+        <form action="{{ route('admin.kelompok-siswa.update', $kelompok->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="row">

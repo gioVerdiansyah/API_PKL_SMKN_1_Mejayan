@@ -50,9 +50,9 @@ class Guru extends Authenticatable
     {
         $this->notify(new ResetPasswordGuruNotification($token, $this->email));
     }
-    public function jurusan(): BelongsTo
+    public function kakomli(): BelongsTo
     {
-        return $this->belongsTo(Jurusan::class, 'jurusan_id');
+        return $this->belongsTo(Kakomli::class, 'kakomli_id');
     }
 
     public function kelompok(): HasMany

@@ -25,9 +25,9 @@ class PengurusPklStoreRequest extends FormRequest
             'nama' => 'required|string|unique:gurus,nama',
             'email' => 'required|email|unique:gurus,email',
             'gelar' => 'required|string',
-            'password' => 'required|string|min:8',
+            'password' => 'nullable|string|min:8',
             'deskripsi' => 'required|string',
-            'photo_guru' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'photo_guru' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 }

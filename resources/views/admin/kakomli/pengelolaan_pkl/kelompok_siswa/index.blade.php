@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="text-end">
-            <a href="{{ route('kelompok-siswa.create') }}" class="btn btn-outline-primary">Tambah Kelompok</a>
+            <a href="{{ route('admin.kelompok-siswa.create') }}" class="btn btn-outline-primary">Tambah Kelompok</a>
         </div>
     </div>
     <div class="card">
@@ -46,7 +46,7 @@
                                 <td>{{ $data->guru->nama }}</td>
                                 <td>{{ count($data->anggota) }}</td>
                                 <td class="d-flex align-items-center gap-2">
-                                    <a href="{{ route('kelompok-siswa.show', $data->id) }}" class="btn btn-primary px-2 py-1"><i
+                                    <a href="{{ route('admin.kelompok-siswa.show', $data->id) }}" class="btn btn-primary px-2 py-1"><i
                                             class="link-icon" width="15" data-feather="file-text"></i></a>
                                 </td>
                             </tr>

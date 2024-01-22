@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DudiStoreRequest;
 use App\Imports\Admin\AdminDudiImport;
 use App\Models\Dudi;
+use App\Models\Jurusan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -19,15 +20,20 @@ class AdminDudiController extends Controller
      */
     public function index(Request $request)
     {
-        $dudi = Dudi::latest();
+        $jurusans = Jurusan::all();
+        $dudi = Dudi::with('jurusan')->latest();
         if ($request->has('query') && !empty($request->input('query'))) {
             $input = $request->input('query');
             $dudi->where('nama', 'LIKE', '%' . $input . '%')
                 ->orWhere('pemimpin', 'LIKE', $input);
         }
 
+        if ($request->has('jurusan') && !empty($request->input('jurusan'))) {
+            $dudi->where('jurusan_id', "$request->jurusan");
+        }
+
         $dudi = $dudi->paginate(10);
-        return view('admin.kakomli.dudi.index', compact('dudi'));
+        return view('admin.kakomli.dudi.index', compact('dudi', 'jurusans'));
     }
 
     /**
@@ -35,7 +41,8 @@ class AdminDudiController extends Controller
      */
     public function create()
     {
-        return view('admin.kakomli.dudi.create');
+        $jurusans = Jurusan::all();
+        return view('admin.kakomli.dudi.create', compact('jurusans'));
     }
 
     /**
@@ -54,7 +61,7 @@ class AdminDudiController extends Controller
             $dudi->koordinat = $request->koordinat;
             $dudi->radius = $request->radius;
             $dudi->alamat = $request->alamat;
-            $dudi->jurusan_id = auth()->guard('kakomli')->user()->jurusan_id;
+            $dudi->jurusan_id = $request->jurusan_id;
             $dudi->senin = $request->senin;
             $dudi->selasa = $request->selasa;
             $dudi->rabu = $request->rabu;
@@ -110,6 +117,7 @@ class AdminDudiController extends Controller
     public function edit(string $id)
     {
         $dudi = Dudi::where('id', $id)->first();
+        $jurusans = Jurusan::all();
         if (!$dudi) {
             return back()->with('message', [
                 'icon' => 'error',
@@ -118,7 +126,7 @@ class AdminDudiController extends Controller
             ]);
         }
 
-        return view('admin.kakomli.dudi.edit', compact('dudi'));
+        return view('admin.kakomli.dudi.edit', compact('dudi', 'jurusans'));
     }
 
     /**
@@ -144,6 +152,7 @@ class AdminDudiController extends Controller
             $dudi->no_telp = $request->no_telp;
             $dudi->email = $request->email;
             $dudi->koordinat = $request->koordinat;
+            $dudi->jurusan_id = $request->jurusan_id;
             $dudi->radius = $request->radius;
             $dudi->alamat = $request->alamat;
             $dudi->senin = $request->senin;
@@ -244,7 +253,7 @@ class AdminDudiController extends Controller
 
             Excel::import(new AdminDudiImport, $file);
 
-            return to_route('dudi.index')->with('message', [
+            return to_route('admin.dudi.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success!',
                 'text' => "Berhasil me-import data"

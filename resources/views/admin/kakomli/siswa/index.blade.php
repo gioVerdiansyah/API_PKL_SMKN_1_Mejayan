@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="text-end">
-            <a href="{{ route('siswa.create') }}" class="btn btn-outline-primary">Tambah Siswa</a>
+            <a href="{{ route('admin.siswa.create') }}" class="btn btn-outline-primary">Tambah Siswa</a>
         </div>
     </div>
     <div class="card">
@@ -56,7 +56,7 @@
                                 <td>{{ $data->nis }}</td>
                                 <td>{{ $data->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
                                 <td class="d-flex align-items-center gap-2">
-                                    <a href="{{ route('siswa.show', $data->id) }}" class="btn btn-primary px-2 py-1"><i
+                                    <a href="{{ route('admin.siswa.show', $data->id) }}" class="btn btn-primary px-2 py-1"><i
                                             class="link-icon" width="15" data-feather="file-text"></i></a>
                                 </td>
                             </tr>

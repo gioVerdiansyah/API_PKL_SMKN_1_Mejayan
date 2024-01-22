@@ -8,6 +8,7 @@ use App\Http\Requests\KelompokSiswaUpdateRequest;
 use App\Models\AnggotaKelompok;
 use App\Models\Dudi;
 use App\Models\Guru;
+use App\Models\Jurusan;
 use App\Models\Kelompok;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,30 +21,31 @@ class AdminKelompokSiswaController extends Controller
      */
     public function index(Request $request)
     {
+        $jurusans = Jurusan::all();
         $kelompok = Kelompok::latest();
 
         if ($request->has('query') && !empty($request->input('query'))) {
             $input = $request->input('query');
 
-            $kelompok->with([
-                'dudi' => function ($query) use ($input) {
-                    $query->orWhere('nama', 'LIKE', "%$input%");
-                },
-                'guru' => function ($query) use ($input) {
-                    $query->orWhere('nama', 'LIKE', "%$input%");
-                },
-                'kakomli' => function ($query) use ($input) {
-                    $query->orWhere('nama', 'LIKE', "%$input%");
-                },
-                "anggota"
-            ])->where('nama_kelompok', 'LIKE', "%$input%");
+            $kelompok->where('nama_kelompok', 'LIKE', "%$input%")
+                ->orWhereHas('dudi', function ($query) use ($input) {
+                    $query->where('nama', 'LIKE', "%$input%");
+                })
+                ->orWhereHas('guru', function ($query) use ($input) {
+                    $query->where('nama', 'LIKE', "%$input%");
+                })
+                ->orWhereHas('kakomli', function ($query) use ($input) {
+                    $query->where('nama', 'LIKE', "%$input%");
+                })
+                ->orWhereHas('anggota');
+
         } else {
             $kelompok->with(['dudi', 'guru', 'kakomli', "anggota"]);
         }
 
-        $kelompok = $kelompok->where('kakomli_id', auth()->guard('kakomli')->user()->id)->paginate(10);
+        $kelompok = $kelompok->paginate(10);
 
-        return view('kakomli.pengelolaan_pkl.kelompok_siswa.index', compact('kelompok'));
+        return view('admin.kakomli.pengelolaan_pkl.kelompok_siswa.index', compact('kelompok', 'jurusans'));
     }
 
     /**
@@ -53,15 +55,14 @@ class AdminKelompokSiswaController extends Controller
     {
         $anggotaTerdaftar = AnggotaKelompok::pluck('user_id');
         $dudiTerdaftar = Kelompok::pluck('dudi_id');
-        $kakomli = auth()->guard('kakomli')->user();
 
-        $dudi = Dudi::where('jurusan_id', $kakomli->jurusan_id)->whereNotIn('id', $dudiTerdaftar)->get();
+        $dudi = Dudi::whereNotIn('id', $dudiTerdaftar)->get();
 
-        $guru = Guru::where('kakomli_id', $kakomli->id)->get();
+        $guru = Guru::all();
 
-        $anggota = User::where('jurusan_id', $kakomli->jurusan_id)->whereNotIn('id', $anggotaTerdaftar)->get();
+        $anggota = User::whereNotIn('id', $anggotaTerdaftar)->get();
 
-        return view('kakomli.pengelolaan_pkl.kelompok_siswa.create', compact('dudi', 'guru', 'anggota'));
+        return view('admin.kakomli.pengelolaan_pkl.kelompok_siswa.create', compact('dudi', 'guru', 'anggota'));
     }
 
     /**
@@ -87,7 +88,7 @@ class AdminKelompokSiswaController extends Controller
 
             DB::commit();
 
-            return to_route('kelompok-siswa.index')->with('message', [
+            return to_route('admin.kelompok-siswa.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success!',
                 'text' => "Berhasil me-nambah kelompok {$request->nama_kelompok}"
@@ -116,7 +117,7 @@ class AdminKelompokSiswaController extends Controller
             ]);
         }
 
-        return view('kakomli.pengelolaan_pkl.kelompok_siswa.show', compact('kelompok'));
+        return view('admin.kakomli.pengelolaan_pkl.kelompok_siswa.show', compact('kelompok'));
     }
 
     /**
@@ -133,12 +134,12 @@ class AdminKelompokSiswaController extends Controller
             ]);
         }
 
-        $dudi = Dudi::where('jurusan_id', auth()->guard('kakomli')->user()->jurusan_id)->get();
-        $guru = Guru::where('kakomli_id', auth()->guard('kakomli')->user()->id)->get();
-        $anggota = User::where('jurusan_id', auth()->guard('kakomli')->user()->jurusan_id)->get();
+        $dudi = Dudi::all();
+        $guru = Guru::all();
+        $anggota = User::all();
         $member = AnggotaKelompok::where('kelompok_id', $kelompok->id)->pluck('user_id')->toArray();
 
-        return view('kakomli.pengelolaan_pkl.kelompok_siswa.edit', compact('kelompok', 'dudi', 'guru', 'anggota', 'member'));
+        return view('admin.kakomli.pengelolaan_pkl.kelompok_siswa.edit', compact('kelompok', 'dudi', 'guru', 'anggota', 'member'));
     }
 
     /**
@@ -175,7 +176,7 @@ class AdminKelompokSiswaController extends Controller
 
             DB::commit();
 
-            return to_route('kelompok-siswa.index')->with('message', [
+            return to_route('admin.kelompok-siswa.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success!',
                 'text' => "Berhasil me-edit kelompok"
@@ -211,7 +212,7 @@ class AdminKelompokSiswaController extends Controller
             $kelompok->delete();
 
             DB::commit();
-            return to_route('kelompok-siswa.index')->with('message', [
+            return to_route('admin.kelompok-siswa.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success!',
                 'text' => "Berhasil me-hapus kelompok $kelompokName"

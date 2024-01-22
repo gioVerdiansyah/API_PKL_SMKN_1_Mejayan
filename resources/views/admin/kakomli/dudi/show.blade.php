@@ -7,7 +7,7 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dudi.index') }}">Dudi</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dudi.index') }}">Dudi</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Detail</li>
                 </ol>
             </nav>
@@ -157,8 +157,8 @@
         </div>
 
         <div class="col-md12 d-flex mt-5 text-start">
-            <a href="{{ route('dudi.edit', $dudi->id) }}" class="btn btn-warning profile-button me-2">Edit</a>
-            <form nameDudi="{{ $dudi->nama }}" action="{{ route('dudi.destroy', $dudi->id) }}" id="delete" method="POST">
+            <a href="{{ route('admin.dudi.edit', $dudi->id) }}" class="btn btn-warning profile-button me-2">Edit</a>
+            <form nameDudi="{{ $dudi->nama }}" action="{{ route('admin.dudi.destroy', $dudi->id) }}" id="delete" method="POST">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-danger profile-button">Hapus</button>

@@ -8,6 +8,7 @@ use App\Http\Requests\PengurusPklStoreRequest;
 use App\Imports\Admin\AdminPengurusPklImport;
 use App\Models\Guru;
 use App\Models\Jurusan;
+use App\Models\Kakomli;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -23,12 +24,18 @@ class AdminPengurusPklController extends Controller
     public function index(Request $request)
     {
         $jurusans = Jurusan::all();
-        $pengurus = Guru::latest();
+        $pengurus = Guru::with(['kakomli.jurusan'])->latest();
 
         if ($request->has('query') && !empty($request->input('query'))) {
             $input = $request->input('query');
             $pengurus->where('nama', 'LIKE', '%' . $input . '%')
                 ->orWhere('email', 'LIKE', $input);
+        }
+
+        if ($request->has('jurusan') && !empty($request->input('jurusan'))) {
+            $pengurus = Guru::with(['kakomli.jurusan'])->whereHas('kakomli', function ($query) use ($request) {
+                $query->where('jurusan_id', $request->input('jurusan'));
+            })->latest();
         }
 
         $pengurus = $pengurus->paginate(10);
@@ -41,7 +48,8 @@ class AdminPengurusPklController extends Controller
      */
     public function create()
     {
-        return view('admin.kakomli.pengurus_pkl.create');
+        $kakomli = Kakomli::whereNot('email', config('app.admin_email'))->get();
+        return view('admin.kakomli.pengurus_pkl.create', compact('kakomli'));
     }
 
     /**
@@ -56,8 +64,8 @@ class AdminPengurusPklController extends Controller
             $pengurus->nama = $request->nama;
             $pengurus->email = $request->email;
             $pengurus->gelar = $request->gelar;
-            $pengurus->password = Hash::make($request->password);
-            $pengurus->kakomli_id = auth()->guard('kakomli')->user()->id;
+            $pengurus->password = Hash::make($request->password ?? 'password');
+            $pengurus->kakomli_id = $request->kakomli_id;
             $pengurus->deskripsi = $request->deskripsi;
 
             if($request->hasFile('photo_guru')){
@@ -69,7 +77,7 @@ class AdminPengurusPklController extends Controller
             $pengurus->save();
 
             DB::commit();
-            return to_route('pengurus-pkl.index')->with('message', [
+            return to_route('admin.pengurus-pkl.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success',
                 'text' => "Berhasil menambah pengurus pkl"
@@ -89,6 +97,7 @@ class AdminPengurusPklController extends Controller
      */
     public function edit(string $id)
     {
+        $kakomli = Kakomli::whereNot('email', config('app.admin_email'))->get();
         $pengurus = Guru::where('id', $id)->first();
         if (!$pengurus) {
             return back()->with('message', [
@@ -98,7 +107,7 @@ class AdminPengurusPklController extends Controller
             ]);
         }
 
-        return view('admin.kakomli.pengurus_pkl.edit', compact('pengurus'));
+        return view('admin.kakomli.pengurus_pkl.edit', compact('pengurus', 'kakomli'));
     }
 
     /**
@@ -122,7 +131,7 @@ class AdminPengurusPklController extends Controller
             $pengurus->nama = $request->nama;
             $pengurus->email = $request->email;
             $pengurus->gelar = $request->gelar;
-            $pengurus->kakomli_id = auth()->guard('kakomli')->user()->id;
+            $pengurus->kakomli_id = $request->kakomli_id;
             $pengurus->deskripsi = $request->deskripsi;
 
             if ($request->password !== null) {
@@ -143,7 +152,7 @@ class AdminPengurusPklController extends Controller
             $pengurus->save();
 
             DB::commit();
-            return to_route('pengurus-pkl.index')->with('message', [
+            return to_route('admin.pengurus-pkl.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success',
                 'text' => "Berhasil me-edit pengurus pkl"
@@ -185,7 +194,7 @@ class AdminPengurusPklController extends Controller
             $pengurus->delete();
 
             DB::commit();
-            return to_route('pengurus-pkl.index')->with('message', [
+            return to_route('admin.pengurus-pkl.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success!',
                 'text' => "Berhasil me-hapus pengurus PKL $pengurusName"
@@ -229,7 +238,7 @@ class AdminPengurusPklController extends Controller
 
             Excel::import(new AdminPengurusPklImport(), $file);
 
-            return to_route('pengurus-pkl.index')->with('message', [
+            return to_route('admin.pengurus-pkl.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success!',
                 'text' => "Berhasil me-import data"

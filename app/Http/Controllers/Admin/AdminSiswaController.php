@@ -82,7 +82,7 @@ class AdminSiswaController extends Controller
             $siswa->save();
 
             DB::commit();
-            return to_route('siswa.index')->with('message', [
+            return to_route('admin.siswa.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success',
                 'text' => 'Berhasil menambah siswa ' . $request->nama
@@ -181,7 +181,7 @@ class AdminSiswaController extends Controller
             $siswa->save();
 
             DB::commit();
-            return to_route('siswa.index')->with('message', [
+            return to_route('admin.siswa.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success',
                 'text' => 'Berhasil me-update siswa'
@@ -223,7 +223,7 @@ class AdminSiswaController extends Controller
             $siswa->delete();
 
             DB::commit();
-            return to_route('siswa.index')->with('message', [
+            return to_route('admin.siswa.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success!',
                 'text' => "Berhasil me-hapus siswa $siswaName"
@@ -267,7 +267,7 @@ class AdminSiswaController extends Controller
 
             Excel::import(new AdminSiswaImport, $file);
 
-            return to_route('siswa.index')->with('message', [
+            return to_route('admin.siswa.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success!',
                 'text' => "Berhasil me-import data"

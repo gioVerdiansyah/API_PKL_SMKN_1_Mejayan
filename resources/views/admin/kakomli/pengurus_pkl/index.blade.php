@@ -11,6 +11,16 @@
         </div>
         <div class="d-flex align-items-center">
             <div class="d-flex justify-content-center my-3">
+                <div class="col-md-6 col-12 me-3 col-lg-4 pk-0">
+                    <select name="jurusan" class="form-select" id="jurusan">
+                        <option selected>Semua</option>
+                        @foreach ($jurusans as $jurusan)
+                            <option value="{{ $jurusan->id }}" {{ request('jurusan') == $jurusan->id ? 'selected' : '' }}>
+                                {{ $jurusan->jurusan }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 <form method="get" class="form-inline d-flex flex-row gap-1">
                     <input class="form-control mr-sm-2 py-0" type="search" name="query" placeholder="Search"
                         aria-label="Search" value="{{ request('query') }}">
@@ -20,7 +30,7 @@
             </div>
         </div>
         <div class="text-end">
-            <a href="{{ route('pengurus-pkl.create') }}" class="btn btn-outline-primary">Tambah Pengurus PKL</a>
+            <a href="{{ route('admin.pengurus-pkl.create') }}" class="btn btn-outline-primary">Tambah Pengurus PKL</a>
         </div>
     </div>
     <div class="card">
@@ -30,6 +40,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Jurusan</th>
                             <th>Photo Profile</th>
                             <th>Nama</th>
                             <th>Email</th>
@@ -41,17 +52,24 @@
                         @forelse ($pengurus as $i => $data)
                             <tr>
                                 <th>{{ ++$i }}</th>
+                                <th>{{ $data->kakomli->jurusan->jurusan }}</th>
                                 <td><img src="{{ asset($data->photo_guru) }}" alt="Photo pengurus PKL"></td>
-                                <td style="white-space: initial;max-width: 200px">{{ $data->nama }} {{ $data->gelar ?? '' }}</td>
+                                <td style="white-space: initial;max-width: 200px">{{ $data->nama }}
+                                    {{ $data->gelar ?? '' }}</td>
                                 <td>{{ $data->email }}</td>
-                                <td style="white-space: initial;max-width: 300px">{{ $data->deskripsi ?? 'Tidak ada deskripsi' }}</td>
+                                <td style="white-space: initial;max-width: 300px">
+                                    {{ $data->deskripsi ?? 'Tidak ada deskripsi' }}</td>
                                 <td class="d-flex align-items-center gap-2">
-                                    <a href="{{ route('pengurus-pkl.edit', $data->id) }}" class="btn btn-warning px-2 py-1"><i
-                                            class="link-icon" width="15" data-feather="edit"></i></a>
-                                    <form nameKakomli="{{ $data->nama }}" action="{{ route('pengurus-pkl.destroy', $data->id) }}" method="POST" class="delete">
+                                    <a href="{{ route('admin.pengurus-pkl.edit', $data->id) }}"
+                                        class="btn btn-warning px-2 py-1"><i class="link-icon" width="15"
+                                            data-feather="edit"></i></a>
+                                    <form nameKakomli="{{ $data->nama }}"
+                                        action="{{ route('admin.pengurus-pkl.destroy', $data->id) }}" method="POST"
+                                        class="delete">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger px-2 py-1"><i class="link-icon" width="15" data-feather="delete"></i></button>
+                                        <button type="submit" class="btn btn-danger px-2 py-1"><i class="link-icon"
+                                                width="15" data-feather="delete"></i></button>
                                     </form>
                                 </td>
                             </tr>
@@ -70,7 +88,23 @@
             </div>
         </div>
     </div>
-        <script>
+    <script>
+        document.getElementById('jurusan').addEventListener('change', function() {
+            var selectedCategoryId = this.value;
+            var currentUrl = window.location.href;
+            var newUrl;
+            if (selectedCategoryId === "Semua") {
+                newUrl = currentUrl.replace(/jurusan=[^&]*/, '');
+            } else {
+                var ctParam = 'jurusan=' + selectedCategoryId;
+                if (currentUrl.includes('jurusan=')) {
+                    newUrl = currentUrl.replace(/jurusan=[^&]*/, ctParam);
+                } else {
+                    newUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + ctParam;
+                }
+            }
+            window.location.href = newUrl;
+        });
         if (document.querySelectorAll('.delete').length > 0) {
             document.querySelectorAll('.delete').forEach(function(form) {
                 form.addEventListener('submit', function(event) {

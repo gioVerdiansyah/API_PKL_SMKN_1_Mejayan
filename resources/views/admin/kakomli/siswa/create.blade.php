@@ -7,7 +7,7 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('siswa.index') }}">Siswa</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.siswa.index') }}">Siswa</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Create</li>
                 </ol>
             </nav>
@@ -22,7 +22,7 @@
         <div class="d-flex flex-column align-items-center pb-2">
             <h4 class="mt-2">Tambah Siswa PKL</h4>
         </div>
-        <form action="{{ route('siswa.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.siswa.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="d-flex flex-column align-items-center pb-2">
                 <label for="potoProfile" class="image-hover">
@@ -223,9 +223,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="col">
-                        <a href="{{ route('siswa.download_list_table') }}" type="button"
+                        <a href="{{ route('admin.siswa.download_list_table') }}" type="button"
                             class="btn btn-primary">download list kolom</a>
-                        <form action="{{ route('siswa.import_data') }}" method="POST" enctype="multipart/form-data"
+                        <form action="{{ route('admin.siswa.import_data') }}" method="POST" enctype="multipart/form-data"
                             id="upload-form">
                             @csrf
 

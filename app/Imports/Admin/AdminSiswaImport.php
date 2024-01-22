@@ -21,14 +21,12 @@ class AdminSiswaImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            $kelas = Kelas::where('kelas', $row['kelas_id'])->first();
-
             $user = new User;
             $user->name = $row['name'];
             $user->email = $row['email'];
             $user->password = Hash::make($row['password'] ?? 'password');
             $user->jurusan_id = $row['jurusan_id'];
-            $user->kelas_id = $kelas->id ?? 1;
+            $user->kelas_id = $row['kelas_id'];
             $user->absen = $row['absen'];
             $user->nis = $row['nis'];
             $user->jenis_kelamin = $row['jenis_kelamin'];

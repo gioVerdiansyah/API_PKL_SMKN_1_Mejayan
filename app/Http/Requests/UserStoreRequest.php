@@ -30,7 +30,7 @@ class UserStoreRequest extends FormRequest
             'kelas'=> ['required', Rule::in(\App\Models\Kelas::pluck('id')->toArray())],
             'jenis_kelamin' => ['required', Rule::in(['P', 'L'])],
             'alamat' => 'nullable|string',
-            'password' => 'required|min:6',
+            'password' => 'nullable|min:6',
             'no_hp' => 'nullable|string|gt:0',
             'no_hp_ortu' => 'nullable|string|gt:0',
             'photo_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',

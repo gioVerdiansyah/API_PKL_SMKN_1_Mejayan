@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminDudiController;
 use App\Http\Controllers\Admin\AdminPengurusPklController;
 use App\Http\Controllers\Admin\AdminSiswaController;
 use App\Http\Controllers\Admin\KakomliController;
+use App\Http\Controllers\Admin\AdminPengelolaanPkl\AdminKelompokSiswaController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\Guru\EditProfileController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -138,6 +139,20 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
     Route::resource('/pengurus-pkl', AdminPengurusPklController::class)->names('admin.pengurus-pkl');
     Route::get('/export-column-pengurus-pkl', [AdminPengurusPklController::class, 'generateKolom'])->name('admin.pengurus_pkl.download_list_table');
     Route::post('/import-data-pengurus-pkl', [AdminSiswaController::class, 'importData'])->name('admin.pengurus_pkl.import_data');
+
+    Route::prefix('/pengelolaan_pkl')->group(function () {
+        Route::resource('/kelompok-siswa', AdminKelompokSiswaController::class)->names("admin.kelompok-siswa");
+    });
+
+    Route::prefix('/rekap-pendataan')->group(function () {
+        Route::get('/list-DuDi', [RekapPendataanController::class, 'showDownloadPage'])->name('admin.rekap_pendataan.dudi.show_download');
+        Route::get('/list-DuDi-download', [RekapPendataanController::class, 'downloadListDudi'])->name('admin.rekap_pendataan.dudi.download');
+        Route::get('/list-DuDi-print', [RekapPendataanController::class, 'printListDudi'])->name('admin.rekap_pendataan.dudi.print');
+
+        Route::get('/pemetaan-DuDi', [RekapPendataanController::class, 'showDownloadPagePemetaan'])->name('admin.rekap_pendataan.pemetaan_dudi.show_download');
+        Route::get('/pemetaan-DuDi-download', [RekapPendataanController::class, 'downloadPemetaanDudi'])->name('admin.rekap_pendataan.pemetaan_dudi.download');
+        Route::get('/pemetaan-DuDi-print', [RekapPendataanController::class, 'printPemetaanDudi'])->name('admin.rekap_pendataan.pemetaan_dudi.print');
+    });
 });
 
 

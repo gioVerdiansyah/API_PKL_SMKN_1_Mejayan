@@ -93,8 +93,8 @@
         </div>
 
         <div class="col-md12 d-flex mt-5 text-start">
-            <a href="{{ route('siswa.edit', $siswa->id) }}" class="btn btn-warning profile-button me-2">Edit</a>
-            <form nameSiswa="{{ $siswa->name }}" action="{{ route('siswa.destroy', $siswa->id) }}" id="delete" method="POST">
+            <a href="{{ route('admin.siswa.edit', $siswa->id) }}" class="btn btn-warning profile-button me-2">Edit</a>
+            <form nameSiswa="{{ $siswa->name }}" action="{{ route('admin.siswa.destroy', $siswa->id) }}" id="delete" method="POST">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-danger profile-button">Hapus</button>

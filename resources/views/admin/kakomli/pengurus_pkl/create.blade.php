@@ -3,11 +3,14 @@
 @section('content')
     <title>{{ config('app.name', 'Laravel') }} - Tambah pengurus PKL PKL</title>
     <link rel="stylesheet" href="{{ asset('css/profile-edit.css') }}">
+    <link rel="stylesheet" href="{{ asset('cssAdmin/vendors/select2/select2.min.css') }}">
+    <script src="{{ asset('cssAdmin/js/select2.js') }}"></script>
+    <script src="{{ asset('cssAdmin/vendors/select2/select2.min.js') }}"></script>
     <div class="card p-3 mb-4 flex-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('pengurus-pkl.index') }}">pengurus PKL</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.pengurus-pkl.index') }}">pengurus PKL</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Create</li>
                 </ol>
             </nav>
@@ -23,7 +26,7 @@
         <div class="d-flex flex-column align-items-center pb-2">
             <h4 class="mt-2">Tambah Pengurus PKL</h4>
         </div>
-        <form action="{{ route('pengurus-pkl.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.pengurus-pkl.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="d-flex flex-column align-items-center pb-2">
                 <label for="potoProfile" class="image-hover">
@@ -32,7 +35,7 @@
                         width="100">
                 </label>
                 <input type="file" name="photo_guru" id="potoProfile" class="d-none">
-                @error('poto_profile')
+                @error('photo_guru')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
                 <h6 class="mt-2">Photo profile pengurus PKL</h6>
@@ -67,6 +70,19 @@
                         </div>
                     </div>
 
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label for="deskripsi" class="form-label">Deskripsi</label>
+
+                            <textarea type="text" class="form-control @error('deskripsi') is-invalid @enderror" placeholder="deskripsi"
+                                name="deskripsi" id="deskripsi" rows="5">{{ old('deskripsi') }}</textarea>
+                            @error('deskripsi')
+                                <div>
+                                    <p class="text-danger mt-2">{{ $message }}</p>
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6 mb-3">
                     <div class="row mt-3">
@@ -96,14 +112,19 @@
                             @enderror
                         </div>
                     </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-12">
-                        <label for="deskripsi" class="form-label">Deskripsi</label>
 
-                        <textarea type="text" class="form-control @error('deskripsi') is-invalid @enderror" placeholder="deskripsi"
-                            name="deskripsi" id="deskripsi" rows="5">{{ old('deskripsi') }}</textarea>
-                        @error('deskripsi')
+                    <div class="col-md-12 mt-3">
+                        <label for="kakomli_id" class="form-label">Kakomli</label>
+
+                        <select name="kakomli_id" id="kakomli_id" class="form-select">
+                            <option selected disabled>Kakomli yang membuat</option>
+                            @foreach ($kakomli as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ old('kakomli_id') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->nama }}</option>
+                            @endforeach
+                        </select>
+                        @error('kakomli_id')
                             <div>
                                 <p class="text-danger mt-2">{{ $message }}</p>
                             </div>
@@ -128,9 +149,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="col">
-                        <a href="{{ route('pengurus-pkl.download_list_table') }}" type="button"
+                        <a href="{{ route('admin.pengurus_pkl.download_list_table') }}" type="button"
                             class="btn btn-primary">download list kolom</a>
-                        <form action="{{ route('pengurus-pkl.import_data') }}" method="POST"
+                        <form action="{{ route('admin.pengurus_pkl.import_data') }}" method="POST"
                             enctype="multipart/form-data" id="upload-form">
                             @csrf
 
@@ -151,6 +172,10 @@
         </div>
     </div>
     <script>
+        $(document).ready(function() {
+            $('#kakomli_id').select2();
+        });
+
         document.getElementById('potoProfile').addEventListener('change', function(event) {
             const inputFile = event.target;
             const profileImage = document.getElementById('profileImage');

@@ -22,7 +22,6 @@ class PengurusPklController extends Controller
      */
     public function index(Request $request)
     {
-        $jurusans = Jurusan::all();
         $pengurus = Guru::latest()->where('kakomli_id', auth()->guard('kakomli')->user()->id);
 
         if ($request->has('query') && !empty($request->input('query'))) {
@@ -33,7 +32,7 @@ class PengurusPklController extends Controller
 
         $pengurus = $pengurus->paginate(10);
 
-        return view('kakomli.pengurus_pkl.index', compact('jurusans', 'pengurus'));
+        return view('kakomli.pengurus_pkl.index', compact('pengurus'));
     }
 
     /**

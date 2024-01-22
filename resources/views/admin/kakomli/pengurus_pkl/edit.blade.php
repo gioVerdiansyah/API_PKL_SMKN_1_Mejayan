@@ -3,11 +3,14 @@
 @section('content')
     <title>{{ config('app.name', 'Laravel') }} - Edit pengurus PKL PKL</title>
     <link rel="stylesheet" href="{{ asset('css/profile-edit.css') }}">
+    <link rel="stylesheet" href="{{ asset('cssAdmin/vendors/select2/select2.min.css') }}">
+    <script src="{{ asset('cssAdmin/js/select2.js') }}"></script>
+    <script src="{{ asset('cssAdmin/vendors/select2/select2.min.js') }}"></script>
     <div class="card p-3 mb-4 flex-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('pengurus-pkl.index') }}">pengurus PKL</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.pengurus-pkl.index') }}">pengurus PKL</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Edit</li>
                 </ol>
             </nav>
@@ -17,7 +20,7 @@
         <div class="d-flex flex-column align-items-center pb-2">
             <h4 class="mt-2">Edit Pengurus PKL</h4>
         </div>
-        <form action="{{ route('pengurus-pkl.update', $pengurus->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.pengurus-pkl.update', $pengurus->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="d-flex flex-column align-items-center pb-2">
@@ -63,6 +66,20 @@
                         </div>
                     </div>
 
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label for="deskripsi" class="form-label">Deskripsi</label>
+
+                            <textarea type="text" class="form-control @error('deskripsi') is-invalid @enderror" placeholder="deskripsi"
+                                name="deskripsi" id="deskripsi" rows="5">{{ old('deskripsi', $pengurus->deskripsi) }}</textarea>
+                            @error('deskripsi')
+                                <div>
+                                    <p class="text-danger mt-2">{{ $message }}</p>
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6 mb-3">
                     <div class="row mt-3">
@@ -70,7 +87,8 @@
                             <label for="gelar" class="form-label">Gelar</label>
 
                             <input type="text" class="form-control @error('gelar') is-invalid @enderror"
-                                placeholder="gelar (opsional)" name="gelar" id="gelar" value="{{ old('gelar',$pengurus->gelar) }}">
+                                placeholder="gelar (opsional)" name="gelar" id="gelar"
+                                value="{{ old('gelar', $pengurus->gelar) }}">
                             @error('gelar')
                                 <div>
                                     <p class="text-danger mt-2">{{ $message }}</p>
@@ -92,14 +110,19 @@
                             @enderror
                         </div>
                     </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-12">
-                        <label for="deskripsi" class="form-label">Deskripsi</label>
 
-                        <textarea type="text" class="form-control @error('deskripsi') is-invalid @enderror" placeholder="deskripsi"
-                            name="deskripsi" id="deskripsi" rows="5">{{ old('deskripsi', $pengurus->deskripsi) }}</textarea>
-                        @error('deskripsi')
+                    <div class="col-md-12 mt-3">
+                        <label for="kakomli_id" class="form-label">Kakomli</label>
+
+                        <select name="kakomli_id" id="kakomli_id" class="form-select">
+                            <option selected disabled>Kakomli yang membuat</option>
+                            @foreach ($kakomli as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ old('kakomli_id', $pengurus->kakomli_id) == $item->id ? 'selected' : '' }}>
+                                    {{ $item->nama }}</option>
+                            @endforeach
+                        </select>
+                        @error('kakomli_id')
                             <div>
                                 <p class="text-danger mt-2">{{ $message }}</p>
                             </div>
@@ -114,6 +137,10 @@
         </form>
     </div>
     <script>
+        $(document).ready(function() {
+            $('#kakomli_id').select2();
+        });
+
         document.getElementById('potoProfile').addEventListener('change', function(event) {
             const inputFile = event.target;
             const profileImage = document.getElementById('profileImage');

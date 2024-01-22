@@ -106,7 +106,7 @@
                     <li class="nav-item nav-category">Pengelolaan PKL</li>
                     <li class="nav-item {{ request()->routeIs('kelompok-siswa.*') ? 'active' : '' }}">
                         <a href="{{ route('kelompok-siswa.index') }}" class="nav-link">
-                            <i class="link-icon" data-feather="settings"></i>
+                            <i class="link-icon" data-feather="grid"></i>
                             <span class="link-title">Kelompok Siswa</span>
                         </a>
                     </li>

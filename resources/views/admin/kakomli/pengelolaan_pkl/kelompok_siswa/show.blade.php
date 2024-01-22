@@ -11,7 +11,7 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('kelompok-siswa.index') }}">Kelompok</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.kelompok-siswa.index') }}">Kelompok</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Detail</li>
                 </ol>
             </nav>
@@ -56,8 +56,8 @@
             </div>
 
             <div class="col-md12 mt-5 text-start d-flex">
-                <a href="{{ route('kelompok-siswa.edit', $kelompok->id) }}" class="btn btn-warning profile-button">Edit</a>
-                <form nameKelompok="{{ $kelompok->nama_kelompok }}" action="{{ route('kelompok-siswa.destroy', $kelompok->id) }}" method="POST" id="delete">
+                <a href="{{ route('admin.kelompok-siswa.edit', $kelompok->id) }}" class="btn btn-warning profile-button">Edit</a>
+                <form nameKelompok="{{ $kelompok->nama_kelompok }}" action="{{ route('admin.kelompok-siswa.destroy', $kelompok->id) }}" method="POST" id="delete">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger profile-button ms-2">Hapus</button>

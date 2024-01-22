@@ -10,6 +10,16 @@
             </nav>
         </div>
         <div class="d-flex justify-content-center my-3">
+            <div class="col-md-6 col-12 me-3 col-lg-4 pk-0">
+                <select name="jurusan" class="form-select" id="jurusan">
+                    <option selected>Semua</option>
+                    @foreach ($jurusans as $jurusan)
+                        <option value="{{ $jurusan->id }}" {{ request('jurusan') == $jurusan->id ? 'selected' : '' }}>
+                            {{ $jurusan->jurusan }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
             <form method="get" class="form-inline d-flex flex-row gap-1">
                 <input class="form-control mr-sm-2 py-0" type="search" name="query" placeholder="Search"
                     aria-label="Search" value="{{ request('query') }}">
@@ -18,7 +28,7 @@
             </form>
         </div>
         <div class="text-end">
-            <a href="{{ route('dudi.create') }}" class="btn btn-outline-primary">Tambah Dudi</a>
+            <a href="{{ route('admin.dudi.create') }}" class="btn btn-outline-primary">Tambah Dudi</a>
         </div>
     </div>
     <div class="card">
@@ -28,6 +38,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Jurusan</th>
                             <th>Nama</th>
                             <th>Pemimpin Dudi</th>
                             <th>No Telp</th>
@@ -39,13 +50,15 @@
                         @forelse ($dudi as $i => $data)
                             <tr>
                                 <th>{{ ++$i }}</th>
+                                <td>{{ $data->jurusan->jurusan }}</td>
                                 <td>{{ $data->nama }}</td>
                                 <td>{{ $data->pemimpin }}</td>
                                 <td>{{ $data->no_telp ?? 'tidak ada no telp' }}</td>
                                 <td style="white-space: initial">{{ $data->alamat }}</td>
                                 <td class="d-flex align-items-center gap-2">
-                                    <a href="{{ route('dudi.show', $data->id) }}" class="btn btn-primary px-2 py-1"><i
-                                            class="link-icon" width="15" data-feather="file-text"></i></a>
+                                    <a href="{{ route('admin.dudi.show', $data->id) }}"
+                                        class="btn btn-primary px-2 py-1"><i class="link-icon" width="15"
+                                            data-feather="file-text"></i></a>
                                 </td>
                             </tr>
                         @empty
@@ -63,4 +76,25 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#jurusan_id').select2();
+        });
+        document.getElementById('jurusan').addEventListener('change', function() {
+            var selectedCategoryId = this.value;
+            var currentUrl = window.location.href;
+            var newUrl;
+            if (selectedCategoryId === "Semua") {
+                newUrl = currentUrl.replace(/jurusan=[^&]*/, '');
+            } else {
+                var ctParam = 'jurusan=' + selectedCategoryId;
+                if (currentUrl.includes('jurusan=')) {
+                    newUrl = currentUrl.replace(/jurusan=[^&]*/, ctParam);
+                } else {
+                    newUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + ctParam;
+                }
+            }
+            window.location.href = newUrl;
+        });
+    </script>
 @endsection

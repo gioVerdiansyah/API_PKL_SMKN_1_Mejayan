@@ -22,7 +22,7 @@
         <div class="d-flex flex-column align-items-center pb-2">
             <h4 class="mt-2">Update Siswa PKL</h4>
         </div>
-        <form action="{{ route('siswa.update', $siswa->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.siswa.update', $siswa->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="d-flex flex-column align-items-center pb-2">

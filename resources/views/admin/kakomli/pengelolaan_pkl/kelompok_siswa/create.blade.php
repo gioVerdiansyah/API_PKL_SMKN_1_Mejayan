@@ -19,7 +19,7 @@
         <div class="d-flex flex-column align-items-center pb-2">
             <h4 class="mt-2">Tambah Kelompok Siswa PKL</h4>
         </div>
-        <form action="{{ route('kelompok-siswa.store') }}" method="POST">
+        <form action="{{ route('admin.kelompok-siswa.store') }}" method="POST">
             @csrf
             <div class="row">
                 <div class="col-md-6 mb-3">
