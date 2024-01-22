@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api\Guru;
 
 use App\Http\Controllers\Controller;
+use App\Models\Absensi;
 use App\Models\Izin;
 use App\Models\Kelompok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class KelolaIzinController extends Controller
 {
@@ -61,6 +63,34 @@ class KelolaIzinController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Error: ' . $e]);
+        }
+    }
+
+    public function tolakPaksaIzin(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $izin = Izin::where('id', $request->izin_id)->first();
+
+            if (!$izin) {
+                return response()->json(['success' => false, 'message' => "ID Izin tidak ditemukan!!!"]);
+            }
+
+            $absen = Absensi::where('user_id', $izin->user_id)->whereDate('created_at', $izin->created_at)->first();
+            $absen->status = 3;
+            $absen->save();
+
+            if (Storage::exists($izin->bukti)) {
+                Storage::delete($izin->bukti);
+            }
+
+            $izin->delete();
+
+            DB::commit();
+            return response()->json(['success' => true, 'message' => "Berhasil me-nolak paksa izin!"], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => "Error: $e"]);
         }
     }
 }

@@ -22,23 +22,11 @@ class UserUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('siswa');
+        $id = $this->route('siswa_siswi');
         return [
-            'nama' => [
-                'required',
-                'string',
-                Rule::unique('users', 'name')->ignore($id, 'id')
-            ],
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('users', 'email')->ignore($id, 'id')
-            ],
-            'nis' => [
-                'required',
-                'string',
-                Rule::unique('users', 'nis')->ignore($id, 'id')
-            ],
+            'nama' => "required|string|unique:users,name," . $id . ",id",
+            'email' => "required|email:rfc,dns|unique:users,email," . $id . ",id",
+            'nis' => "required|integer|unique:users,nis," . $id . ",id",
             'jurusan' => ['required', Rule::in(\App\Models\Jurusan::pluck('id')->toArray())],
             'kelas' => ['required', Rule::in(\App\Models\Kelas::pluck('id')->toArray())],
             'jenis_kelamin' => ['required', Rule::in(['P', 'L'])],
@@ -47,7 +35,7 @@ class UserUpdateRequest extends FormRequest
             'no_hp' => 'nullable|string|gt:0',
             'no_hp_ortu' => 'nullable|string|gt:0',
             'photo_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'absen' => 'required|integer|digits:2'
+            'absen' => 'required'
         ];
     }
 }

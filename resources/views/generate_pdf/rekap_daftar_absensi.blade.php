@@ -117,7 +117,7 @@
     @endforeach
 </div>
 
-{{-- <script>
+<script>
     window.addEventListener('load', function() {
     window.print({
         landscape: true,
@@ -129,4 +129,4 @@
     }
 });
 
-</script> --}}
+</script>

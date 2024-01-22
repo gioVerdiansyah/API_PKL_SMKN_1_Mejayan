@@ -23,10 +23,8 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6 order-2 order-md-1 text-center text-md-left">
-                    <h1 class="text-white font-weight-bold mb-4">Showcase your app with Small Apps</h1>
-                    <p class="text-white mb-5">Besides its beautiful design. Laapp is an incredibly rich core framework
-                        for you to
-                        showcase your App.</p>
+                    <h1 class="text-white font-weight-bold mb-4">Aplikasi Presensi PKL SMKN 1 Mejayan</h1>
+                    <p class="text-white mb-5">Adalah aplikasi untuk mempermudah melakukan presensi, jurnal, serta guru pembimbing untuk melakukan presensi dan rekap kegiatan selama PKL.</p>
                     <div class="d-flex flex-col">
                         <button class="button-download" type="button">
                             <span class="button__text"><i class="fa-brands fa-android"></i> Android</span>

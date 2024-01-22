@@ -11,7 +11,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class PrintController extends Controller
+class AdminPrintController extends Controller
 {
     public function showPrintJurnalSiswa(string $id)
     {
@@ -136,7 +136,7 @@ class PrintController extends Controller
             ];
         }
 
-        $absensi = Absensi::with(['user.kelas'])
+        $absensi = Absensi::with('user')
             ->whereIn('user_id', $kelompok->anggota->pluck('user_id'))
             ->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])
             ->get();

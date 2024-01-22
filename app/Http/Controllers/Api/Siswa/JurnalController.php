@@ -87,8 +87,7 @@ class JurnalController extends Controller
                 return response()->json(['success' => false, 'message' => "ID user tidak ditemukan, cobalah logout lalu login ulang"], 404);
             }
 
-            $doesntFillJurnal = $jurnal->where('status', 2)->count();
-
+            $doesntFillJurnal = $jurnal->whereIn('status', [0,2])->count();
             return response()->json(['success' => true, 'data' => $jurnal, 'doenst_jurnal' => $doesntFillJurnal], 200);
         }catch(\Exception $e){
             return response()->json(['success' => false, 'message' => "Error: Error: {$e->getMessage()}"], 500);

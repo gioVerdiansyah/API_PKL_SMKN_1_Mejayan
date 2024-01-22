@@ -28,14 +28,47 @@ class IzinController extends Controller
                 ->whereDate('created_at', today())->where('status', '!=', '6')
                 ->exists();
 
+            $hasIzin = Izin::where('user_id', $user->id)->whereDate('created_at', today())->exists();
+
+            if (!$hasIzin && $request->tipe_izin === "Dispensasi") {
+                $izin = new Izin;
+                $izin->user_id = $user->id;
+                $izin->tipe_izin = $request->tipe_izin;
+                $izin->alasan = $request->alasan;
+                $izin->awal_izin = Carbon::parse($request->awal_izin);
+                $izin->akhir_izin = Carbon::parse($request->akhir_izin);
+
+                if (!$request->hasFile("bukti")) {
+                    return response()->json(["success" => false, "message" => "Foto Bukti tidak ditemukan!"], 404);
+                }
+
+                $nameFile = $request->file('bukti')->hashName();
+                $path = $request->file('bukti')->storeAs('bukti_izin', $nameFile);
+
+                $izin->bukti = $path;
+                $izin->save();
+
+
+                if (!$absenSudahAda) {
+                    $absensi = new Absensi;
+                    $absensi->user_id = $user->id;
+                    $absensi->status = 1;
+                    $absensi->datang = now();
+                    $absensi->save();
+                }
+
+                DB::commit();
+                return response()->json(['success' => true, 'message' => "Berhasil izin pada hari ini"], 201);
+            }
+
+            if ($hasIzin) {
+                return response()->json(['success' => false, "message" => "Anda sudah izin pada hari ini"], 403);
+            }
+
             if ($absenSudahAda) {
                 return response()->json(['success' => false, 'message' => 'Anda sudah dinyatakan absen, tidak bisa melakukan izin! Edit absensi menjadi \'Reset\' untuk mereset absensi'], 403);
             }
 
-            $sudahIzin = Izin::where('user_id', $user->id)->whereDate('created_at', today())->exists();
-            if ($sudahIzin) {
-                return response()->json(['success' => false, "message" => "Anda sudah izin pada hari ini"], 403);
-            }
 
             $izin = new Izin;
             $izin->user_id = $user->id;
@@ -86,15 +119,15 @@ class IzinController extends Controller
 
     public function izinShow(string $id)
     {
-        try{
+        try {
             $dataIzin = Izin::with('user')->where('id', $id)->orderBy('created_at', 'desc')->first();
 
-            if (!$dataIzin){
+            if (!$dataIzin) {
                 return response()->json(['success' => false, 'message' => 'Data izin tidak ditemukan'], 404);
             }
 
             return response()->json(['success' => true, 'message' => 'Berhasil mendapatkan data', 'data' => $dataIzin], 200);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => "Error: {$e->getMessage()}"], 500);
         }
     }
@@ -111,7 +144,7 @@ class IzinController extends Controller
 
             $izin = Izin::where('id', $id)->first();
 
-            if(!$izin){
+            if (!$izin) {
                 return response()->json(['success' => false, 'message' => 'ID Absen tidak ditemukan'], 404);
             }
 
@@ -124,7 +157,7 @@ class IzinController extends Controller
 
             $path = $izin->bukti;
             if ($request->hasFile("bukti")) {
-                if(Storage::exists($path)){
+                if (Storage::exists($path)) {
                     Storage::delete($path);
                 }
                 $nameFile = $request->file('bukti')->hashName();

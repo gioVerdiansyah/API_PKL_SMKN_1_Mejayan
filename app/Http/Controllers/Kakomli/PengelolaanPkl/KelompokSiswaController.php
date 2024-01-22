@@ -90,7 +90,7 @@ class KelompokSiswaController extends Controller
             return to_route('kelompok-siswa.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success!',
-                'text' => "Berhasil me-nambah kelompok {$request->nama_kelompok}"
+                'text' => "Berhasil me-nambah kelompok: {$request->nama_kelompok}"
             ]);
         } catch (\Exception $e) {
             DB::rollBack();

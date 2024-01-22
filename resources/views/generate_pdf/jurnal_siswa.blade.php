@@ -5,7 +5,7 @@
 </style>
 
 <div style="margin: 0;">
-    <h1 style="text-align: center;">Rekap Jurnal</h1>
+    <h1 style="text-align: center;text-transform: uppercase">Rekap Jurnal PKL</h1>
     <div style="margin-bottom: 10px;">
         <p style="margin: 0"><span style="font-weight: bold;">Nama:</span> {{ $user->name }}</p>
         <p style="margin: 0"><span style="font-weight: bold;">Absen:</span> {{ $user->absen }}</p>
@@ -26,7 +26,7 @@
             @forelse ($dataJurnal as $i => $data)
                 <tr>
                     <th style="border: 1px solid #ddd; padding: 8px;">{{ ++$i }}</th>
-                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center">{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y H:i:s') }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center">{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
                         @if (is_null($data->bukti))
                             No Image

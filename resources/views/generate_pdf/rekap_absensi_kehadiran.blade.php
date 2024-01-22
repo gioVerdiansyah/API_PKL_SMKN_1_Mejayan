@@ -22,6 +22,7 @@
             <thead>
                 <tr>
                     <th class="border border-3 border-secondary p-2 text-center">Nama</th>
+                    <th class="border border-3 border-secondary p-2 text-center">Kelas</th>
                     <th class="border border-3 border-secondary p-2 text-center">Hadir</th>
                     <th class="border border-3 border-secondary p-2 text-center">Telat</th>
                     <th class="border border-3 border-secondary p-2 text-center">Izin</th>
@@ -36,6 +37,7 @@
                 @foreach ($absensi->groupBy('user_id') as $userId => $userAbsensi)
                     <tr>
                         <td  class="border border-3 border-secondary p-2 ps-3">{{ $userAbsensi->first()->user->name }}</td>
+                        <td  class="border border-3 border-secondary p-2 ps-3">{{ $userAbsensi->first()->user->kelas->kelas }}</td>
                         <td  class="border border-3 border-secondary p-2 text-center">{{ $userAbsensi->whereIn('status', ['1', '2', '4', '5'])->count() }}</td>
                         <td  class="border border-3 border-secondary p-2 text-center">{{ $userAbsensi->whereIn('status', ['2', '5'])->count() }}</td>
                         <td  class="border border-3 border-secondary p-2 text-center">{{ $userAbsensi->where('status', '6')->count() }}</td>
@@ -49,13 +51,13 @@
         </table>
     </div>
         <div class="ps-5 pt-3 d-flex flex-column justify-content-start">
-        <h3 class="my-1 fs-5">{{ $kelompok->dudi->pemimpin }}</h3>
-        <div style="width: 100px;height: 100px;"></div>
-        <h3 class="my-1 fs-5">Pemimpin/Pengurus DuDi</h3>
+            <h3 class="my-1 fs-5">Pemimpin/Pengurus DuDi</h3>
+            <div style="width: 100px;height: 70px;"></div>
+            <h3 class="my-1 fs-5">{{ $kelompok->dudi->pemimpin }}</h3>
     </div>
 </div>
 
-{{-- <script>
+<script>
     window.addEventListener('load', function() {
     window.print({
         landscape: true,
@@ -67,4 +69,4 @@
     }
 });
 
-</script> --}}
+</script>

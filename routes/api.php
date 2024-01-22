@@ -28,18 +28,27 @@ use Illuminate\Support\Facades\Route;
 Route::middleware("verifyAPIKey")->group(function () {
     Route::post('/login', LoginController::class);
     Route::get('/check-login', [CheckLoginController::class, 'index']);
+
+    // Absensi
     Route::post('/absensi/hadir', [AbsensiController::class, 'absen']);
     Route::post('/absensi/pulang', [AbsensiController::class, 'pulang']);
+    Route::patch('/absensi/salah', [AbsensiController::class, 'absenSalah']);
+
+    // Izin
     Route::post('/absensi/izin', [IzinController::class, 'izin']);
     Route::get('/absensi/izin/get/{id}', [IzinController::class, 'izinGet']);
     Route::get('/absensi/izin/show/{id}', [IzinController::class, 'izinShow']);
     Route::post('/absensi/izin/edit/{id}', [IzinController::class, 'editIzin']);
-    Route::patch('/absensi/salah', [AbsensiController::class, 'absenSalah']);
+
+    // Jurnal
     Route::post('/jurnal', [JurnalController::class,'jurnal']);
     Route::get('/jurnal/get/{id}', [JurnalController::class,'jurnalGet']);
     Route::get('/jurnal/show/{id}', [JurnalController::class,'jurnalShow']);
     Route::post('/jurnal/edit/{id}', [JurnalController::class,'editJurnal']);
+
     Route::post('/edit-profile/{id}', [EditProfileController::class,'editProfile']);
+
+    // PINDAAAAH KE GURU
     Route::get('/absensi/trouble', [AbsensiController::class, 'absenTrouble']);
 
 
@@ -59,6 +68,7 @@ Route::middleware("verifyAPIKey")->group(function () {
         // list izin
         Route::get('/{guru_id}/izin/get/{nama_kelompok?}/{status?}', [KelolaIzinController::class, 'getIzin']);
         Route::put('/{guru_id}/izin/agreement', [KelolaIzinController::class, 'izinAgreement']);
+        Route::post('/{guru_id}/izin/tolak-paksa', [KelolaIzinController::class, 'tolakPaksaIzin']);
 
         Route::post('/{guru_id}/profile/edit', [EditProfileGuruController::class, 'edit']);
     });

@@ -118,8 +118,8 @@
                         <div class="col-md-12">
                             <label for="absen" class="form-label">Absen</label>
 
-                            <input type="number" class="form-control @error('absen') is-invalid @enderror"
-                                placeholder="absen" name="absen" id="absen" value="{{ old('absen', $siswa->absen) + 1 ?? '' }}">
+                            <input type="text" class="form-control @error('absen') is-invalid @enderror"
+                                placeholder="absen" name="absen" id="absen" value="{{ old('absen', $siswa->absen) }}">
                             @error('absen')
                                 <div>
                                     <p class="text-danger mt-2">{{ $message }}</p>
