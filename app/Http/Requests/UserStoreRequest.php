@@ -34,7 +34,32 @@ class UserStoreRequest extends FormRequest
             'no_hp' => 'nullable|string|gt:0',
             'no_hp_ortu' => 'nullable|string|gt:0',
             'photo_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'absen' => 'required|integer'
+            'absen' => 'required|integer',
+            'senin' => ['required', 'regex:/^([01]\d|2[0-3]):([0-5]\d)\s?-\s?([01]\d|2[0-3]):([0-5]\d)$/'],
+            'selasa' => ['required', 'regex:/^([01]\d|2[0-3]):([0-5]\d)\s?-\s?([01]\d|2[0-3]):([0-5]\d)$/'],
+            'rabu' => ['required', 'regex:/^([01]\d|2[0-3]):([0-5]\d)\s?-\s?([01]\d|2[0-3]):([0-5]\d)$/'],
+            'kamis' => ['required', 'regex:/^([01]\d|2[0-3]):([0-5]\d)\s?-\s?([01]\d|2[0-3]):([0-5]\d)$/'],
+            'jumat' => ['required', 'regex:/^([01]\d|2[0-3]):([0-5]\d)\s?-\s?([01]\d|2[0-3]):([0-5]\d)$/'],
+            'sabtu' => ['nullable', 'regex:/^([01]\d|2[0-3]):([0-5]\d)\s?-\s?([01]\d|2[0-3]):([0-5]\d)$/'],
+            'minggu' => ['nullable', 'regex:/^([01]\d|2[0-3]):([0-5]\d)\s?-\s?([01]\d|2[0-3]):([0-5]\d)$/'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'senin.required' => 'Jam masuk Senin wajib diisi.',
+            'senin.regex' => 'Format jam masuk Senin tidak valid.',
+            'selasa.required' => 'Jam masuk Selasa wajib diisi.',
+            'selasa.regex' => 'Format jam masuk Selasa tidak valid.',
+            'rabu.required' => 'Jam masuk Rabu wajib diisi.',
+            'rabu.regex' => 'Format jam masuk Rabu tidak valid.',
+            'kamis.required' => 'Jam masuk Kamis wajib diisi.',
+            'kamis.regex' => 'Format jam masuk Kamis tidak valid.',
+            'jumat.required' => 'Jam masuk Jumat wajib diisi.',
+            'jumat.regex' => 'Format jam masuk Jumat tidak valid.',
+            'sabtu.regex' => 'Format jam masuk Sabtu tidak valid.',
+            'minggu.regex' => 'Format jam masuk Minggu tidak valid.',
         ];
     }
 }

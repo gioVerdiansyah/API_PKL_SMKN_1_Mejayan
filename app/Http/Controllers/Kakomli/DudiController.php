@@ -55,20 +55,6 @@ class DudiController extends Controller
             $dudi->radius = $request->radius;
             $dudi->alamat = $request->alamat;
             $dudi->jurusan_id = auth()->guard('kakomli')->user()->jurusan_id;
-            $dudi->senin = $request->senin;
-            $dudi->selasa = $request->selasa;
-            $dudi->rabu = $request->rabu;
-            $dudi->kamis = $request->kamis;
-            $dudi->jumat = $request->jumat;
-            $dudi->sabtu = $request->sabtu;
-            $dudi->minggu = $request->minggu;
-            $dudi->ji_senin = $request->ji_senin;
-            $dudi->ji_selasa = $request->ji_selasa;
-            $dudi->ji_rabu = $request->ji_rabu;
-            $dudi->ji_kamis = $request->ji_kamis;
-            $dudi->ji_jumat = $request->ji_jumat;
-            $dudi->ji_sabtu = $request->ji_sabtu;
-            $dudi->ji_minggu = $request->ji_minggu;
             $dudi->save();
 
             DB::commit();
@@ -146,20 +132,6 @@ class DudiController extends Controller
             $dudi->koordinat = $request->koordinat;
             $dudi->radius = $request->radius;
             $dudi->alamat = $request->alamat;
-            $dudi->senin = $request->senin;
-            $dudi->selasa = $request->selasa;
-            $dudi->rabu = $request->rabu;
-            $dudi->kamis = $request->kamis;
-            $dudi->jumat = $request->jumat;
-            $dudi->sabtu = $request->sabtu;
-            $dudi->minggu = $request->minggu;
-            $dudi->ji_senin = $request->ji_senin;
-            $dudi->ji_selasa = $request->ji_selasa;
-            $dudi->ji_rabu = $request->ji_rabu;
-            $dudi->ji_kamis = $request->ji_kamis;
-            $dudi->ji_jumat = $request->ji_jumat;
-            $dudi->ji_sabtu = $request->ji_sabtu;
-            $dudi->ji_minggu = $request->ji_minggu;
             $dudi->save();
 
             DB::commit();

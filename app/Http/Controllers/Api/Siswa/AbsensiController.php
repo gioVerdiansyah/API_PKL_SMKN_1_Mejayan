@@ -22,7 +22,7 @@ class AbsensiController extends Controller
     {
         try {
             DB::beginTransaction();
-            $user = User::select('id')->where('id', $request->user_id)->first();
+            $user = User::where('id', $request->user_id)->first();
             if (!$user) {
                 return response()->json(['success' => false, 'message' => 'User tidak ditemukan'], 404);
             }
@@ -66,9 +66,9 @@ class AbsensiController extends Controller
             $now = Carbon::now()->locale('id');
             $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
 
-            $jamMasuk = $dudi[$hariIni];
+            $jamMasuk = $user[$hariIni];
             if (is_null($jamMasuk)) {
-                return response()->json(["success" => false, "message" => $kelompok], 403);
+                return response()->json(["success" => false, "message" => "Anda tidak dapat absen pada hari {$hariIni}"], 403);
             }
             $jamMasuk = explode(" - ", $jamMasuk)[0];
             $jamMasukTimestamp = strtotime($jamMasuk);
@@ -76,7 +76,7 @@ class AbsensiController extends Controller
 
             $selisihSatuJam = 3600;
 
-            $jamMasuk = $dudi->{$hariIni};
+            $jamMasuk = $user->{$hariIni};
             $jamMasuk = substr($jamMasuk, 0, 5);
             $telat = $now->diff(Carbon::parse($now->format('Y-m-d') . ' ' . $jamMasuk));
             $waktuTelat = $telat->format('%H:%I');
@@ -191,7 +191,7 @@ class AbsensiController extends Controller
             $now = Carbon::now()->locale('id');
             $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
 
-            $jamMasuk = $dudi[$hariIni];
+            $jamMasuk = $user[$hariIni];
             if (is_null($jamMasuk)) {
                 return response()->json(["success" => false, "message" => "Anda tidak dapat me-edit absen pada hari $hariIni"], 403);
             }
@@ -201,7 +201,7 @@ class AbsensiController extends Controller
 
             $selisihSatuJam = 3600;
 
-            $jamMasuk = $dudi->{$hariIni};
+            $jamMasuk = $user->{$hariIni};
             $jamMasuk = substr($jamMasuk, 0, 5);
             $telat = $now->diff(Carbon::parse($now->format('Y-m-d') . ' ' . $jamMasuk));
             $waktuTelat = $telat->format('%H:%I');

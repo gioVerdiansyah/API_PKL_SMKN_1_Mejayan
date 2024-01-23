@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DudiStoreRequest extends FormRequest
+class PrintAbsensiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,9 @@ class DudiStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => ['required', 'string', 'unique:dudis,nama'],
-            'pemimpin' => ['required', 'string'],
-            'no_telp' => ['nullable', 'string'],
-            'email' => ['nullable', 'email:rfc,dns'],
-            'alamat' => ['required', 'string'],
-            'koordinat' => ['required', 'regex:/^-?\d{1,2}\.\d+, -?\d{1,3}\.\d+$/'],
-            'radius' => ['required', 'integer'],
+            'kelompok' => "required|string|exists:kelompoks,nama_kelompok",
+            'tipe' => 'required|in:daftar-hadir,kehadiran',
+            'bulan' => 'required',
         ];
     }
 }

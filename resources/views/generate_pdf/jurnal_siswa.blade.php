@@ -26,15 +26,20 @@
             @forelse ($dataJurnal as $i => $data)
                 <tr>
                     <th style="border: 1px solid #ddd; padding: 8px;">{{ ++$i }}</th>
-                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center">{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center">
+                        {{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
                         @if (is_null($data->bukti))
                             No Image
                         @else
-                            <img src="storage/{{ $data->bukti }}" alt="Foto Jurnal siswa {{ $user->name }} ke {{ $i }}" style="width: 100px; height: auto;">
+                            <img src="storage/{{ $data->bukti }}"
+                                alt="Foto Jurnal siswa {{ $user->name }} ke {{ $i }}"
+                                style="width: 100px; height: auto;">
                         @endif
                     </td>
-                    <td style="border: 1px solid #ddd; padding: 8px;"><p style="word-wrap: break-word; white-space: pre-line;">{{ $data->kegiatan }}</p></td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">
+                        <p style="word-wrap: break-word; white-space: pre-line;">{{ $data->kegiatan }}</p>
+                    </td>
                 </tr>
             @empty
                 <tr>
@@ -45,4 +50,9 @@
             @endforelse
         </tbody>
     </table>
+    <div style="margin-top: 20px">
+        <h3 class="my-1 fs-5">Pemimpin/Pengurus DuDi</h3>
+        <div style="width: 100px;height: 70px;"></div>
+        <h3>{{ $kelompok->dudi->pemimpin }}</h3>
+    </div>
 </div>

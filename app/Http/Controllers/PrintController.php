@@ -10,6 +10,7 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Writer\Xls\Style\ColorMap;
 
 class PrintController extends Controller
 {
@@ -23,12 +24,31 @@ class PrintController extends Controller
                 'text' => 'ID user / jurnal tidak ditemukan'
             ]);
         }
-        return view('print_jurnal', compact('id'));
+
+        $jurnal = Jurnal::with('user')->where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+
+        $uniqueMonths = $jurnal->pluck('created_at')->map(function ($createdAt) {
+            $date = Carbon::parse($createdAt);
+            $year = $date->format('Y');
+            $month = $date->format('m') . '-' . $year;
+            $namaBulan = $date->translatedFormat('F');
+            if ($year < date('Y')) {
+                $namaBulan .= ' ' . $year;
+            }
+            return [
+                'bulan' => $month,
+                'nama_bulan' => $namaBulan
+            ];
+        })->unique();
+
+        $dataBulan = $uniqueMonths->values()->all();
+
+        return view('print_jurnal', compact('id', 'dataBulan'));
     }
     public function printJurnalSiswa(Request $request)
     {
         try {
-            $jurnal = Jurnal::with('user')->where('user_id', $request->user_id)->get();
+            $jurnal = Jurnal::with('user')->where('user_id', $request->user_id)->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])->get();
             $user = User::with(['kelas', 'jurusan'])->where('id', $request->user_id)->first();
 
             $kelompok = Kelompok::with(['dudi', 'guru'])->whereHas('anggota', function ($query) use ($user) {
@@ -46,7 +66,7 @@ class PrintController extends Controller
             if (file_exists($path)) {
                 unlink($path);
             }
-                $pdf = PDF::setPaper('A4', 'potrait')->loadView('generate_pdf.jurnal_siswa', ['dataJurnal' => $jurnal, 'user' => $user, 'kelompok' =>  $kelompok]);
+            $pdf = PDF::setPaper('A4', 'potrait')->loadView('generate_pdf.jurnal_siswa', ['dataJurnal' => $jurnal, 'user' => $user, 'kelompok' => $kelompok]);
             $folder_exist = storage_path($base_path);
             if (!file_exists($folder_exist)) {
                 mkdir($folder_exist, 0755, true);
@@ -77,7 +97,8 @@ class PrintController extends Controller
         $kelompok = Kelompok::with([
             'dudi' => function ($query) {
                 $query->select(['id', 'nama']);
-            }])->where('guru_id', $guru_id)->get();
+            }
+        ])->where('guru_id', $guru_id)->get();
 
         $absen = Kelompok::with([
             'anggota',
@@ -125,7 +146,7 @@ class PrintController extends Controller
         $kelompok = Kelompok::with([
             'anggota',
             'dudi' => function ($query) {
-                $query->select(['id', 'nama', 'senin', 'pemimpin']);
+                $query->select(['id', 'nama', 'pemimpin']);
             }
         ])->where('guru_id', $guru_id)->where('nama_kelompok', $namaKelompok)->first();
 
@@ -145,7 +166,7 @@ class PrintController extends Controller
         $absensiBulan = $bulanTahun->translatedFormat('F Y');
 
         $listUser = User::whereIn('id', $kelompok->anggota->pluck('user_id'))->get();
-        if($request->tipe === "daftar-hadir"){
+        if ($request->tipe === "daftar-hadir") {
             return view('generate_pdf.rekap_daftar_absensi', compact('absensi', 'kelompok', 'absensiBulan', 'listUser'));
         }
         // dd($absensi->where('status', '1')->count());

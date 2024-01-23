@@ -15,7 +15,8 @@
     </div>
     <div class="card p-4">
         <div class="d-flex flex-column align-items-center pb-5">
-            <img src="{{ asset($siswa->photo_profile) }}" alt="photo siswa" class="rounded-5 shadow-sm border" width="70">
+            <img src="{{ asset($siswa->photo_profile) }}" alt="photo siswa" class="rounded-5 shadow-sm border"
+                width="70">
         </div>
         <div class="row">
             <div class="col-md-6 mb-3">
@@ -29,7 +30,7 @@
                 <div class="row mt-3">
                     <div class="col-md-12">
                         <label class="form-label">NIS</label>
-                        <p>{{ $siswa->nis}}</p>
+                        <p>{{ $siswa->nis }}</p>
                     </div>
                 </div>
 
@@ -72,14 +73,14 @@
                 <div class="row mt-3">
                     <div class="col-md-12 mt-1">
                         <label class="form-label">Jurusan</label>
-                        <p>{{ $siswa->jurusan->jurusan}}</p>
+                        <p>{{ $siswa->jurusan->jurusan }}</p>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-12 mt-1">
                         <label class="form-label">Jenis Kelamin</label>
-                        <p>{{ $siswa->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan'}}</p>
+                        <p>{{ $siswa->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</p>
                     </div>
                 </div>
 
@@ -90,11 +91,62 @@
                     </div>
                 </div>
             </div>
+            {{-- jam dudi --}}
+            <span class="fw-bold">Jam Dudi</span>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Senin</label>
+                            <p>{{ $siswa->senin }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Rabu</label>
+                            <p>{{ $siswa->rabu }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Juma'at</label>
+                            <p>{{ $siswa->jumat }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Minggu</label>
+                            <p>{{ $siswa->minggu ?? 'libur' }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Selasa</label>
+                            <p>{{ $siswa->selasa }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Kamis</label>
+                            <p>{{ $siswa->kamis }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Saptu</label>
+                            <p>{{ $siswa->saptu ?? 'libur' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="col-md12 d-flex mt-5 text-start">
             <a href="{{ route('siswa.edit', $siswa->id) }}" class="btn btn-warning profile-button me-2">Edit</a>
-            <form nameSiswa="{{ $siswa->name }}" action="{{ route('siswa.destroy', $siswa->id) }}" id="delete" method="POST">
+            <form nameSiswa="{{ $siswa->name }}" action="{{ route('siswa.destroy', $siswa->id) }}" id="delete"
+                method="POST">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-danger profile-button">Hapus</button>

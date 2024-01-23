@@ -33,6 +33,14 @@ class LoginController extends Controller
             $kelompok = Kelompok::with('dudi')->whereHas('anggota', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })->first();
+
+            if(!$kelompok){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda belum didaftarkan kedalam kelompok/DuDi!!!'
+                ], 401);
+            }
+
             $dudi = Dudi::where('id', $kelompok->dudi_id)->first();
             $guru = Guru::where('id', $kelompok->guru_id)->first();
 

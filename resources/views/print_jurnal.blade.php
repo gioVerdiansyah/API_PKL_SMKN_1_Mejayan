@@ -3,6 +3,16 @@
 @section('content')
     <div class="container d-flex align-items-center justify-content-center" style="height: 50vh;">
         <div id="content">
+            <div class="form-group">
+                <label for="bulan-bulan" class="form-label">Print jurnal pada bulan:</label>
+                <select name="bulan" class="form-control" id="bulan-bulan">
+                    @forelse ($dataBulan as $items)
+                        <option value="{{ $items['bulan'] }}">{{ $items['nama_bulan'] }}</option>
+                    @empty
+                        <option disabled>Bulan tidak ada</option>
+                    @endforelse
+                </select>
+            </div>
             <div id="button-download">
                 <link rel="stylesheet" href="{{ asset('css/button_download.css') }}">
 
@@ -39,18 +49,20 @@
     <script>
         let upload = document.querySelector(".upload");
         const generatePdf = () => {
+            const selectValue = $('#bulan-bulan').val();
             $.ajax({
                 type: "post",
                 url: "{{ route('print_jurnal') }}",
                 data: {
                     user_id: '{{ $id }}',
+                    bulan: selectValue,
                     _token: '{{ csrf_token() }}'
                 },
                 dataType: "json",
                 beforeSend: function() {
                     upload.classList.add("uploading");
 
-                    $('#message-loading').length >=1 && $('#message-loading').remove();
+                    $('#message-loading').length >= 1 && $('#message-loading').remove();
 
                     $('#content').append(`
                         <div id="message-loading">
@@ -66,7 +78,7 @@
                     upload.classList.add("uploaded-after");
                     upload.className = "upload";
 
-                    if(response.success){
+                    if (response.success) {
                         $('.upload__filename').text(`${response.name_file}.pdf`);
 
                         $('.upload__button').removeAttr('onclick');
@@ -77,7 +89,7 @@
                         $('#message-loading').html(`
                             <p style="color: ${response.success ? 'green' : 'red'}">${response.message}</p>
                         `);
-                    }else{
+                    } else {
                         $('.upload__filename').text("Gagal me-generate PDF!");
 
                         $('#message-loading').html(`

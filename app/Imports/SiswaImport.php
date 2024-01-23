@@ -36,6 +36,13 @@ class SiswaImport implements ToCollection, WithHeadingRow
             $user->alamat = $row['alamat'];
             $user->no_hp = $row['no_hp'];
             $user->no_hp_ortu = $row['no_hp_ortu'];
+            $user->senin = $row['senin'];
+            $user->selasa = $row['selasa'];
+            $user->rabu = $row['rabu'];
+            $user->kamis = $row['kamis'];
+            $user->jumat = $row['jumat'];
+            $user->sabtu = $row['sabtu'];
+            $user->minggu = $row['minggu'];
             $user->save();
         }
     }

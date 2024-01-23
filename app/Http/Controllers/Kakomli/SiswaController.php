@@ -68,6 +68,13 @@ class SiswaController extends Controller
             $siswa->jurusan_id = $request->jurusan;
             $siswa->jenis_kelamin = $request->jenis_kelamin;
             $siswa->alamat = $request->alamat;
+            $siswa->senin = $request->senin;
+            $siswa->selasa = $request->selasa;
+            $siswa->rabu = $request->rabu;
+            $siswa->kamis = $request->kamis;
+            $siswa->jumat = $request->jumat;
+            $siswa->sabtu = $request->sabtu;
+            $siswa->minggu = $request->minggu;
 
             if($request->hasFile('photo_profile')){
                 $fileName = $request->file('photo_profile')->hashName();
@@ -158,6 +165,13 @@ class SiswaController extends Controller
             $siswa->jurusan_id = $request->jurusan;
             $siswa->jenis_kelamin = $request->jenis_kelamin;
             $siswa->alamat = $request->alamat;
+            $siswa->senin = $request->senin;
+            $siswa->selasa = $request->selasa;
+            $siswa->rabu = $request->rabu;
+            $siswa->kamis = $request->kamis;
+            $siswa->jumat = $request->jumat;
+            $siswa->sabtu = $request->sabtu;
+            $siswa->minggu = $request->minggu;
 
             if ($request->password !== null) {
                 $siswa->password = Hash::make($request->password);

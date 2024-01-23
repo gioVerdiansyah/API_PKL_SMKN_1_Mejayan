@@ -25,6 +25,16 @@ return new class extends Migration
             $table->string('alamat')->nullable();
             $table->string('no_hp')->nullable();
             $table->string('no_hp_ortu')->nullable();
+
+            // Jam masuk per siswa
+            $table->string('senin');
+            $table->string('selasa');
+            $table->string('rabu');
+            $table->string('kamis');
+            $table->string('jumat');
+            $table->string('sabtu')->nullable();
+            $table->string('minggu')->nullable();
+
             $table->timestamps();
             $table->rememberToken();
         });

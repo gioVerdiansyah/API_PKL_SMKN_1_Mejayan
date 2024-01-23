@@ -31,6 +31,13 @@ class UserSeeder extends Seeder
                 'alamat' => 'Kab Maidun, Kec Balerejo, Ds Sogo',
                 'no_hp' => '081234567890',
                 'no_hp_ortu' => '081234567891',
+                'senin' => '08:00 - 16:00',
+                'selasa' => '08:00 - 16:00',
+                'rabu' => '08:00 - 16:00',
+                'kamis' => '08:00 - 16:00',
+                'jumat' => '08:00 - 16:00',
+                'sabtu' => null,
+                'minggu' => null,
             ]
         );
     }

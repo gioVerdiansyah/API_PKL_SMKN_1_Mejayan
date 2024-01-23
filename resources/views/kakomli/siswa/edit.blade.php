@@ -206,6 +206,104 @@
                         </div>
                     </div>
                 </div>
+                <span class="fw-bold">Jam Dudi</span>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="senin" class="form-label">Senin</label>
+                                <input type="text" class="form-control @error('senin') is-invalid @enderror"
+                                    placeholder="jam masuk senin" name="senin" id="senin"
+                                    value="{{ old('senin', $siswa->senin) }}" required>
+                                @error('senin')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="rabu" class="form-label">Rabu</label>
+                                <input type="text" class="form-control @error('rabu') is-invalid @enderror"
+                                    placeholder="jam masuk rabu" name="rabu" id="rabu"
+                                    value="{{ old('rabu', $siswa->rabu) }}" required>
+                                @error('rabu')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="jumat" class="form-label">Juma'at</label>
+                                <input type="text" class="form-control @error('jumat') is-invalid @enderror"
+                                    placeholder="jam masuk jumat" name="jumat" id="jumat"
+                                    value="{{ old('jumat', $siswa->jumat) }}" required>
+                                @error('jumat')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="minggu" class="form-label">Minggu</label>
+                                <input type="text" class="form-control @error('minggu') is-invalid @enderror"
+                                    placeholder="jam masuk minggu" name="minggu" id="minggu"
+                                    value="{{ old('minggu', $siswa->minggu) }}">
+                                @error('minggu')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="selasa" class="form-label">Selasa</label>
+                                <input type="text" class="form-control @error('selasa') is-invalid @enderror"
+                                    placeholder="jam masuk selasa" name="selasa" id="selasa"
+                                    value="{{ old('selasa', $siswa->selasa) }}" required>
+                                @error('selasa')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="kamis" class="form-label">Kamis</label>
+                                <input type="text" class="form-control @error('kamis') is-invalid @enderror"
+                                    placeholder="jam masuk kamis" name="kamis" id="kamis"
+                                    value="{{ old('kamis', $siswa->kamis) }}" required>
+                                @error('kamis')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="sabtu" class="form-label">Sabtu</label>
+                                <input type="text" class="form-control @error('sabtu') is-invalid @enderror"
+                                    placeholder="jam masuk sabtu" name="sabtu" id="sabtu"
+                                    value="{{ old('sabtu', $siswa->sabtu) }}">
+                                @error('sabtu')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="col-md12 mt-5 text-start">

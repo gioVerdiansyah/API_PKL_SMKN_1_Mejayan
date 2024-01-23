@@ -28,12 +28,7 @@ class JurnalController extends Controller
             $now = Carbon::now()->locale('id');
             $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
 
-            $kelompok = Kelompok::with('dudi')->whereHas('anggota', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })->first();
-            $dudi = Dudi::where('id', $kelompok->dudi_id)->first();
-
-            $jamMasuk = $dudi[$hariIni];
+            $jamMasuk = $user[$hariIni];
             if (is_null($jamMasuk)) {
                 return response()->json(["success" => false, "message" => "Anda tidak dapat mengisi jurnal pada hari $hariIni"], 403);
             }

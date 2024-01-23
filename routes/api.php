@@ -59,6 +59,7 @@ Route::middleware("verifyAPIKey")->group(function () {
         // list absensi
         Route::get('/{guru_id}/absensi/get/{nama_kelompok?}/{hari?}', [KelolaAbsensiController::class, 'getAbsen']);
         Route::get('/{guru_id}/absensi/reject/{nama_kelompok?}', [KelolaAbsensiController::class, 'absenReject']);
+        Route::post('/{guru_id}/absensi/trouble', [KelolaAbsensiController::class, 'absenTrouble']);
 
         // list jurnal
         Route::get('/{guru_id}/jurnal/get/{nama_kelompok?}/{hari?}/{status?}', [KelolaJurnalController::class, 'getJurnal']);
@@ -69,6 +70,8 @@ Route::middleware("verifyAPIKey")->group(function () {
         Route::get('/{guru_id}/izin/get/{nama_kelompok?}/{status?}', [KelolaIzinController::class, 'getIzin']);
         Route::put('/{guru_id}/izin/agreement', [KelolaIzinController::class, 'izinAgreement']);
         Route::post('/{guru_id}/izin/tolak-paksa', [KelolaIzinController::class, 'tolakPaksaIzin']);
+
+        Route::get('/{guru_id}/anggota/get', [KelolaAbsensiController::class, 'getAnggota']);
 
         Route::post('/{guru_id}/profile/edit', [EditProfileGuruController::class, 'edit']);
     });

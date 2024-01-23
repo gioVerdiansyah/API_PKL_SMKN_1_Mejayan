@@ -21,23 +21,6 @@ return new class extends Migration
             $table->string('koordinat');
             $table->integer('radius');
             $table->foreignId('jurusan_id')->constrained()->restrictOnDelete();
-
-            $table->string('senin');
-            $table->string('selasa');
-            $table->string('rabu');
-            $table->string('kamis');
-            $table->string('jumat');
-            $table->string('sabtu')->nullable();
-            $table->string('minggu')->nullable();
-            // jam istirahat
-
-            $table->string('ji_senin');
-            $table->string('ji_selasa');
-            $table->string('ji_rabu');
-            $table->string('ji_kamis');
-            $table->string('ji_jumat')->nullable();
-            $table->string('ji_sabtu')->nullable();
-            $table->string('ji_minggu')->nullable();
             $table->timestamps();
         });
     }
