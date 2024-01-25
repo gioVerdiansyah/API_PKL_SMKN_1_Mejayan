@@ -20,7 +20,7 @@
     <meta name="theme-name" content="small-apps" />
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('images/app/Logo_SMK.png') }}" />
 
     <!-- PLUGINS CSS STYLE -->
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}">
@@ -90,8 +90,38 @@
                         <a class="nav-link" href="contact.html">Contact</a>
                     </li>
                     <li class="nav-item ml-3">
-                        <button class="button-login d-flex align-items-center" onclick="window.location.href = '{{ route('login') }}'"> Login Kakomli
-                        </button>
+                        @if (Auth::guard('kakomli')->check())
+                            <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="{{ Auth::guard('kakomli')->user()->photo_profile }}" alt="Photo Profile" class="rounded-circle" width="30">
+                            </a>
+                            <div class="dropdown-menu p-0" aria-labelledby="profileDropdown">
+                                <div class="d-flex flex-column align-items-center border-bottom px-5 py-3">
+                                    <div class="mb-3">
+                                        <img src="{{ Auth::guard('kakomli')->user()->photo_profile }}" alt="Photo Profile" class="rounded-circle" width="30">
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="tx-16 fw-bolder">{{ Auth::guard('kakomli')->user()->nama }}</p>
+                                    </div>
+                                </div>
+                                <ul class="list-unstyled p-1">
+                                    <li class="dropdown-item py-2">
+                                        <form action="{{ route('logout') }}" method="post">
+                                            @csrf
+                                            <button type="submit" class="text-body ms-0 btn btn-warning" id="button-logout">
+                                                <span>Log Out</span>
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                        @else
+                            <button class="button-login d-flex align-items-center" onclick="window.location.href = '{{ route('login') }}'"> Login Kakomli</button>
+                        @endif
                     </li>
                 </ul>
             </div>

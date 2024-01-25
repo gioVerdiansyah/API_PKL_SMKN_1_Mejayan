@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Guru;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\EditProfileGuruRequest;
+use App\Http\Requests\UpdateGuruRequest;
 use App\Models\Guru;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 
 class EditProfileController extends Controller
 {
-    public function edit(EditProfileGuruRequest $request, string $guru_id)
+    public function edit(UpdateGuruRequest $request, string $guru_id)
     {
         try {
             DB::beginTransaction();

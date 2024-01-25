@@ -60,7 +60,7 @@ class PrintController extends Controller
             }
 
             $base_path = 'app/public/jurnal_siswa';
-            $file_name = 'Jurnal_PKL_' . str_replace(' ', '_', $user->name);
+            $file_name = 'Jurnal_PKL_' . str_replace(' ', '_', $user->name) . "_" . $request->bulan;
             $path = storage_path($base_path . '/' . $file_name . '.pdf');
 
             if (file_exists($path)) {
@@ -75,7 +75,7 @@ class PrintController extends Controller
 
             return response()->json(['success' => true, 'message' => 'PDF Jurnal berhasil di generate!', 'pdf_url' => url("storage/jurnal_siswa/$file_name" . '.pdf'), 'name_file' => $file_name]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Ada kesalahan server', 'error' => $e]);
+            return response()->json(['success' => false, 'message' => 'Ada kesalahan server', 'error' => $e, 'bulan' => $request->bulan]);
         }
     }
 

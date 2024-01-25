@@ -153,6 +153,9 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
         Route::get('/pemetaan-DuDi-download', [RekapPendataanController::class, 'downloadPemetaanDudi'])->name('admin.rekap_pendataan.pemetaan_dudi.download');
         Route::get('/pemetaan-DuDi-print', [RekapPendataanController::class, 'printPemetaanDudi'])->name('admin.rekap_pendataan.pemetaan_dudi.print');
     });
+
+    // authorization
+    Route::get('authorizationQR', [AdminController::class, 'authorizationQR'])->name('admin.authorizationQR');
 });
 
 

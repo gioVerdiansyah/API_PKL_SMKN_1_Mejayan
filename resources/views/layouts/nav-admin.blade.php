@@ -128,6 +128,13 @@
                             <span class="link-title">Pemetaan DuDi</span>
                         </a>
                     </li>
+                    <li class="nav-item nav-category">Core</li>
+                    <li class="nav-item {{ request()->routeIs('admin.authorizationQR') ? 'active' : '' }}">
+                        <a href="{{ route('admin.authorizationQR') }}" class="nav-link">
+                            <i class="fa-solid fa-qrcode"></i>
+                            <span class="link-title m-3">authorizationQR WA</span>
+                        </a>
+                    </li>
 
                     {{-- <li class="nav-item nav-category">List</li>
                     <li class="nav-item @if (request()->routeIs('mou.create') or request()->routeIs('mou.edit') or request()->routeIs('testimoni.create') or request()->routeIs('testimoni.edit')) active @endif">

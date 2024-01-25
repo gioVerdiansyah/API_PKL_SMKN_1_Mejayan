@@ -18,6 +18,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
     'api_key' => env('APP_API_KEY'),
+    'app_url_bot_wa' => env('APP_URL_BOT_WA'),
+    'api_key_bot_wa' => env('APP_API_KEY_BOT_WA'),
     'admin_email' => env('MAIL_ADMIN'),
     'jam_tutup_absen' => env('JAM_TUTUP_ABSEN'),
     'jam_tutup_jurnal' => env('JAM_TUTUP_JURNAL'),
@@ -100,7 +102,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'id',
 
     /*
     |--------------------------------------------------------------------------
