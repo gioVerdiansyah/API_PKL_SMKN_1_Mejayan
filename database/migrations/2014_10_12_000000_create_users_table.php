@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('nis');
             $table->enum('jenis_kelamin', ['P', 'L']);
             $table->string('alamat')->nullable();
-            $table->string('no_hp');
+            $table->string('no_hp')->nullable();
             $table->string('no_hp_ortu')->nullable();
 
             // Jam masuk per siswa

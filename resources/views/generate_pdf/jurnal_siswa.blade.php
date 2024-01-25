@@ -26,8 +26,9 @@
             @forelse ($dataJurnal as $i => $data)
                 <tr>
                     <th style="border: 1px solid #ddd; padding: 8px;">{{ ++$i }}</th>
-                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center">
-                        {{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                        {{ \Carbon\Carbon::parse($data->created_at)->locale('id')->isoFormat('dddd, DD-MM-YYYY') }}
+                    </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
                         @if (is_null($data->bukti))
                             No Image

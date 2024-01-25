@@ -23,6 +23,7 @@ class RegisterGuruRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255', 'unique:gurus,nama'],
+            'no_hp' => 'nullable|string|gt:0|regex:/^62\d+$/',
             'gelar' => ['required', 'string', 'max:10'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:gurus,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],

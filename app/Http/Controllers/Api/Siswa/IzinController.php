@@ -8,6 +8,7 @@ use App\Models\Absensi;
 use App\Models\Izin;
 use App\Models\Kelompok;
 use App\Models\User;
+use App\Notifications\SendMessage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,10 +24,10 @@ class IzinController extends Controller
             $user = User::where('name', $request->name)->first();
             $kelompok = Kelompok::with([
                 'dudi' => function ($query) {
-                    $query->select('id','nama');
+                    $query->select('id', 'nama');
                 },
                 'guru' => function ($query) {
-                    $query->select('id','nama', 'gelar');
+                    $query->select('id', 'nama', 'gelar', 'no_hp');
                 }
             ])->whereHas('anggota', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
@@ -107,13 +108,9 @@ class IzinController extends Controller
 
             DB::commit();
 
-            Http::withHeaders([
-                'x-api-key' => config('app.api_key_bot_wa')
-            ])->post(config('app.app_url_bot_wa') . '/send-message', [
-                        'session' => 'PKL_SMKN1Mejayan',
-                        'to' => (substr($user->no_hp, 0, 1) === '0') ? '62' . substr($user->no_hp, 1) : $user->no_hp,
-                        'text' => "*NOTIFIKASI IZIN PKL SMKN 1 Mejayan* \nHalooo~ {$kelompok->guru->nama} {$kelompok->guru->gelar} \nsiswa dengan nama *{$user->name}* telah melakukan izin dengan tipe izin: *{$request->tipe_izin}* pada hari ini. \n\nMohon persetujuannya bapak/ibu pengurus kelompok: *{$kelompok->nama_kelompok}* sekian Terimakasih."
-                    ]);
+            $now = Carbon::now()->format('l, d M Y');
+
+            SendMessage::send($kelompok->guru->no_hp, "Assalamualaikum Warahmatullahi Wabarakatuh \nSiswa atas nama : *{$user->name}* \nmengajukan ijin : *{$request->tipe_izin}* \npada hari ini : *{$now}*. \nMohon verifikasi nya. \n\nTerimakasih.");
 
             return response()->json(['success' => true, 'message' => "Berhasil izin pada hari ini"], 201);
         } catch (\Exception $e) {
