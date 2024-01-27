@@ -1,27 +1,49 @@
-@extends('layouts.nav-admin')
+@extends('layouts.nav-kakomli')
 
 @section('content')
     <div class="card p-4 mb-4 flex-md-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
-                    <li class="breadcrumb-item active" aria-current="page">List-list data DuDi</li>
+                    <li class="breadcrumb-item"><a href="{{ route('siswa.index') }}">Rekap Pendataan</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Absensi</li>
                 </ol>
             </nav>
         </div>
     </div>
     <div class="card">
-        <form action="{{ route('admin.rekap_pendataan.dudi.print') }}" method="POST">
+        <form action="{{ route('rekap_pendataan.print_absensi_siswa') }}" method="POST">
             @csrf
             <div class="card-body pt-3 d-flex flex-column align-items-center">
-                <p class="text-muted align-self-start">Cetak Rekap List DuDi</p>
+                <p class="text-muted align-self-start">Cetak Absensi siswa</p>
                 <div class="col-md-6">
-                    <label class="visually-hidden" for="jurusan">Preference</label>
-                    <select class="form-select" id="jurusan" name="jurusan">
-                        @foreach ($jurusan as $item)
-                            <option value="{{ $item->id }}">{{ $item->jurusan }}</option>
-                        @endforeach
-                    </select>
+                    <div class="form-group">
+                        <label for="nama_kelompok" class="form-label">Print jurnal pada bulan:</label>
+                        <select name="nama_kelompok" class="form-control" id="nama_kelompok">
+                            @forelse ($kelompok as $items)
+                                <option value="{{ $items->nama_kelompok }}">{{ $items->nama_kelompok . " / " . $items->dudi->nama }}</option>
+                            @empty
+                                <option disabled>Tidak ada Kelompok atau DuDi</option>
+                            @endforelse
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipe" class="form-label">Tipe Rekap</label>
+                        <select name="tipe" class="form-control" id="tipe">
+                            <option value="daftar-hadir">Daftar Hadir</option>
+                            <option value="kehadiran">Kehadiran</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bulan-bulan" class="form-label">Print jurnal pada bulan:</label>
+                        <select name="bulan" class="form-control" id="bulan-bulan">
+                            @forelse ($dataBulan as $items)
+                                <option value="{{ $items['bulan'] }}">{{ $items['nama_bulan'] }}</option>
+                            @empty
+                                <option disabled>Bulan tidak ada</option>
+                            @endforelse
+                        </select>
+                    </div>
                     <link rel="stylesheet" href="{{ asset('css/button_download_print.css') }}">
                     <button type="submit" class="print-btn mt-3">
                         <span class="printer-wrapper">

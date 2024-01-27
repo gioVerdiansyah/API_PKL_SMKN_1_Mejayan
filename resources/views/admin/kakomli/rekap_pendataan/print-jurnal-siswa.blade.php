@@ -1,27 +1,45 @@
 @extends('layouts.nav-admin')
 
 @section('content')
+    <link rel="stylesheet" href="{{ asset('cssAdmin/vendors/select2/select2.min.css') }}">
+    <script src="{{ asset('cssAdmin/js/select2.js') }}"></script>
+    <script src="{{ asset('cssAdmin/vendors/select2/select2.min.js') }}"></script>
     <div class="card p-4 mb-4 flex-md-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
-                    <li class="breadcrumb-item active" aria-current="page">List-list data DuDi</li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.siswa.index') }}">Siswa</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Rekab Jurnal</li>
                 </ol>
             </nav>
         </div>
     </div>
     <div class="card">
-        <form action="{{ route('admin.rekap_pendataan.dudi.print') }}" method="POST">
+        <form action="{{ route('admin.rekap_pendataan.print_jurnal_siswa') }}" method="POST">
             @csrf
             <div class="card-body pt-3 d-flex flex-column align-items-center">
-                <p class="text-muted align-self-start">Cetak Rekap List DuDi</p>
+                <p class="text-muted align-self-start">Cetak Jurnal siswa-siswi</p>
                 <div class="col-md-6">
-                    <label class="visually-hidden" for="jurusan">Preference</label>
-                    <select class="form-select" id="jurusan" name="jurusan">
-                        @foreach ($jurusan as $item)
-                            <option value="{{ $item->id }}">{{ $item->jurusan }}</option>
-                        @endforeach
-                    </select>
+                    <div class="form-group">
+                        <label for="list-siswa" class="form-label">Nama Siswa</label>
+                        <select name="siswa" class="form-control" id="list-siswa">
+                            @forelse ($siswa as $items)
+                                <option value="{{ $items->id }}">{{ $items->name }}</option>
+                            @empty
+                                <option disabled>Tidak ada siswa</option>
+                            @endforelse
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bulan-bulan" class="form-label">Print jurnal pada bulan:</label>
+                        <select name="bulan" class="form-control" id="bulan-bulan">
+                            @forelse ($dataBulan as $items)
+                                <option value="{{ $items['bulan'] }}">{{ $items['nama_bulan'] }}</option>
+                            @empty
+                                <option disabled>Bulan tidak ada</option>
+                            @endforelse
+                        </select>
+                    </div>
                     <link rel="stylesheet" href="{{ asset('css/button_download_print.css') }}">
                     <button type="submit" class="print-btn mt-3">
                         <span class="printer-wrapper">
@@ -51,4 +69,9 @@
             </div>
         </form>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#list-siswa').select2();
+        });
+    </script>
 @endsection

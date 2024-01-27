@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\AgreementMail;
+use App\Models\Dudi;
 use App\Models\Guru;
 use App\Models\Kakomli;
-use App\Models\PrivateStorage;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Kelompok;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
     public function dashboard()
     {
-        return view('admin.dashboard');
+        $kelompok = Kelompok::count();
+        $user = User::count();
+        $dudi = Dudi::count();
+        $guru = Guru::count();
+        return view('admin.dashboard', compact('kelompok', 'user', 'dudi', 'guru'));
     }
 
     public function dataKakomli()

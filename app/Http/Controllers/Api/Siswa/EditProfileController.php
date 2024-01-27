@@ -31,6 +31,10 @@ class EditProfileController extends Controller
                 $user->photo_profile = 'storage/' . $path;
             }
 
+            if ($request->no_hp) {
+                $user->no_hp = $request->no_hp;
+            }
+
             if ($request->filled('oldPass') && $request->filled('newPass')) {
                 if (Hash::check($request->oldPass, $user->password)) {
                     $user->password = Hash::make($request->newPass);
@@ -39,7 +43,7 @@ class EditProfileController extends Controller
                 }
             }
 
-            if ($request->hasFile('photo_profile') || ($request->filled('oldPass') && $request->filled('newPass'))) {
+            if ($request->hasFile('photo_profile') || ($request->filled('oldPass') && $request->filled('newPass') || $request->filled('no_hp'))) {
                 $user->save();
                 DB::commit();
                 return response()->json(['success' => true, 'message' => "Logout dan login kembali untuk melihat perubahan"], 201);

@@ -108,7 +108,7 @@
                             <span class="link-title ms-3">Pengurus PKL</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('admin.kelompok-siswa.*') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->routeIs('admin.siswa-kelompok.*') ? 'active' : '' }}">
                         <a href="{{ route('admin.kelompok-siswa.index') }}" class="nav-link">
                             <i class="link-icon" data-feather="grid"></i>
                             <span class="link-title">Kelompok Siswa</span>
@@ -122,10 +122,25 @@
                             <span class="link-title">Rekap List DuDi</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('admin.rekap_pendataan.pemetaan_dudi.*') ? 'active' : '' }}">
+                    <li
+                        class="nav-item {{ request()->routeIs('admin.rekap_pendataan.pemetaan_dudi.*') ? 'active' : '' }}">
                         <a href="{{ route('admin.rekap_pendataan.pemetaan_dudi.show_download') }}" class="nav-link">
                             <i class="link-icon" data-feather="book-open"></i>
                             <span class="link-title">Pemetaan DuDi</span>
+                        </a>
+                    </li>
+                    <li
+                        class="nav-item {{ request()->routeIs('admin.rekap_pendataan.show_print_absensi_siswa') ? 'active' : '' }}">
+                        <a href="{{ route('admin.rekap_pendataan.show_print_absensi_siswa') }}" class="nav-link">
+                            <i class="fa-solid fa-check-to-slot"></i>
+                            <span class="link-title m-4">Rekap Absensi</span>
+                        </a>
+                    </li>
+                    <li
+                        class="nav-item {{ request()->routeIs('admin.rekap_pendataan.show_print_jurnal_siswa') ? 'active' : '' }}">
+                        <a href="{{ route('admin.rekap_pendataan.show_print_jurnal_siswa') }}" class="nav-link">
+                            <i class="fa-solid fa-list-check"></i>
+                            <span class="link-title m-3">Rekap Jurnal</span>
                         </a>
                     </li>
                     <li class="nav-item nav-category">Core</li>

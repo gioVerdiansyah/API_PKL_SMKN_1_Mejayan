@@ -66,7 +66,7 @@ class PrintController extends Controller
             if (file_exists($path)) {
                 unlink($path);
             }
-            $pdf = PDF::setPaper('A4', 'potrait')->loadView('generate_pdf.jurnal_siswa', ['dataJurnal' => $jurnal, 'user' => $user, 'kelompok' => $kelompok]);
+            $pdf = PDF::setPaper('A4', 'potrait')->loadView('generate_pdf.jurnal_siswa', ['dataJurnal' => $jurnal, 'user' => $user, 'kelompok' => $kelompok, 'isRekap' => false]);
             $folder_exist = storage_path($base_path);
             if (!file_exists($folder_exist)) {
                 mkdir($folder_exist, 0755, true);

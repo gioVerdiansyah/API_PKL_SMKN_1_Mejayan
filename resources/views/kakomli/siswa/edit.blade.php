@@ -13,9 +13,6 @@
             </nav>
         </div>
         <div class="text-end">
-            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#uploadDataByExcel">Update Siswa
-                PKL
-                by Excel</button>
         </div>
     </div>
     <div class="card p-4">

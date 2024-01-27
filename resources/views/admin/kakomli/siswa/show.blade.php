@@ -7,7 +7,7 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dudi.index') }}">Dudi</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('dudi.index') }}">Admin</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Detail</li>
                 </ol>
             </nav>
@@ -91,8 +91,60 @@
                 </div>
             </div>
         </div>
+        {{-- jam masuk --}}
+            <span class="fw-bold">Jam masuk siswa</span>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Senin</label>
+                            <p>{{ $siswa->senin }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Rabu</label>
+                            <p>{{ $siswa->rabu }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Juma'at</label>
+                            <p>{{ $siswa->jumat }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Minggu</label>
+                            <p>{{ $siswa->minggu ?? 'libur' }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Selasa</label>
+                            <p>{{ $siswa->selasa }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Kamis</label>
+                            <p>{{ $siswa->kamis }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <label class="form-label">Saptu</label>
+                            <p>{{ $siswa->saptu ?? 'libur' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         <div class="col-md12 d-flex mt-5 text-start">
+            <a href="{{ route('admin.siswa.show_print_absensi_siswa', $siswa->id) }}" class="btn btn-primary profile-button me-2">Rekap Absen</a>
+            <a href="{{ route('admin.siswa.show_print_jurnal_siswa', $siswa->id) }}" class="btn btn-success profile-button me-2">Rekap Jurnal</a>
             <a href="{{ route('admin.siswa.edit', $siswa->id) }}" class="btn btn-warning profile-button me-2">Edit</a>
             <form nameSiswa="{{ $siswa->name }}" action="{{ route('admin.siswa.destroy', $siswa->id) }}" id="delete" method="POST">
                 @csrf

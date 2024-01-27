@@ -7,9 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Imports\SiswaImport;
+use App\Models\Absensi;
+use App\Models\Jurnal;
 use App\Models\Jurusan;
 use App\Models\Kelas;
+use App\Models\Kelompok;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -289,5 +293,117 @@ class SiswaController extends Controller
                 'text' => $e
             ]);
         }
+    }
+
+    public function showPrintAbsensiSiswa(string $siswa_id)
+    {
+        $siswa = User::where('id', $siswa_id)->first();
+        if (!$siswa) {
+            return back()->with('message', [
+                'icon' => 'error',
+                'title' => 'Not Found',
+                'text' => 'ID siswa tidak ditemukan'
+            ]);
+        }
+
+        $absensi = Absensi::with('user')->where('user_id', $siswa->id)->get();
+
+        $uniqueMonths = $absensi->pluck('created_at')->map(function ($createdAt) {
+            $date = Carbon::parse($createdAt);
+            $year = $date->format('Y');
+            $month = $date->format('m') . '-' . $year;
+            $namaBulan = $date->translatedFormat('F');
+            if ($year < date('Y')) {
+                $namaBulan .= ' ' . $year;
+            }
+            return [
+                'bulan' => $month,
+                'nama_bulan' => $namaBulan
+            ];
+        })->unique();
+
+        $dataBulan = $uniqueMonths->values()->all();
+
+        return view('kakomli.rekap_pendataan.print-absensi-siswa', compact('siswa', 'dataBulan'));
+    }
+    public function printAbsensiSiswa(Request $request, string $siswa_id)
+    {
+        $kelompok = Kelompok::with([
+            'anggota',
+            'dudi' => function ($query) {
+                $query->select(['id', 'nama', 'pemimpin']);
+            }
+        ])->whereHas('anggota', function ($query) use ($siswa_id) {
+            $query->where('user_id', $siswa_id);
+        })->first();
+
+        $absensi = Absensi::with(['user.kelas'])
+            ->where('user_id', $siswa_id)
+            ->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])
+            ->get();
+
+        $bulanTahun = Carbon::createFromFormat('m-Y', $request->bulan)->locale('id');
+        $absensiBulan = $bulanTahun->translatedFormat('F Y');
+
+        $listUser = User::where('id', $siswa_id)->get();
+        if ($request->tipe === "daftar-hadir") {
+            return view('generate_pdf.rekap_daftar_absensi', compact('absensi', 'kelompok', 'absensiBulan', 'listUser'));
+        }
+        // dd($absensi->where('status', '1')->count());
+        $bulannya = $request->bulan;
+        return view('generate_pdf.rekap_absensi_kehadiran', compact('absensi', 'kelompok', 'absensiBulan', 'listUser', 'bulannya'));
+    }
+    public function showPrintJurnalSiswa(string $siswa_id)
+    {
+        $siswa = User::where('id', $siswa_id)->first();
+        if (!$siswa) {
+            return to_route('home')->with('message', [
+                'icon' => 'error',
+                'title' => 'Not Found',
+                'text' => 'ID user / jurnal tidak ditemukan'
+            ]);
+        }
+
+        $jurnal = Jurnal::with('user')->where('user_id', $siswa->id)->orderBy('created_at', 'desc')->get();
+
+        $uniqueMonths = $jurnal->pluck('created_at')->map(function ($createdAt) {
+            $date = Carbon::parse($createdAt);
+            $year = $date->format('Y');
+            $month = $date->format('m') . '-' . $year;
+            $namaBulan = $date->translatedFormat('F');
+            if ($year < date('Y')) {
+                $namaBulan .= ' ' . $year;
+            }
+            return [
+                'bulan' => $month,
+                'nama_bulan' => $namaBulan
+            ];
+        })->unique();
+
+        $dataBulan = $uniqueMonths->values()->all();
+
+        return view('kakomli.rekap_pendataan.print-jurnal-siswa', compact('siswa', 'dataBulan'));
+    }
+    public function printJurnalSiswa(Request $request, string $siswa_id)
+    {
+        $jurnal = Jurnal::with('user')->where('user_id', $siswa_id)->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])->get();
+        $user = User::with(['kelas', 'jurusan'])->where('id', $siswa_id)->first();
+
+        $kelompok = Kelompok::with(['dudi', 'guru'])->whereHas('anggota', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->first();
+
+        if (!$jurnal || !$user) {
+            return response()->json(['success' => false, 'message' => 'Ada kesalahan server', 'error' => 'ID user / jurnal tidak ditemukan']);
+        }
+
+        $base_path = 'app/public/jurnal_siswa';
+        $file_name = 'Jurnal_PKL_' . str_replace(' ', '_', $user->name) . "_" . $request->bulan;
+        $path = storage_path($base_path . '/' . $file_name . '.pdf');
+
+        if (file_exists($path)) {
+            unlink($path);
+        }
+        return view('generate_pdf.jurnal_siswa', ['dataJurnal' => $jurnal, 'user' => $user, 'kelompok' => $kelompok, 'isRekap' => true]);
     }
 }

@@ -19,6 +19,7 @@ class KakomliSeeder extends Seeder
             'nama' => "Admin Ini",
             'email' => 'admin@smkn1mejayan.sch.id',
             'password' => Hash::make('admin-pkl-smkn-1-mejayan'),
+            'photo_profile' => 'images/app/LOGO_SMK.png',
             'jurusan_id' => 1,
         ]);
     }

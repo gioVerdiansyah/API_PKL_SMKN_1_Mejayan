@@ -2,17 +2,16 @@
 
 use App\Http\Controllers\AbsensiTroubleController;
 use App\Http\Controllers\Admin\AdminDudiController;
+use App\Http\Controllers\Admin\AdminPengelolaanPkl\AdminKelompokSiswaController;
 use App\Http\Controllers\Admin\AdminPengurusPklController;
+use App\Http\Controllers\Admin\AdminRekapPendataanController;
 use App\Http\Controllers\Admin\AdminSiswaController;
 use App\Http\Controllers\Admin\KakomliController;
-use App\Http\Controllers\Admin\AdminPengelolaanPkl\AdminKelompokSiswaController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Api\Guru\EditProfileController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\Guru\ForgotPasswordGuruController;
 use App\Http\Controllers\Auth\Guru\ResetPasswordGuruController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Kakomli\DudiController;
 use App\Http\Controllers\Kakomli\EditProfileController as EditProfileKakomliController;
@@ -23,22 +22,7 @@ use App\Http\Controllers\Kakomli\RekapPendataanController;
 use App\Http\Controllers\Kakomli\SiswaController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\TestingController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -96,12 +80,23 @@ Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
     Route::put('/edit-profile', [EditProfileKakomliController::class, 'update'])->name('kakomli.update_profile');
 
     Route::resource('/dudi', DudiController::class);
-    Route::get('/export-column-dudi', [DudiController::class, 'generateKolom'])->name('dudi.download_list_table');
-    Route::post('/import-data-dudi', [DudiController::class, 'importData'])->name('dudi.import_data');
+    Route::prefix('/siswa-siswi')->group(function(){
+        Route::get('/export', [DudiController::class, 'generateKolom'])->name('dudi.download_list_table');
+        Route::post('/import', [DudiController::class, 'importData'])->name('dudi.import_data');
+    });
 
     Route::resource('/siswa-siswi', SiswaController::class)->names('siswa');
-    Route::get('/export-column-siswa', [SiswaController::class, 'generateKolom'])->name('siswa.download_list_table');
-    Route::post('/import-data-siswa', [SiswaController::class, 'importData'])->name('siswa.import_data');
+    Route::prefix('/siswa-siswi')->group(function(){
+        Route::get('/export', [SiswaController::class, 'generateKolom'])->name('siswa.download_list_table');
+        Route::post('/import', [SiswaController::class, 'importData'])->name('siswa.import_data');
+
+        // print absen & jurnal siswa on kakomli
+        Route::get('/print-absensi/{siswa_id}', [SiswaController::class, 'showPrintAbsensiSiswa'])->name('siswa.show_print_absensi_siswa');
+        Route::post('/print-absensi/{siswa_id}', [SiswaController::class, 'printAbsensiSiswa'])->name('siswa.print_absensi_siswa');
+
+        Route::get('/print-jurnal/{siswa_id}', [SiswaController::class, 'showPrintJurnalSiswa'])->name('siswa.show_print_jurnal_siswa');
+        Route::post('/print-jurnal/{siswa_id}', [SiswaController::class, 'printJurnalSiswa'])->name('siswa.print_jurnal_siswa');
+    });
 
     Route::resource('/pengurus-pkl', PengurusPklController::class)->except('show');
     Route::get('/export-column-pengurus-pkl', [PengurusPklController::class, 'generateKolom'])->name('pengurus-pkl.download_list_table');
@@ -119,6 +114,12 @@ Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
         Route::get('/pemetaan-DuDi', [RekapPendataanController::class, 'showDownloadPagePemetaan'])->name('rekap_pendataan.pemetaan_dudi.show_download');
         Route::get('/pemetaan-DuDi-download', [RekapPendataanController::class, 'downloadPemetaanDudi'])->name('rekap_pendataan.pemetaan_dudi.download');
         Route::get('/pemetaan-DuDi-print', [RekapPendataanController::class, 'printPemetaanDudi'])->name('rekap_pendataan.pemetaan_dudi.print');
+
+        Route::get('/print-absensi', [RekapPendataanController::class, 'showPrintAbsensiSiswa'])->name('rekap_pendataan.show_print_absensi_siswa');
+        Route::post('/print-absensi', [RekapPendataanController::class, 'printAbsensiSiswa'])->name('rekap_pendataan.print_absensi_siswa');
+
+        Route::get('/print-jurnal', [RekapPendataanController::class, 'showPrintJurnalSiswa'])->name('rekap_pendataan.show_print_jurnal_siswa');
+        Route::post('/print-jurnal', [RekapPendataanController::class, 'printJurnalSiswa'])->name('rekap_pendataan.print_jurnal_siswa');
     });
 });
 
@@ -132,9 +133,18 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
     Route::get('/export-column-dudi', [AdminDudiController::class, 'generateKolom'])->name('admin.dudi.download_list_table');
     Route::post('/import-data-dudi', [AdminDudiController::class, 'importData'])->name('admin.dudi.import_data');
 
-    Route::resource('/siswa', AdminSiswaController::class)->names('admin.siswa');
-    Route::get('/export-column-siswa', [AdminSiswaController::class, 'generateKolom'])->name('admin.siswa.download_list_table');
-    Route::post('/import-data-siswa', [AdminSiswaController::class, 'importData'])->name('admin.siswa.import_data');
+    Route::resource('/data-siswa', AdminSiswaController::class)->names('admin.siswa');
+    Route::prefix('/data-siswa')->group(function(){
+        Route::get('/export', [AdminSiswaController::class, 'generateKolom'])->name('admin.siswa.download_list_table');
+        Route::post('/import', [AdminSiswaController::class, 'importData'])->name('admin.siswa.import_data');
+
+        // print absen & jurnal siswa on Admin
+        Route::get('/print-absensi/{siswa_id}', [AdminSiswaController::class, 'showPrintAbsensiSiswa'])->name('admin.siswa.show_print_absensi_siswa');
+        Route::post('/print-absensi/{siswa_id}', [AdminSiswaController::class, 'printAbsensiSiswa'])->name('admin.siswa.print_absensi_siswa');
+
+        Route::get('/print-jurnal/{siswa_id}', [AdminSiswaController::class, 'showPrintJurnalSiswa'])->name('admin.siswa.show_print_jurnal_siswa');
+        Route::post('/print-jurnal/{siswa_id}', [AdminSiswaController::class, 'printJurnalSiswa'])->name('admin.siswa.print_jurnal_siswa');
+    });
 
     Route::resource('/pengurus-pkl', AdminPengurusPklController::class)->names('admin.pengurus-pkl');
     Route::get('/export-column-pengurus-pkl', [AdminPengurusPklController::class, 'generateKolom'])->name('admin.pengurus_pkl.download_list_table');
@@ -145,13 +155,17 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
     });
 
     Route::prefix('/rekap-pendataan')->group(function () {
-        Route::get('/list-DuDi', [RekapPendataanController::class, 'showDownloadPage'])->name('admin.rekap_pendataan.dudi.show_download');
-        Route::get('/list-DuDi-download', [RekapPendataanController::class, 'downloadListDudi'])->name('admin.rekap_pendataan.dudi.download');
-        Route::get('/list-DuDi-print', [RekapPendataanController::class, 'printListDudi'])->name('admin.rekap_pendataan.dudi.print');
+        Route::get('/list-DuDi', [AdminRekapPendataanController::class, 'showDownloadPage'])->name('admin.rekap_pendataan.dudi.show_download');
+        Route::post('/list-DuDi-print', [AdminRekapPendataanController::class, 'printListDudi'])->name('admin.rekap_pendataan.dudi.print');
 
-        Route::get('/pemetaan-DuDi', [RekapPendataanController::class, 'showDownloadPagePemetaan'])->name('admin.rekap_pendataan.pemetaan_dudi.show_download');
-        Route::get('/pemetaan-DuDi-download', [RekapPendataanController::class, 'downloadPemetaanDudi'])->name('admin.rekap_pendataan.pemetaan_dudi.download');
-        Route::get('/pemetaan-DuDi-print', [RekapPendataanController::class, 'printPemetaanDudi'])->name('admin.rekap_pendataan.pemetaan_dudi.print');
+        Route::get('/pemetaan-DuDi', [AdminRekapPendataanController::class, 'showDownloadPagePemetaan'])->name('admin.rekap_pendataan.pemetaan_dudi.show_download');
+        Route::post('/pemetaan-DuDi-print', [AdminRekapPendataanController::class, 'printPemetaanDudi'])->name('admin.rekap_pendataan.pemetaan_dudi.print');
+
+        Route::get('/print-absensi', [AdminRekapPendataanController::class, 'showPrintAbsensiSiswa'])->name('admin.rekap_pendataan.show_print_absensi_siswa');
+        Route::post('/print-absensi', [AdminRekapPendataanController::class, 'printAbsensiSiswa'])->name('admin.rekap_pendataan.print_absensi_siswa');
+
+        Route::get('/print-jurnal', [AdminRekapPendataanController::class, 'showPrintJurnalSiswa'])->name('admin.rekap_pendataan.show_print_jurnal_siswa');
+        Route::post('/print-jurnal', [AdminRekapPendataanController::class, 'printJurnalSiswa'])->name('admin.rekap_pendataan.print_jurnal_siswa');
     });
 
     // authorization

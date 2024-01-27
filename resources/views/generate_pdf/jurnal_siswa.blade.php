@@ -33,9 +33,15 @@
                         @if (is_null($data->bukti))
                             No Image
                         @else
-                            <img src="storage/{{ $data->bukti }}"
-                                alt="Foto Jurnal siswa {{ $user->name }} ke {{ $i }}"
-                                style="width: 100px; height: auto;">
+                            @if ($isRekap)
+                                <img src="{{ url('storage/' . $data->bukti) }}"
+                                    alt="Foto Jurnal siswa {{ $user->name }} ke {{ $i }}"
+                                    style="width: 100px; height: auto;">
+                            @else
+                                <img src="storage/{{ $data->bukti }}"
+                                    alt="Foto Jurnal siswa {{ $user->name }} ke {{ $i }}"
+                                    style="width: 100px; height: auto;">
+                            @endif
                         @endif
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
@@ -57,3 +63,18 @@
         <h3>{{ $kelompok->dudi->pemimpin }}</h3>
     </div>
 </div>
+
+@if ($isRekap)
+    <script>
+        window.addEventListener('load', function() {
+            window.print({
+                landscape: true,
+                headers: false,
+                options: false
+            });
+            window.onafterprint = function() {
+                alert("tekan ctrl + p untuk print lagi");
+            }
+        });
+    </script>
+@endif

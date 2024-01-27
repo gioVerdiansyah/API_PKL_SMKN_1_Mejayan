@@ -7,7 +7,7 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dudi.index') }}">Dudi</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('dudi.index') }}">Siswa</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Detail</li>
                 </ol>
             </nav>
@@ -91,8 +91,8 @@
                     </div>
                 </div>
             </div>
-            {{-- jam dudi --}}
-            <span class="fw-bold">Jam Dudi</span>
+            {{-- jam masuk --}}
+            <span class="fw-bold">Jam masuk siswa</span>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <div class="row mt-3">
@@ -144,6 +144,8 @@
         </div>
 
         <div class="col-md12 d-flex mt-5 text-start">
+            <a href="{{ route('siswa.show_print_absensi_siswa', $siswa->id) }}" class="btn btn-primary profile-button me-2">Rekap Absen</a>
+            <a href="{{ route('siswa.show_print_jurnal_siswa', $siswa->id) }}" class="btn btn-success profile-button me-2">Rekap Jurnal</a>
             <a href="{{ route('siswa.edit', $siswa->id) }}" class="btn btn-warning profile-button me-2">Edit</a>
             <form nameSiswa="{{ $siswa->name }}" action="{{ route('siswa.destroy', $siswa->id) }}" id="delete"
                 method="POST">

@@ -71,6 +71,10 @@ class IzinController extends Controller
                 }
 
                 DB::commit();
+
+                $now = Carbon::parse(now())->locale('id')->isoFormat('dddd, DD MMM YYYY');
+
+                SendMessage::send($kelompok->guru->no_hp, "Assalamualaikum Warahmatullahi Wabarakatuh \nSiswa atas nama : *{$user->name}* \nmengajukan ijin : *{$request->tipe_izin}* \npada hari ini : *{$now}*. \nMohon verifikasi nya. \n\nTerimakasih.");
                 return response()->json(['success' => true, 'message' => "Berhasil izin pada hari ini"], 201);
             }
 
@@ -108,7 +112,7 @@ class IzinController extends Controller
 
             DB::commit();
 
-            $now = Carbon::now()->format('l, d M Y');
+            $now = Carbon::parse(now())->locale('id')->isoFormat('dddd, DD MMM YYYY');
 
             SendMessage::send($kelompok->guru->no_hp, "Assalamualaikum Warahmatullahi Wabarakatuh \nSiswa atas nama : *{$user->name}* \nmengajukan ijin : *{$request->tipe_izin}* \npada hari ini : *{$now}*. \nMohon verifikasi nya. \n\nTerimakasih.");
 

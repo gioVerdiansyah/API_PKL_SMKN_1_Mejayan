@@ -53,36 +53,6 @@
                     <li class="nav-item dropdown active">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Home</a>
                     </li>
-                    <li class="nav-item dropdown @@pages">
-                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Pages
-                            <span><i class="ti-angle-down"></i></span>
-                        </a>
-                        <!-- Dropdown list -->
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item @@team" href="team.html">Team</a></li>
-                            <li><a class="dropdown-item @@career" href="career.html">Career</a></li>
-                            <li><a class="dropdown-item @@blog" href="blog.html">Blog</a></li>
-                            <li><a class="dropdown-item @@blogSingle" href="blog-single.html">Blog
-                                    Single</a></li>
-                            <li><a class="dropdown-item @@privacy"
-                                    href="privacy-policy.html">Privacy</a></li>
-                            <li><a class="dropdown-item @@faq" href="FAQ.html">FAQ</a></li>
-                            <li><a class="dropdown-item" href="sign-in.html">Sign In</a></li>
-                            <li><a class="dropdown-item" href="sign-up.html">Sign Up</a></li>
-                            <li><a class="dropdown-item" href="404.html">404</a></li>
-                            <li><a class="dropdown-item" href="comming-soon.html">Coming Soon</a></li>
-
-                            <li class="dropdown dropdown-submenu dropleft">
-                                <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0501" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
-
-                                <ul class="dropdown-menu" aria-labelledby="dropdown0501">
-                                    <li><a class="dropdown-item" href="index.html">Submenu 21</a></li>
-                                    <li><a class="dropdown-item" href="index.html">Submenu 22</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
                     <li class="nav-item @@about">
                         <a class="nav-link" href="#about">About</a>
                     </li>

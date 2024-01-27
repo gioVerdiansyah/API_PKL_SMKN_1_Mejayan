@@ -124,6 +124,18 @@
                             <span class="link-title">Pemetaan DuDi</span>
                         </a>
                     </li>
+                    <li class="nav-item {{ request()->routeIs('rekap_pendataan.show_print_absensi_siswa') ? 'active' : '' }}">
+                        <a href="{{ route('rekap_pendataan.show_print_absensi_siswa') }}" class="nav-link">
+                            <i class="fa-solid fa-check-to-slot"></i>
+                            <span class="link-title m-4">Rekap Absensi</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('rekap_pendataan.show_print_jurnal_siswa') ? 'active' : '' }}">
+                        <a href="{{ route('rekap_pendataan.show_print_jurnal_siswa') }}" class="nav-link">
+                            <i class="fa-solid fa-list-check"></i>
+                            <span class="link-title m-3">Rekap Jurnal</span>
+                        </a>
+                    </li>
                     <li class="nav-item nav-category">Profile</li>
                     <li class="nav-item {{ request()->routeIs('kakomli.edit_profile') ? 'active' : '' }}">
                         <a href="{{ route('kakomli.edit_profile') }}" class="nav-link">
