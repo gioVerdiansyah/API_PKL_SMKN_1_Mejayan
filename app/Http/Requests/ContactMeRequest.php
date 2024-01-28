@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateGuruRequest extends FormRequest
+class ContactMeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,9 @@ class UpdateGuruRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'oldPass' => 'nullable|string',
-            'no_hp' => 'required|string|gt:0|regex:/^62\d+$/',
-            'newPass' => 'required_with:oldPass,string,min:8',
-            'confirmPass' => 'required_with:oldPass|same:newPass',
-            'photo_guru' => "nullable|file|image|mimes:png,jpg,jpeg|max:2048"
+            'name' => 'required|string|max:100',
+            'email' => 'required|email:rfc,dns',
+            'message' => 'required|string|max:5000'
         ];
     }
 

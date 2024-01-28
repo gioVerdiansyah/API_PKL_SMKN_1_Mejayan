@@ -46,7 +46,7 @@ class AbsenRequest extends FormRequest
             $messages[] = implode(', ', $formattedMessages);
         }
 
-        $response = response()->json(['absen' => ['success' => false, 'message' => "Validasi Error: " . implode(', ', $messages)]], 422);
+        $response = response()->json(['success' => false, 'message' => "Validasi Error: " . implode(', ', $messages)]);
 
         throw new ValidationException($validator, $response);
     }

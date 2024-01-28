@@ -30,4 +30,8 @@ class TestingController extends Controller
 
         return view('generate_pdf.pemetaan_dudi', compact('kelompok', 'jurusan'));
     }
+
+    public function showEmailTest(){
+        return view('emails.contact_me');
+    }
 }

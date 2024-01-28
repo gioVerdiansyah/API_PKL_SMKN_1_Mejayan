@@ -150,25 +150,6 @@
                             <span class="link-title m-3">authorizationQR WA</span>
                         </a>
                     </li>
-
-                    {{-- <li class="nav-item nav-category">List</li>
-                    <li class="nav-item @if (request()->routeIs('mou.create') or request()->routeIs('mou.edit') or request()->routeIs('testimoni.create') or request()->routeIs('testimoni.edit')) active @endif">
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#list" role="button"
-                            aria-expanded="false" aria-controls="berita">
-                            <i class="link-icon" data-feather="list"></i>
-                            <span class="link-title">List-list</span>
-                            <i class="link-arrow" data-feather="chevron-down"></i>
-                        </a>
-                        <div class="collapse" id="list">
-                            <ul class="nav sub-menu">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">Kakomli</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li> --}}
-                    {{-- Sidebar ends here --}}
                 </ul>
             </div>
         </nav>

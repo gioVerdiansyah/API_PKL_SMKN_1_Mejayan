@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AbsensiTroubleController;
 use App\Http\Controllers\Admin\AdminDudiController;
 use App\Http\Controllers\Admin\AdminPengelolaanPkl\AdminKelompokSiswaController;
 use App\Http\Controllers\Admin\AdminPengurusPklController;
@@ -13,6 +12,7 @@ use App\Http\Controllers\Auth\Guru\ForgotPasswordGuruController;
 use App\Http\Controllers\Auth\Guru\ResetPasswordGuruController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\ContactMeController;
 use App\Http\Controllers\Kakomli\DudiController;
 use App\Http\Controllers\Kakomli\EditProfileController as EditProfileKakomliController;
 use App\Http\Controllers\Kakomli\HomeController;
@@ -54,10 +54,7 @@ Route::prefix('/guru')->group(function(){
     Route::post('/password/reset', [ResetPasswordGuruController::class, 'reset'])->name('password_guru.update');
 });
 
-// Absensi bermasalah
-Route::get('/absen/trouble', [AbsensiTroubleController::class, 'absenTroubles']);
-Route::post('/absen/trouble', [AbsensiTroubleController::class, 'absenTroublesStore'])->name('absen-trouble');
-
+Route::post('contact-me', [ContactMeController::class, 'contactMe'])->name('send-contact');
 // print
 Route::get('/print/jurnal/{id}', [PrintController::class, 'showPrintJurnalSiswa']);
 Route::post('/print/jurnal', [PrintController::class, 'printJurnalSiswa'])->name('print_jurnal');
@@ -178,4 +175,5 @@ Route::prefix('/test')->group(function(){
     Route::get('/getColumn', [TestingController::class, 'getColumn']);
     Route::get('/table-dudi-list', [TestingController::class, 'tableDudiList']);
     Route::get('/table-pemetaan-dudi', [TestingController::class, 'tablePemetaanDudi']);
+    Route::get('/show-mail', [TestingController::class, 'showEmailTest']);
 });

@@ -57,40 +57,46 @@
                         <a class="nav-link" href="#about">About</a>
                     </li>
                     <li class="nav-item @@contact">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" href="#contact">Contact</a>
                     </li>
                     <li class="nav-item ml-3">
                         @if (Auth::guard('kakomli')->check())
                             <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="{{ Auth::guard('kakomli')->user()->photo_profile }}" alt="Photo Profile" class="rounded-circle" width="30">
-                            </a>
-                            <div class="dropdown-menu p-0" aria-labelledby="profileDropdown">
-                                <div class="d-flex flex-column align-items-center border-bottom px-5 py-3">
-                                    <div class="mb-3">
-                                        <img src="{{ Auth::guard('kakomli')->user()->photo_profile }}" alt="Photo Profile" class="rounded-circle" width="30">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown"
+                                        role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        <img src="{{ Auth::guard('kakomli')->user()->photo_profile }}"
+                                            alt="Photo Profile" class="rounded-circle" width="30">
+                                    </a>
+                                    <div class="dropdown-menu p-0" aria-labelledby="profileDropdown">
+                                        <div class="d-flex flex-column align-items-center border-bottom px-5 py-3">
+                                            <div class="mb-3">
+                                                <img src="{{ Auth::guard('kakomli')->user()->photo_profile }}"
+                                                    alt="Photo Profile" class="rounded-circle" width="30">
+                                            </div>
+                                            <div class="text-center">
+                                                <p class="tx-16 fw-bolder">{{ Auth::guard('kakomli')->user()->nama }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <ul class="list-unstyled p-1">
+                                            <li class="dropdown-item py-2">
+                                                <form action="{{ route('logout') }}" method="post">
+                                                    @csrf
+                                                    <button type="submit" class="text-body ms-0 btn btn-warning"
+                                                        id="button-logout">
+                                                        <span>Log Out</span>
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <div class="text-center">
-                                        <p class="tx-16 fw-bolder">{{ Auth::guard('kakomli')->user()->nama }}</p>
-                                    </div>
-                                </div>
-                                <ul class="list-unstyled p-1">
-                                    <li class="dropdown-item py-2">
-                                        <form action="{{ route('logout') }}" method="post">
-                                            @csrf
-                                            <button type="submit" class="text-body ms-0 btn btn-warning" id="button-logout">
-                                                <span>Log Out</span>
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
+                                </li>
+                            </ul>
                         @else
-                            <button class="button-login d-flex align-items-center" onclick="window.location.href = '{{ route('login') }}'"> Login Kakomli</button>
+                            <button class="button-login d-flex align-items-center"
+                                onclick="window.location.href = '{{ route('login') }}'"> Login Kakomli</button>
                         @endif
                     </li>
                 </ul>
@@ -106,80 +112,6 @@
 =            Footer            =
 =============================-->
     <footer>
-        <div class="footer-main">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4 col-md-12 m-md-auto align-self-center">
-                        <div class="block">
-                            <a href="index.html"><img src="{{ asset('images/app/logo-with-title.png') }}"
-                                    class="w-50" alt="footer-logo"></a>
-                            <!-- Social Site Icons -->
-                            <ul class="social-icon list-inline">
-                                <li class="list-inline-item">
-                                    <a href="https://www.facebook.com/themefisher"><i class="ti-facebook"></i></a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="https://twitter.com/themefisher"><i class="ti-twitter"></i></a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="https://www.instagram.com/themefisher/"><i class="ti-instagram"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-6 mt-5 mt-lg-0">
-                        <div class="block-2">
-                            <!-- heading -->
-                            <h6>Product</h6>
-                            <!-- links -->
-                            <ul>
-                                <li><a href="team.html">Teams</a></li>
-                                <li><a href="blog.html">Blogs</a></li>
-                                <li><a href="FAQ.html">FAQs</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-6 mt-5 mt-lg-0">
-                        <div class="block-2">
-                            <!-- heading -->
-                            <h6>Resources</h6>
-                            <!-- links -->
-                            <ul>
-                                <li><a href="sign-up.html">Singup</a></li>
-                                <li><a href="sign-in.html">Login</a></li>
-                                <li><a href="blog.html">Blog</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-6 mt-5 mt-lg-0">
-                        <div class="block-2">
-                            <!-- heading -->
-                            <h6>Company</h6>
-                            <!-- links -->
-                            <ul>
-                                <li><a href="career.html">Career</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                                <li><a href="team.html">Investor</a></li>
-                                <li><a href="privacy.html">Terms</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-6 mt-5 mt-lg-0">
-                        <div class="block-2">
-                            <!-- heading -->
-                            <h6>Company</h6>
-                            <!-- links -->
-                            <ul>
-                                <li><a href="about.html">About</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                                <li><a href="team.html">Team</a></li>
-                                <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="text-center bg-dark py-4">
             <div class="d-flex justify-content-center align-items-center flex-column">
                 <small class="text-secondary">Copyright &copy;</small>
@@ -192,6 +124,19 @@
         </div>
     </footer>
     <!-- JAVASCRIPTS -->
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            const bodyHeight = document.body.clientHeight;
+            const windowHeight = window.innerHeight;
+
+            if (bodyHeight < windowHeight) {
+                const footer = document.querySelector('footer');
+                footer.style.position = 'absolute';
+                footer.style.bottom = '0';
+                footer.style.width = '100%';
+            }
+        });
+    </script>
     @if (session('message'))
         <script>
             Swal.fire({
