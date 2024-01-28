@@ -66,8 +66,8 @@
                                     {{ __('Login') }}
                                 </button>
 
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                @if (Route::has('password_kakomli.request'))
+                                    <a class="btn btn-link" href="{{ route('password_kakomli.request') }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif

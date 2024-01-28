@@ -51,7 +51,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto d-flex .flex-lg-row align-items-lg-center align-items-start">
                     <li class="nav-item dropdown active">
-                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Home</a>
+                        <a class="nav-link dropdown-toggle" href="#">Home</a>
                     </li>
                     <li class="nav-item @@about">
                         <a class="nav-link" href="#about">About</a>
@@ -66,13 +66,13 @@
                                     <a class="nav-link dropdown-toggle" href="#" id="profileDropdown"
                                         role="button" data-bs-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
-                                        <img src="{{ Auth::guard('kakomli')->user()->photo_profile }}"
+                                        <img src="{{ asset(Auth::guard('kakomli')->user()->photo_profile) }}"
                                             alt="Photo Profile" class="rounded-circle" width="30">
                                     </a>
                                     <div class="dropdown-menu p-0" aria-labelledby="profileDropdown">
                                         <div class="d-flex flex-column align-items-center border-bottom px-5 py-3">
                                             <div class="mb-3">
-                                                <img src="{{ Auth::guard('kakomli')->user()->photo_profile }}"
+                                                <img src="{{ asset(Auth::guard('kakomli')->user()->photo_profile) }}"
                                                     alt="Photo Profile" class="rounded-circle" width="30">
                                             </div>
                                             <div class="text-center">

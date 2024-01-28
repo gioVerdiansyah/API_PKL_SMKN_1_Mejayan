@@ -2265,7 +2265,7 @@ hr {
 
 .button-download .button__text,
 .button-download2 .button__text {
-    transform: translateX(10px);
+    transform: translateX(3px);
     color: #fff;
     font-weight: 600;
 }
@@ -2401,6 +2401,13 @@ hr {
 }
 
 @media screen and (max-width: 560px) {
+    #button-download {
+        flex-direction: column;
+        align-items: center;
+    }
+    #button-download button.button-download {
+        margin-top: 20px;
+    }
     .card-body {
         padding-top: 5px;
     }

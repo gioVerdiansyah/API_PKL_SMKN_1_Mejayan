@@ -27,7 +27,7 @@
                     <p class="text-white mb-5">Adalah aplikasi untuk mempermudah melakukan presensi, jurnal, serta guru
                         pembimbing untuk melakukan presensi dan rekap kegiatan selama PKL.</p>
                     <h3 class="text-white">Aplikasi untuk: </h3>
-                    <div class="d-flex">
+                    <div class="d-flex" id="button-download">
                         <link rel="stylesheet" href="{{ asset('css/select-for.css') }}">
                         <div class="wrapper mr-3">
                             <div class="option">
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <button class="button-download" type="button">
-                            <span class="button__text"><i class="fa-brands fa-android"></i> Android</span>
+                            <span class="button__text"><i class="fa-brands fa-android"></i> Download</span>
                             <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"
                                     id="bdd05811-e15d-428c-bb53-8661459f9307" data-name="Layer 2" class="svg">
                                     <path
@@ -68,8 +68,8 @@
     </section>
     <!--====  End of Hero Section  ====-->
 
-    <section id="about" class="section pt-0 position-relative pull-top">
-        <div class="container">
+    <section class="section pt-0 position-relative pull-top">
+        <div class="container" id="about">
             <div class="rounded shadow p-5 bg-white">
                 <div class="row">
                     <div class="col-lg-4 col-md-6 mt-5 mt-md-0 text-center">
@@ -143,7 +143,7 @@
                         <ul class="contact-info__list list-style--none position-relative z-index-101">
                             <li class="mb-4 pl-4 text-white">
                                 <span class="position-absolute"><i class="fas fa-envelope"></i></span>
-                                smknmejayan@yahoo.co.id
+                                <a href="mailto:smknmejayan@yahoo.co.id" class="text-white">smknmejayan@yahoo.co.id</a>
                             </li>
                             <li class="mb-4 pl-4 text-white">
                                 <span class="position-absolute"><i class="fas fa-phone"></i></span> (0351) 388490
@@ -188,7 +188,7 @@
                                     <div class="form-group">
                                         <label class="required-field" for="firstName">Nama</label>
                                         <input type="text" class="form-control" id="name" name="name"
-                                            placeholder="John">
+                                            placeholder="John" required>
                                     </div>
                                 </div>
 
@@ -196,14 +196,14 @@
                                     <div class="form-group">
                                         <label class="required-field" for="email">Email</label>
                                         <input type="text" class="form-control" id="email" name="email"
-                                            placeholder="example@gmail.com">
+                                            placeholder="example@gmail.com" required>
                                     </div>
                                 </div>
 
                                 <div class="col-sm-12 mb-3">
                                     <div class="form-group">
                                         <label class="required-field" for="message">Saran dan masukkan</label>
-                                        <textarea class="form-control" id="message" name="message" rows="4" placeholder="Saran anda..."></textarea>
+                                        <textarea class="form-control" id="message" name="message" rows="4" placeholder="Saran anda..." required></textarea>
                                     </div>
                                 </div>
 
