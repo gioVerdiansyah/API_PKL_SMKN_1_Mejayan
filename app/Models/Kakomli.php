@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Notifications\ResetPasswordKakomliNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 class Kakomli extends Authenticatable
@@ -30,6 +31,10 @@ class Kakomli extends Authenticatable
         'password' => 'hashed'
     ];
 
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordKakomliNotification($token, $this->email));
+    }
     public function jurusan(): BelongsTo{
         return $this->belongsTo(Jurusan::class, 'jurusan_id');
     }

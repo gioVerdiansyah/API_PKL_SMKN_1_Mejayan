@@ -10,6 +10,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\Guru\ForgotPasswordGuruController;
 use App\Http\Controllers\Auth\Guru\ResetPasswordGuruController;
+use App\Http\Controllers\Auth\Kakomli\ForgotPasswordKakomliController;
+use App\Http\Controllers\Auth\Kakomli\ResetPasswordKakomliController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ContactMeController;
@@ -23,6 +25,8 @@ use App\Http\Controllers\Kakomli\SiswaController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\Route;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -52,6 +56,13 @@ Route::prefix('/guru')->group(function(){
     Route::post('/password/email', [ForgotPasswordGuruController::class, 'sendResetLinkEmail'])->name('password_guru.email');
     Route::get('/password/reset/{token}', [ResetPasswordGuruController::class, 'showResetForm'])->name('password_guru.reset');
     Route::post('/password/reset', [ResetPasswordGuruController::class, 'reset'])->name('password_guru.update');
+});
+
+Route::prefix('/kakomli')->group(function(){
+    Route::get('/password/reset', [ForgotPasswordKakomliController::class, 'showLinkRequestForm'])->name('password_kakomli.request');
+    Route::post('/password/email', [ForgotPasswordKakomliController::class, 'sendResetLinkEmail'])->name('password_kakomli.email');
+    Route::get('/password/reset/{token}', [ResetPasswordKakomliController::class, 'showResetForm'])->name('password_kakomli.reset');
+    Route::post('/password/reset', [ResetPasswordKakomliController::class, 'reset'])->name('password_kakomli.update');
 });
 
 Route::post('contact-me', [ContactMeController::class, 'contactMe'])->name('send-contact');
