@@ -13,8 +13,8 @@
     <div class="card">
         <div class="card-body pt-3">
             <p class="text-muted">Download Atau Cetak</p>
-            <div class="d-flex justify-content-center">
-                <link rel="stylesheet" href="{{ asset('css/button_download_docs.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/button_download_docs.css') }}">
+            <div class="d-flex justify-content-center kebawah">
                 <button class="download-button p-0 me-5" onclick="window.location.href = `{{ route('rekap_pendataan.pemetaan_dudi.download') }}`">
                     <div class="docs" style="padding: 11px 20px"><svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round"
                             fill="none" stroke-width="2" stroke="currentColor" height="20" width="20"

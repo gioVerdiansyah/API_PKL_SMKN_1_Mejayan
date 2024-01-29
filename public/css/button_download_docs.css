@@ -19,7 +19,7 @@
     z-index: 1;
     background-color: #242a35;
     border: solid 1px #e8e8e82d;
-    transition: all .5s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 .download-button:hover {
@@ -39,11 +39,11 @@
     transform: translateY(0%);
     background-color: #01e056;
     border: solid 1px #01e0572d;
-    transition: all .5s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 .download-button:hover .download {
-    transform: translateY(100%)
+    transform: translateY(100%);
 }
 
 .download svg polyline,
@@ -60,5 +60,15 @@
     }
     100% {
         transform: translateY(0%);
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .kebawah {
+        flex-direction: column;
+        align-items: center;
+    }
+    .download-button {
+        margin-bottom: 20px;
     }
 }

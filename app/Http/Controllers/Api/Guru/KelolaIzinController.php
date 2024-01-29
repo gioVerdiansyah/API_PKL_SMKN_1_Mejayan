@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Absensi;
 use App\Models\Izin;
 use App\Models\Kelompok;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -57,6 +59,21 @@ class KelolaIzinController extends Controller
                 $izin->comment_guru = $request->keterangan;
             }
             $izin->save();
+
+            $jumlahIzin = intval(Carbon::parse($izin->awal_izin)->diffInDays(Carbon::parse($izin->akhir_izin)));
+            $user = User::where('id', $izin->user_id)->first();
+            $now = Carbon::now()->locale('id');
+            $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
+
+            if($request->status == 1 && $jumlahIzin > 0){
+                for($i = 1; $i <= $jumlahIzin; $i++){
+                    $absensi = new Absensi;
+                    $absensi->user_id = $izin->user_id;
+                    $absensi->status = '6';
+                    $absensi->datang = date('Y-m-d') . ' ' . explode(' - ', $user->{$hariIni})[0];
+                    $absensi->save();
+                }
+            }
 
             DB::commit();
             return response()->json(['success' => true, 'message' => "Izin berhasil di " . (($request->status == 1) ? 'setujui' : 'tolak')]);
