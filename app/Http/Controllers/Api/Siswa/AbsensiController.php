@@ -63,7 +63,7 @@ class AbsensiController extends Controller
 
             $jarakBatas = $dudi->radius;
 
-            $now = Carbon::now()->locale('id');
+            $now = Carbon::now()->locale('id'); 
             $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
 
             $jamMasuk = $user[$hariIni];

@@ -21,6 +21,8 @@ return [
     'app_url_bot_wa' => env('APP_URL_BOT_WA'),
     'api_key_bot_wa' => env('APP_API_KEY_BOT_WA'),
     'admin_email' => env('MAIL_ADMIN'),
+    'admin_url' => env('APP_ADMIN_APP_URL'),
+    'admin_url_api' => env('APP_ADMIN_API_URL'),
     'dev_email' => env('MAIL_DEVELEOPER'),
     'jam_tutup_absen' => env('JAM_TUTUP_ABSEN'),
     'jam_tutup_jurnal' => env('JAM_TUTUP_JURNAL'),

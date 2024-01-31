@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Kelas;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class KelasSeeder extends Seeder
 {
@@ -13,20 +15,23 @@ class KelasSeeder extends Seeder
      */
     public function run(): void
     {
-        Kelas::insert([
-            ['kelas' => "XII RPL 1"],
-            ['kelas' => "XII RPL 2"],
-            ['kelas' => "XII TKR 1"],
-            ['kelas' => "XII TKR 2"],
-            ['kelas' => "XII TBSM 1"],
-            ['kelas' => "XII TBSM 2"],
-            ['kelas' => "XII TBSM 3"],
-            ['kelas' => "XII TO 1"],
-            ['kelas' => "XII TO 2"],
-            ['kelas' => "XII TO 3"],
-            ['kelas' => "XII APHP 1"],
-            ['kelas' => "XII APHP 2"],
-            ['kelas' => "XII APHP 3"],
-        ]);
+        try {
+            $response = Http::withHeader('x-api-key', config('app.api_key'))->get(config('app.admin_url_api') . 'kelas');
+            $data = json_decode($response->body());
+
+            DB::beginTransaction();
+
+            foreach ($data as $item) {
+                $kelas = new Kelas;
+                $kelas->id = $item->id;
+                $kelas->kelas = $item->tingkatan . ' ' . $item->kelas;
+                $kelas->save();
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 }

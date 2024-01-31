@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PengurusPklStoreRequest extends FormRequest
+class PengurusPklStoreAPIRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,8 @@ class PengurusPklStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => 'required|string|unique:gurus,nama',
-            'email' => 'required|email|unique:gurus,email',
-            'no_hp' => 'required|regex:/^62\d+$/',
-            'password' => 'nullable|string|min:8',
-            'deskripsi' => 'required|string',
-            'photo_guru' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'guru_id' => 'required|array',
+            'guru_id.*' => 'required|string|uuid|unique:gurus,id',
         ];
     }
 }

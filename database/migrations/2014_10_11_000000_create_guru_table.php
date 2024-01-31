@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('gurus', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string("nama");
-            $table->string('gelar')->nullable();
             $table->string("email");
             $table->string('no_hp');
             $table->string('password');

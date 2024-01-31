@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\PengurusPklExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PengurusPklStoreAPIRequest;
 use App\Http\Requests\PengurusPklStoreRequest;
 use App\Imports\Admin\AdminPengurusPklImport;
 use App\Models\Guru;
@@ -12,6 +13,7 @@ use App\Models\Kakomli;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
@@ -52,6 +54,21 @@ class AdminPengurusPklController extends Controller
         return view('admin.kakomli.pengurus_pkl.create', compact('kakomli'));
     }
 
+    public function createFromAPI()
+    {
+        try {
+            $response = Http::withHeader('x-api-key', config('app.api_key'))->get(config('app.admin_url_api') . 'guru');
+            $data = json_decode($response->body());
+            return view('admin.kakomli.pengurus_pkl.createFromAPI', compact('data'));
+        } catch (\Exception) {
+            return back()->with('message', [
+                'icon' => 'error',
+                'title' => 'Error',
+                'text' => "Ada kesalahaan server!"
+            ]);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -63,7 +80,6 @@ class AdminPengurusPklController extends Controller
             $pengurus = new Guru;
             $pengurus->nama = $request->nama;
             $pengurus->email = $request->email;
-            $pengurus->gelar = $request->gelar;
             $pengurus->password = Hash::make($request->password ?? 'password');
             $pengurus->kakomli_id = $request->kakomli_id;
             $pengurus->deskripsi = $request->deskripsi;
@@ -88,6 +104,44 @@ class AdminPengurusPklController extends Controller
                 'icon' => 'error',
                 'title' => 'Ada kesalahan server',
                 'text' => "Error: $e"
+            ]);
+        }
+    }
+
+    public function storeFromAPI(PengurusPklStoreAPIRequest $request)
+    {
+        try {
+            $guru_id = $request->guru_id;
+            $response = Http::withHeader('x-api-key', config('app.api_key'))->post(config('app.admin_url_api') . 'selected-guru', [
+                'selectedGuru' => $guru_id
+            ]);
+
+            $data = json_decode($response->body());
+
+            DB::beginTransaction();
+
+            foreach ($data as $item) {
+                $pengurus = new Guru;
+                $pengurus->nama = $item->nama;
+                $pengurus->email = $item->email;
+                $pengurus->no_hp = $item->nomor_hp;
+                $pengurus->password = Hash::make('password');
+                $pengurus->kakomli_id = auth()->guard('kakomli')->user()->id;
+                $pengurus->photo_guru = config('app.admin_url') . $item->foto_guru;
+                $pengurus->save();
+            }
+
+            DB::commit();
+            return to_route('admin.pengurus-pkl.index')->with('message', [
+                'icon' => 'success',
+                'title' => 'Success',
+                'text' => "Berhasil menambah pengurus pkl"
+            ]);
+        } catch (\Exception) {
+            return back()->with('message', [
+                'icon' => 'error',
+                'title' => 'Error',
+                'text' => "Ada kesalahaan server!"
             ]);
         }
     }
@@ -130,7 +184,6 @@ class AdminPengurusPklController extends Controller
 
             $pengurus->nama = $request->nama;
             $pengurus->email = $request->email;
-            $pengurus->gelar = $request->gelar;
             $pengurus->kakomli_id = $request->kakomli_id;
             $pengurus->deskripsi = $request->deskripsi;
 

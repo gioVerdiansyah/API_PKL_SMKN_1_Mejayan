@@ -12,7 +12,14 @@
                 </ol>
             </nav>
         </div>
-        <div class="text-end">
+        <div>
+            <button class="btn btn-outline-success"
+                onclick="window.location.href = `{{ route('pengurus-pkl.import_by_api') }}`">Tambah
+                Pengurus
+                PKL
+                by API Admin</button>
+        </div>
+        <div>
             <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#uploadDataByExcel">Tambah
                 Pengurus
                 PKL
@@ -66,16 +73,15 @@
                             @enderror
                         </div>
                     </div>
-
                 </div>
                 <div class="col-md-6 mb-3">
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <label for="gelar" class="form-label">Gelar</label>
+                            <label for="no_hp" class="form-label">Nomor Telepon</label>
 
-                            <input type="text" class="form-control @error('gelar') is-invalid @enderror"
-                                placeholder="gelar (opsional)" name="gelar" id="gelar" value="{{ old('gelar') }}">
-                            @error('gelar')
+                            <input type="text" class="form-control @error('no_hp') is-invalid @enderror"
+                                placeholder="Nomor Telephone Guru" name="no_hp" id="no_hp">{{ old('no_hp') }}
+                            @error('no_hp')
                                 <div>
                                     <p class="text-danger mt-2">{{ $message }}</p>
                                 </div>

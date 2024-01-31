@@ -15,6 +15,12 @@
                 </ol>
             </nav>
         </div>
+                <div>
+            <button class="btn btn-outline-success"
+                onclick="window.location.href = `{{ route('admin.pengurus-pkl.create_by_api') }}`">Tambah Siswa
+                PKL
+                by API Admin</button>
+        </div>
         <div class="text-end">
             <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#uploadDataByExcel">Tambah
                 Pengurus

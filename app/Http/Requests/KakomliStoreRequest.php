@@ -22,7 +22,7 @@ class KakomliStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'jurusan' => 'required|integer',
+            'jurusan' => 'required|uuid',
             'nama' => 'required|string|max:255|unique:kakomlis,nama',
             'email' => 'required|email|unique:kakomlis,email',
             'password' => 'required|string|min:8',

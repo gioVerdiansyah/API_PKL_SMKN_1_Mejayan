@@ -65,7 +65,7 @@
                                 <option selected disabled>Pilih Pengurus/Pembimbing</option>
                                 @foreach ($guru as $item)
                                     <option value="{{ $item->id }}"
-                                        {{ old('guru_id', $kelompok->guru_id) == $item->id ? 'selected' : '' }}>{{ $item->nama }} {{ $item->gelar }}</option>
+                                        {{ old('guru_id', $kelompok->guru_id) == $item->id ? 'selected' : '' }}>{{ $item->nama }}</option>
                                 @endforeach
                             </select>
                             @error('guru_id')

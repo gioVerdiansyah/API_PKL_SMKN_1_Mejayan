@@ -21,7 +21,6 @@ class AdminPengurusPklImport implements ToCollection, WithHeadingRow
         foreach ($rows as $row) {
             $pengurus = new Guru;
             $pengurus->nama = $row['nama'];
-            $pengurus->gelar = $row['gelar'];
             $pengurus->email = $row['email'];
             $pengurus->password = Hash::make($row['password'] ?? 'password');
             $pengurus->kakomli_id = $row['kakomli_id'];

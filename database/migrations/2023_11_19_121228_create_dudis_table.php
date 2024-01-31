@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('alamat');
             $table->string('koordinat');
             $table->integer('radius');
-            $table->foreignId('jurusan_id')->constrained()->restrictOnDelete();
+            $table->foreignUuid('jurusan_id')->constrained()->restrictOnDelete();
             $table->timestamps();
         });
     }

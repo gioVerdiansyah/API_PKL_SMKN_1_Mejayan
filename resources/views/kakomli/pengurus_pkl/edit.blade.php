@@ -62,16 +62,15 @@
                             @enderror
                         </div>
                     </div>
-
                 </div>
                 <div class="col-md-6 mb-3">
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <label for="gelar" class="form-label">Gelar</label>
+                            <label for="no_hp" class="form-label">Nomor Telepon</label>
 
-                            <input type="text" class="form-control @error('gelar') is-invalid @enderror"
-                                placeholder="gelar (opsional)" name="gelar" id="gelar" value="{{ old('gelar',$pengurus->gelar) }}">
-                            @error('gelar')
+                            <input type="text" class="form-control @error('no_hp') is-invalid @enderror"
+                                placeholder="Nomor Telephone Guru" name="no_hp" id="no_hp" value="{{ old('no_hp', $pengurus->no_hp) }}">
+                            @error('no_hp')
                                 <div>
                                     <p class="text-danger mt-2">{{ $message }}</p>
                                 </div>
@@ -84,7 +83,7 @@
                             <label for="password" class="form-label">Password</label>
 
                             <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                placeholder="password pengurus PKL" name="password" id="password">
+                                placeholder="password baru pengurus PKL" name="password" id="password">
                             @error('password')
                                 <div>
                                     <p class="text-danger mt-2">{{ $message }}</p>

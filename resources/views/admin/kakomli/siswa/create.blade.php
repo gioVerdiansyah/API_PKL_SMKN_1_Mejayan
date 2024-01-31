@@ -12,7 +12,13 @@
                 </ol>
             </nav>
         </div>
-        <div class="text-end">
+        <div>
+            <button class="btn btn-outline-success"
+                onclick="window.location.href = `{{ route('admin.siswa.create_by_api') }}`">Tambah Siswa
+                PKL
+                by API Admin</button>
+        </div>
+        <div>
             <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#uploadDataByExcel">Tambah Siswa
                 PKL
                 by Excel</button>
@@ -118,7 +124,8 @@
                             <label for="absen" class="form-label">Absen</label>
 
                             <input type="number" class="form-control @error('absen') is-invalid @enderror"
-                                placeholder="absen" name="absen" id="absen" value="{{ (old('absen') != null) ? old('absen') + 1 ?? '' : '' }}">
+                                placeholder="absen" name="absen" id="absen"
+                                value="{{ old('absen') != null ? old('absen') + 1 ?? '' : '' }}">
                             @error('absen')
                                 <div>
                                     <p class="text-danger mt-2">{{ $message }}</p>
@@ -225,8 +232,8 @@
                     <div class="col">
                         <a href="{{ route('admin.siswa.download_list_table') }}" type="button"
                             class="btn btn-primary">download list kolom</a>
-                        <form action="{{ route('admin.siswa.import_data') }}" method="POST" enctype="multipart/form-data"
-                            id="upload-form">
+                        <form action="{{ route('admin.siswa.import_data') }}" method="POST"
+                            enctype="multipart/form-data" id="upload-form">
                             @csrf
 
                             <div class="input-group pt-3">

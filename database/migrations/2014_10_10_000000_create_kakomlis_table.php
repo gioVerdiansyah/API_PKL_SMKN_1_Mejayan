@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('password');
             $table->string('photo_profile')->default('images/mobile/default_photo.png');
-            $table->foreignId('jurusan_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('jurusan_id')->constrained()->cascadeOnDelete();
             $table->rememberToken();
             $table->timestamps();
         });

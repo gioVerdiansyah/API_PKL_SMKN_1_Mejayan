@@ -23,7 +23,7 @@ class KakomliUpdateRequest extends FormRequest
     {
         $id = $this->route('kakomli');
         return [
-            'jurusan' => 'required|integer',
+            'jurusan' => 'required|uuid',
             'nama' => 'required|string|max:255|unique:kakomlis,nama,' . $id . ',id',
             'email' => 'required|email|unique:kakomlis,email,' . $id . ',id',
             'password' => 'nullable|string|min:8',

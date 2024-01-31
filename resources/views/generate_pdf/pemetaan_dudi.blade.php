@@ -89,7 +89,7 @@
                     <td rowspan="{{ count($item->anggota) }}" style="text-align: center; vertical-align: middle">{{ $item->dudi->pemimpin }}</td>
                     <td rowspan="{{ count($item->anggota) }}" style="text-align: center; vertical-align: middle">{{ $item->dudi->no_telp }}</td>
                     <td rowspan="{{ count($item->anggota) }}" style="text-align: center; vertical-align: middle">{{ $item->dudi->alamat }}</td>
-                    <td rowspan="{{ count($item->anggota) }}" style="text-align: center; vertical-align: middle">{{ $item->guru->nama }} {{ $item->guru->gelar }}</td>
+                    <td rowspan="{{ count($item->anggota) }}" style="text-align: center; vertical-align: middle">{{ $item->guru->nama }}</td>
                 </tr>
                 @foreach ($item->anggota as $j => $anggota)
                     @if ($j > 0)

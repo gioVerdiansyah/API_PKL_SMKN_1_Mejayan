@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Guru;
+use App\Models\Jurusan;
 use App\Models\Kakomli;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,7 +21,7 @@ class KakomliSeeder extends Seeder
             'email' => 'admin@smkn1mejayan.sch.id',
             'password' => Hash::make('admin-pkl-smkn-1-mejayan'),
             'photo_profile' => 'images/app/LOGO_SMK.png',
-            'jurusan_id' => 1,
+            'jurusan_id' => Jurusan::where('jurusan', 'RPL')->first()->id,
         ]);
     }
 }

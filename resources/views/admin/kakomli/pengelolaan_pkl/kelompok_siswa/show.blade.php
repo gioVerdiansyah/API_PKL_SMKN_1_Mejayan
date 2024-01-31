@@ -40,7 +40,7 @@
                 <div class="row mt-3">
                     <div class="col-md-12">
                         <p class="text-bold fw-bolder">Nama Pengurus/Pembimbing</p>
-                        <p>{{ $kelompok->guru->nama }} {{ $kelompok->guru->gelar }}</p>
+                        <p>{{ $kelompok->guru->nama }}</p>
                     </div>
                 </div>
             </div>

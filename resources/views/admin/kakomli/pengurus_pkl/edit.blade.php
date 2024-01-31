@@ -81,21 +81,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <label for="gelar" class="form-label">Gelar</label>
-
-                            <input type="text" class="form-control @error('gelar') is-invalid @enderror"
-                                placeholder="gelar (opsional)" name="gelar" id="gelar"
-                                value="{{ old('gelar', $pengurus->gelar) }}">
-                            @error('gelar')
-                                <div>
-                                    <p class="text-danger mt-2">{{ $message }}</p>
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
 
                     <div class="row mt-3">
                         <div class="col-md-12">
