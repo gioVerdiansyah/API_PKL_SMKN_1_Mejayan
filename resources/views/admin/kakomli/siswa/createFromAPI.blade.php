@@ -1,4 +1,4 @@
-@extends('layouts.nav-kakomli')
+@extends('layouts.nav-admin')
 
 @section('content')
     <title>{{ config('app.name', 'Laravel') }} - Tambah Siswa PKL</title>

@@ -52,9 +52,6 @@
     <!-- core:js -->
     <script src="{{ asset('cssAdmin/vendors/core/core.js') }}"></script>
 
-    {{-- CSS PERSETUJUAN --}}
-    <link rel="stylesheet" href="{{ asset('cssAdmin/css/persetujuan/persetujuan.css') }}">
-
     <link rel="shortcut icon" href="{{ asset('images/app/Logo_SMK.png') }}" />
 </head>
 
@@ -84,7 +81,7 @@
                     </li>
 
                     <li class="nav-item nav-category">Data-Data</li>
-                    <li class="nav-item {{ request()->routeIs('admin.persetujuan') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->routeIs('kakomli.*') ? 'active' : '' }}">
                         <a href="{{ route('kakomli.index') }}" class="nav-link">
                             <i class="link-icon" data-feather="cpu"></i>
                             <span class="link-title">Data Kakomli</span>
@@ -144,6 +141,12 @@
                         </a>
                     </li>
                     <li class="nav-item nav-category">Core</li>
+                    <li class="nav-item {{ request()->routeIs('admin.synchronization') ? 'active' : '' }}">
+                        <a href="{{ route('admin.synchronization') }}" class="nav-link">
+                            <i class="link-icon" data-feather="refresh-cw"></i>
+                            <span class="link-title">Synchronization Data</span>
+                        </a>
+                    </li>
                     <li class="nav-item {{ request()->routeIs('admin.authorizationQR') ? 'active' : '' }}">
                         <a href="{{ route('admin.authorizationQR') }}" class="nav-link">
                             <i class="fa-solid fa-qrcode"></i>

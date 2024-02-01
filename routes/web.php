@@ -196,6 +196,10 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
         Route::post('/print-jurnal', [AdminRekapPendataanController::class, 'printJurnalSiswa'])->name('admin.rekap_pendataan.print_jurnal_siswa');
     });
 
+    // synchronization
+    Route::get('/synchronization-data', [AdminController::class, 'synchronization'])->name('admin.synchronization');
+    Route::post('/synchronization-data', [AdminController::class, 'synchronizationdata'])->name('admin.synchronization-data');
+
     // authorization
     Route::get('authorizationQR', [AdminController::class, 'authorizationQR'])->name('admin.authorizationQR');
 });

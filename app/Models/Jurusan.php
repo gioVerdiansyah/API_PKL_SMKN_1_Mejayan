@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 class Jurusan extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     public $incrementing = false, $keyType = "string";
 
@@ -23,7 +24,6 @@ class Jurusan extends Model
             }
         });
     }
-    public $timestamps = false;
     public function kakomli():HasOne{
         return $this->hasOne(Kakomli::class, 'id');
     }

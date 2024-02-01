@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 class Kelas extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     public $incrementing = false, $keyType = "string";
 
@@ -21,6 +22,5 @@ class Kelas extends Model
                 $model->{$model->getKeyName()} = Str::uuid()->toString();
             }
         });
-    }
-    public $timestamps = false;
+}
 }

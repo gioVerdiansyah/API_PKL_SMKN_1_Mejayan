@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('jurusan');
             $table->string('full_name');
             $table->String('gambar');
+            $table->timestamps();
         });
     }
 
