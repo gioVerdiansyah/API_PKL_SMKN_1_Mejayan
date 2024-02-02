@@ -51,7 +51,7 @@ class KelolaAbsensiController extends Controller
             $kelompok = Kelompok::with(['anggota'])->where('guru_id', $guru_id)->where('nama_kelompok', $namaKelompok)->first();
 
             $userAbsen = Absensi::whereDate('created_at', today())
-                ->where('status', '!=', '6')
+                ->where('status', '!=', '7')
                 ->whereIn('user_id', $kelompok->anggota->pluck('user_id'))
                 ->pluck('user_id');
 

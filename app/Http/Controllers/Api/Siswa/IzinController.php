@@ -27,7 +27,7 @@ class IzinController extends Controller
                     $query->select('id', 'nama');
                 },
                 'guru' => function ($query) {
-                    $query->select('id', 'nama', 'gelar', 'no_hp');
+                    $query->select('id', 'nama', 'no_hp');
                 }
             ])->whereHas('anggota', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
