@@ -48,10 +48,6 @@ Route::middleware("verifyAPIKey")->group(function () {
 
     Route::post('/edit-profile/{id}', [EditProfileController::class,'editProfile']);
 
-    // PINDAAAAH KE GURU
-    Route::get('/absensi/trouble', [AbsensiController::class, 'absenTrouble']);
-
-
     // Guru
     Route::prefix('/guru')->group(function(){
         Route::post('/login', \App\Http\Controllers\Api\Guru\LoginController::class);

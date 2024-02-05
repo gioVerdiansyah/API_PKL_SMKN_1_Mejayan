@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\SiswaExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PrintAbsensiRequest;
 use App\Http\Requests\UserStoreAPIRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -382,7 +383,7 @@ class AdminSiswaController extends Controller
 
         return view('admin.kakomli.siswa.print-absensi-siswa', compact('siswa', 'dataBulan'));
     }
-    public function printAbsensiSiswa(Request $request, string $siswa_id)
+    public function printAbsensiSiswa(PrintAbsensiRequest $request, string $siswa_id)
     {
         $kelompok = Kelompok::with([
             'anggota',

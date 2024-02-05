@@ -37,7 +37,7 @@ class LoginController extends Controller
             if(!$kelompok){
                 return response()->json([
                     'success' => false,
-                    'message' => 'Anda belum didaftarkan kedalam kelompok/DuDi!!!'
+                    'message' => 'Anda belum didaftarkan kedalam kelompok!'
                 ], 401);
             }
 

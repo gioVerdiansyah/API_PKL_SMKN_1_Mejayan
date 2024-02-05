@@ -29,9 +29,6 @@
                 </form>
             </div>
         </div>
-        <div class="text-end">
-            <a href="{{ route('admin.pengurus-pkl.create') }}" class="btn btn-outline-primary">Tambah Pengurus PKL</a>
-        </div>
     </div>
     <div class="card">
         <div class="card-body">
@@ -45,7 +42,6 @@
                             <th>Nama</th>
                             <th>Email</th>
                             <th>Deskripsi</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,19 +54,6 @@
                                 <td>{{ $data->email }}</td>
                                 <td style="white-space: initial;max-width: 300px">
                                     {{ $data->deskripsi ?? 'Tidak ada deskripsi' }}</td>
-                                <td class="d-flex align-items-center gap-2">
-                                    <a href="{{ route('admin.pengurus-pkl.edit', $data->id) }}"
-                                        class="btn btn-warning px-2 py-1"><i class="link-icon" width="15"
-                                            data-feather="edit"></i></a>
-                                    <form nameKakomli="{{ $data->nama }}"
-                                        action="{{ route('admin.pengurus-pkl.destroy', $data->id) }}" method="POST"
-                                        class="delete">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger px-2 py-1"><i class="link-icon"
-                                                width="15" data-feather="delete"></i></button>
-                                    </form>
-                                </td>
                             </tr>
                         @empty
                             <tr>

@@ -10,7 +10,9 @@ use App\Models\Kelas;
 use App\Models\Kelompok;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 
 class AdminController extends Controller
@@ -34,24 +36,13 @@ class AdminController extends Controller
     {
         return view('admin.synchronizationData');
     }
-    public function synchronizationdata()
+    public function syncJurusan()
     {
         try {
             $responseJurusan = Http::withHeader('x-api-key', config('app.api_key'))->get(config('app.admin_url_api') . 'jurusan');
             $dataJurusan = json_decode($responseJurusan->body());
 
             DB::beginTransaction();
-
-            $statistics = [
-                'jurusan' => [
-                    'create' => 0,
-                    'update' => 0,
-                ],
-                'kelas' => [
-                    'create' => 0,
-                    'update' => 0,
-                ],
-            ];
 
             $responseJurusan = Http::withHeader('x-api-key', config('app.api_key'))->get(config('app.admin_url_api') . 'jurusan');
             $dataJurusan = json_decode($responseJurusan->body());
@@ -67,7 +58,6 @@ class AdminController extends Controller
                     $existingJurusan->updated_at = $item->updated_at;
                     $existingJurusan->save();
 
-                    $statistics['jurusan']['update']++;
                 } elseif (!$existingJurusan) {
                     $newJurusan = new Jurusan();
                     $newJurusan->id = $item->id;
@@ -77,10 +67,21 @@ class AdminController extends Controller
                     $newJurusan->created_at = $item->created_at;
                     $newJurusan->updated_at = $item->updated_at;
                     $newJurusan->save();
-
-                    $statistics['jurusan']['create']++;
                 }
             }
+
+            DB::commit();
+
+            return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Jurusan', 'next_url' => route('admin.synchronization-data-kelas')]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => "DONE", 'type' => 'Jurusan','error' => $e->getMessage()]);
+        }
+    }
+
+    public function syncKelas(){
+        try{
+            DB::beginTransaction();
 
             $responseKelas = Http::withHeader('x-api-key', config('app.api_key'))->get(config('app.admin_url_api') . 'kelas');
             $dataKelas = json_decode($responseKelas->body());
@@ -93,8 +94,6 @@ class AdminController extends Controller
                     $existingKelas->created_at = Carbon::parse($item->created_at);
                     $existingKelas->updated_at = Carbon::parse($item->updated_at);
                     $existingKelas->save();
-
-                    $statistics['kelas']['update']++;
                 } elseif (!$existingKelas) {
                     $newKelas = new Kelas();
                     $newKelas->id = $item->id;
@@ -102,28 +101,127 @@ class AdminController extends Controller
                     $newKelas->created_at = Carbon::parse($item->created_at);
                     $newKelas->updated_at = Carbon::parse($item->updated_at);
                     $newKelas->save();
-
-                    $statistics['kelas']['create']++;
                 }
             }
 
             DB::commit();
-
-            return response()->json(['success' => true, 'data' => $statistics, 'message' => "Berhasil mendapatkan data"]);
-        } catch (\Exception $e) {
+            return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Kelas', "next_url" => route('admin.synchronization-data-guru')]);
+        }catch(\Exception $e){
             DB::rollBack();
-            return response()->json(['success' => false, 'message' => "Ada kesalahan saat mendapatkan data!", 'error' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => "FAIL", 'type' => 'Kelas', 'error' => $e->getMessage()]);
         }
     }
 
+    public function syncGuru(){
+        try {
+            DB::beginTransaction();
+
+            $responseKelas = Http::withHeader('x-api-key', config('app.api_key'))->get(config('app.admin_url_api') . 'guru');
+            $dataGuru = json_decode($responseKelas->body());
+
+            foreach ($dataGuru as $item) {
+                $existingGuru = Guru::find($item->id);
+
+                if ($existingGuru && $existingGuru->updated_at != $item->updated_at) {
+                    $existingGuru->nama = $item->nama;
+                    $existingGuru->email = $item->email;
+                    $existingGuru->no_hp = $item->nomor_hp;
+                    $existingGuru->email = $item->email;
+                    $existingGuru->password = Hash::make($item->nip);
+                    $existingGuru->photo_guru = config('app.admin_url') . $item->foto_guru;
+                    $existingGuru->created_at = Carbon::parse($item->created_at);
+                    $existingGuru->updated_at = Carbon::parse($item->updated_at);
+                    $existingGuru->save();
+                } elseif (!$existingGuru) {
+                    $newGuru = new Guru();
+                    $newGuru->id = $item->id;
+                    $newGuru->nama = $item->nama;
+                    $newGuru->email = $item->email;
+                    $newGuru->email = $item->email;
+                    $newGuru->no_hp = $item->nomor_hp;
+                    $newGuru->email = $item->email;
+                    $newGuru->password = Hash::make($item->nip);
+                    $newGuru->photo_guru = config('app.admin_url') . $item->foto_guru;
+                    $newGuru->created_at = Carbon::parse($item->created_at);
+                    $newGuru->updated_at = Carbon::parse($item->updated_at);
+                    $newGuru->save();
+                }
+            }
+
+            DB::commit();
+            return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Guru' , "next_url" => route('admin.synchronization-data-siswa')]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => "FAIL", 'type' => 'Guru' , 'error' => $e->getMessage()]);
+        }
+    }
+
+    public function syncSiswa(Request $response){
+        try {
+            if(is_string($response->next_page)){
+            DB::beginTransaction();
+
+            $url = ($response->next_page === 'undefined') ? config('app.admin_url_api') . 'siswa' : $response->next_page;
+
+            $responseKelas = Http::withHeader('x-api-key', config('app.api_key'))->get($url);
+            $dataResponse = json_decode($responseKelas->body());
+            $dataSiswa = $dataResponse->data;
+
+            foreach ($dataSiswa as $item) {
+                $existingSiswa = User::find($item->id);
+
+                if ($existingSiswa && $existingSiswa->updated_at != $item->updated_at) {
+                    $existingSiswa->name = $item->nama;
+                    $existingSiswa->email = $item->email;
+                    $existingSiswa->no_hp = $item->no_hp;
+                    $existingSiswa->email = $item->email;
+                    $existingSiswa->password = Hash::make($item->nis);
+                    $existingSiswa->nis = $item->nis;
+                    $existingSiswa->kelas_id = $item->kelas->id;
+                    $existingSiswa->jurusan_id = $item->kelas->jurusan_id;
+                    $existingSiswa->absen = $item->nomor_absen;
+                    $existingSiswa->jenis_kelamin = strtoupper($item->gender);
+                    $existingSiswa->created_at = Carbon::parse($item->created_at);
+                    $existingSiswa->updated_at = Carbon::parse($item->updated_at);
+                    $existingSiswa->save();
+                } elseif (!$existingSiswa) {
+                    $newSiswa = new User();
+                    $newSiswa->id = $item->id;
+                    $newSiswa->name = $item->nama;
+                    $newSiswa->email = $item->email;
+                    $newSiswa->no_hp = $item->no_hp;
+                    $newSiswa->email = $item->email;
+                    $newSiswa->password = Hash::make($item->nis);
+                    $newSiswa->nis = $item->nis;
+                    $newSiswa->kelas_id = $item->kelas->id;
+                    $newSiswa->jurusan_id = $item->kelas->jurusan_id;
+                    $newSiswa->absen = $item->nomor_absen;
+                    $newSiswa->jenis_kelamin = strtoupper($item->gender);
+                    $newSiswa->created_at = Carbon::parse($item->created_at);
+                    $newSiswa->updated_at = Carbon::parse($item->updated_at);
+                    $newSiswa->save();
+                }
+            }
+
+            DB::commit();
+            return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Siswa ' . (($dataResponse->last_page === $dataResponse->current_page) ? 'Terakhir' : 'Ke-' . $dataResponse->current_page), "next_url" => route('admin.synchronization-data-siswa'), 'next_page_url' => $dataResponse->next_page_url]);
+        }else{
+            return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Siswa', "next_url" => null]);
+        }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => "FAIL", 'type' => 'Siswa',  'error' => $e->getMessage()]);
+        }
+    }
     public function authorizationQR()
     {
         $response = Http::withHeaders([
             'x-api-key' => config('app.api_key_bot_wa')
         ])->get(config('app.app_url_bot_wa') . '/start-session', [
                     'session' => 'PKL_SMKN1Mejayan',
-                    'scan' => true
                 ]);
+
+        $response = json_decode($response);
 
         return view('admin.authorizationQR', compact('response'));
     }

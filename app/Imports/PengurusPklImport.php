@@ -27,7 +27,6 @@ class PengurusPklImport implements ToCollection, WithHeadingRow
                 $pengurus->email = $row['email'];
                 $pengurus->no_hp = $row['no_hp'];
                 $pengurus->password = Hash::make($row['password'] ?? 'password');
-                $pengurus->kakomli_id = auth()->guard('kakomli')->user()->id;
                 $pengurus->deskripsi = $row['deskripsi'];
                 $pengurus->save();
             }

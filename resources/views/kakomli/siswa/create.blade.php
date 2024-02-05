@@ -13,11 +13,6 @@
             </nav>
         </div>
         <div>
-            <button class="btn btn-outline-success" onclick="window.location.href = `{{ route('siswa.create_by_api') }}`">Tambah Siswa
-                PKL
-                by API Admin</button>
-        </div>
-        <div>
             <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#uploadDataByExcel">Tambah Siswa
                 PKL
                 by Excel</button>

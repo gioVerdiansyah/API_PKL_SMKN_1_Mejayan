@@ -27,11 +27,11 @@ return new class extends Migration
             $table->string('no_hp_ortu')->nullable();
 
             // Jam masuk per siswa
-            $table->string('senin');
-            $table->string('selasa');
-            $table->string('rabu');
-            $table->string('kamis');
-            $table->string('jumat');
+            $table->string('senin')->default('08:00 - 16:00');
+            $table->string('selasa')->default('08:00 - 16:00');
+            $table->string('rabu')->default('08:00 - 16:00');
+            $table->string('kamis')->default('08:00 - 16:00');
+            $table->string('jumat')->default('08:00 - 16:00');
             $table->string('sabtu')->nullable();
             $table->string('minggu')->nullable();
 

@@ -24,7 +24,7 @@
                             <option value="kehadiran">Kehadiran</option>
                         </select>
                     </div>
-                    <label for="bulan-bulan" class="form-label">Print jurnal pada bulan:</label>
+                    <label for="bulan-bulan" class="form-label">Print absensi pada bulan:</label>
                     <select name="bulan" class="form-control" id="bulan-bulan">
                         @forelse ($dataBulan as $items)
                             <option value="{{ $items['bulan'] }}">{{ $items['nama_bulan'] }}</option>

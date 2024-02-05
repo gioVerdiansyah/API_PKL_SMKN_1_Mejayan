@@ -36,11 +36,12 @@ class Kernel extends ConsoleKernel
             $users = \App\Models\User::all();
 
             foreach ($users as $user) {
+                $hasAlpha = Absensi::where('user_id', $user->id)->whereDate('created_at', today())->exists();
                 if(!Jurnal::where("user_id", $user->id)->whereDate('created_at', today())->exists()){
                     Jurnal::create([
                         'user_id' => $user->id,
                         'status' => '3',
-                        'kegiatan' => 'Tidak mengisi Jurnal'
+                        'kegiatan' => $hasAlpha ? 'Tidak mengisi Jurnal karena Alpha' : 'Tidak mengisi Jurnal'
                     ]);
                 }
             }

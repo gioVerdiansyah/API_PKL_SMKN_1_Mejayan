@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Kakomli;
 
 use App\Exports\SiswaExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PrintAbsensiRequest;
 use App\Http\Requests\UserStoreAPIRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -30,7 +31,7 @@ class SiswaController extends Controller
      */
     public function index(Request $request)
     {
-        $siswa = User::latest();
+        $siswa = User::latest()->where('jurusan_id', auth()->guard('kakomli')->user()->jurusan_id);
         $jurusans = Jurusan::all();
 
         if ($request->has('query') && !empty($request->input('query'))) {
@@ -39,7 +40,7 @@ class SiswaController extends Controller
                 ->orWhere('nis', 'LIKE', $input);
         }
 
-        $siswa = $siswa->where('jurusan_id', auth()->guard('kakomli')->user()->jurusan_id)->paginate(10);
+        $siswa = $siswa->paginate(10);
 
         return view('kakomli.siswa.index', compact('siswa', 'jurusans'));
     }
@@ -52,21 +53,6 @@ class SiswaController extends Controller
         $jurusan = Jurusan::all();
         $kelas = Kelas::all();
         return view('kakomli.siswa.create', compact('jurusan', 'kelas'));
-    }
-
-    public function createFromAPI()
-    {
-        try {
-            $response = Http::withHeader('x-api-key', config('app.api_key'))->get(config('app.admin_url_api') . 'siswa');
-            $data = json_decode($response->body());
-            return view('kakomli.siswa.createFromAPI', compact('data'));
-        } catch (\Exception) {
-            return back()->with('message', [
-                'icon' => 'error',
-                'title' => 'Error',
-                'text' => "Ada kesalahaan server!"
-            ]);
-        }
     }
 
     /**
@@ -117,55 +103,6 @@ class SiswaController extends Controller
                 'icon' => 'error',
                 'title' => 'Ada kesalahan server',
                 'text' => $e
-            ]);
-        }
-    }
-
-    public function storeFromAPI(UserStoreAPIRequest $request)
-    {
-        try {
-            $siswa_id = $request->siswa_id;
-            $response = Http::withHeader('x-api-key', config('app.api_key'))->post(config('app.admin_url_api') . 'selected-siswa', [
-                'selectedSiswa' => $siswa_id
-            ]);
-
-            $data = json_decode($response->body());
-
-            DB::beginTransaction();
-
-            foreach ($data as $item) {
-                $siswa = new User;
-                $siswa->name = $item->nama;
-                $siswa->email = $item->email;
-                $siswa->password = Hash::make('password');
-                $siswa->jenis_kelamin = strtoupper($item->gender);
-                $siswa->no_hp = $item->no_hp;
-                $siswa->jurusan_id = $item->kelas->jurusan_id;
-                $siswa->kelas_id = $item->kelas_id;
-                $siswa->nis = $item->nis;
-                $siswa->absen = $item->nomor_absen;
-
-                $siswa->senin = $request->senin;
-                $siswa->selasa = $request->selasa;
-                $siswa->rabu = $request->rabu;
-                $siswa->kamis = $request->kamis;
-                $siswa->jumat = $request->jumat;
-                $siswa->sabtu = $request->sabtu;
-                $siswa->minggu = $request->minggu;
-                $siswa->save();
-            }
-
-            DB::commit();
-            return to_route('siswa.index')->with('message', [
-                'icon' => 'success',
-                'title' => 'Success',
-                'text' => "Berhasil menambah siswa pkl"
-            ]);
-        } catch (\Exception) {
-            return back()->with('message', [
-                'icon' => 'error',
-                'title' => 'Error',
-                'text' => "Ada kesalahaan server!"
             ]);
         }
     }
@@ -390,9 +327,9 @@ class SiswaController extends Controller
 
         $dataBulan = $uniqueMonths->values()->all();
 
-        return view('kakomli.rekap_pendataan.print-absensi-siswa', compact('siswa', 'dataBulan'));
+        return view('kakomli.siswa.print-absensi-siswa', compact('siswa', 'dataBulan'));
     }
-    public function printAbsensiSiswa(Request $request, string $siswa_id)
+    public function printAbsensiSiswa(PrintAbsensiRequest $request, string $siswa_id)
     {
         $kelompok = Kelompok::with([
             'anggota',
@@ -448,7 +385,7 @@ class SiswaController extends Controller
 
         $dataBulan = $uniqueMonths->values()->all();
 
-        return view('kakomli.rekap_pendataan.print-jurnal-siswa', compact('siswa', 'dataBulan'));
+        return view('kakomli.siswa.print-jurnal-siswa', compact('siswa', 'dataBulan'));
     }
     public function printJurnalSiswa(Request $request, string $siswa_id)
     {

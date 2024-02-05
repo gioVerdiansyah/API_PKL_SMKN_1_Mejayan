@@ -94,9 +94,6 @@ Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
     });
 
     Route::resource('/siswa-siswi', SiswaController::class)->names('siswa');
-    Route::get('/siswa/import-by-API', [SiswaController::class, 'createFromAPI'])->name('siswa.create_by_api');
-    Route::post('/siswa/import-by-API', [SiswaController::class, 'storeFromAPI'])->name('siswa.import_by_api');
-
     Route::prefix('/siswa-siswi')->group(function(){
 
         Route::get('/export', [SiswaController::class, 'generateKolom'])->name('siswa.download_list_table');
@@ -111,14 +108,7 @@ Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
 
     });
 
-    Route::resource('/pengurus-pkl', PengurusPklController::class)->except('show');
-    Route::prefix('/pengurus-pkl')->group(function(){
-        Route::get('/export', [PengurusPklController::class, 'generateKolom'])->name('pengurus-pkl.download_list_table');
-        Route::post('/import', [PengurusPklController::class, 'importData'])->name('pengurus-pkl.import_data');
-
-        Route::get('/import-by-API', [PengurusPklController::class, 'createFromAPI'])->name('pengurus-pkl.create_by_api');
-        Route::post('/import-by-API', [PengurusPklController::class, 'storeFromAPI'])->name('pengurus-pkl.import_by_api');
-    });
+    Route::resource('/pengurus-pkl', PengurusPklController::class)->only('index');
 
     Route::prefix('/pengelolaan_pkl')->group(function(){
         Route::resource('/kelompok-siswa', KelompokSiswaController::class);
@@ -152,10 +142,6 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
     Route::post('/import-data-dudi', [AdminDudiController::class, 'importData'])->name('admin.dudi.import_data');
 
     Route::resource('/data-siswa', AdminSiswaController::class)->names('admin.siswa');
-
-    Route::get('/siswa/import-by-API', [AdminSiswaController::class, 'createFromAPI'])->name('admin.siswa.create_by_api');
-    Route::post('/siswa/import-by-API', [AdminSiswaController::class, 'storeFromAPI'])->name('admin.siswa.import_by_api');
-
     Route::prefix('/data-siswa')->group(function(){
         Route::get('/export', [AdminSiswaController::class, 'generateKolom'])->name('admin.siswa.download_list_table');
         Route::post('/import', [AdminSiswaController::class, 'importData'])->name('admin.siswa.import_data');
@@ -169,14 +155,7 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
         Route::post('/print-jurnal/{siswa_id}', [AdminSiswaController::class, 'printJurnalSiswa'])->name('admin.siswa.print_jurnal_siswa');
     });
 
-    Route::resource('/pengurus-pkl', AdminPengurusPklController::class)->names('admin.pengurus-pkl')->except('show');
-    Route::prefix('/pengurus-pkl')->group(function(){
-        Route::get('/export', [AdminPengurusPklController::class, 'generateKolom'])->name('admin.pengurus_pkl.download_list_table');
-        Route::post('/import', [AdminSiswaController::class, 'importData'])->name('admin.pengurus_pkl.import_data');
-
-        Route::get('/import-by-API', [AdminPengurusPklController::class, 'createFromAPI'])->name('admin.pengurus-pkl.create_by_api');
-        Route::post('/import-by-API', [AdminPengurusPklController::class, 'storeFromAPI'])->name('admin.pengurus-pkl.import_by_api');
-    });
+    Route::resource('/pengurus-pkl', AdminPengurusPklController::class)->names('admin.pengurus-pkl')->only('index');
 
     Route::prefix('/pengelolaan_pkl')->group(function () {
         Route::resource('/kelompok-siswa', AdminKelompokSiswaController::class)->names("admin.kelompok-siswa");
@@ -198,7 +177,10 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
 
     // synchronization
     Route::get('/synchronization-data', [AdminController::class, 'synchronization'])->name('admin.synchronization');
-    Route::post('/synchronization-data', [AdminController::class, 'synchronizationdata'])->name('admin.synchronization-data');
+    Route::post('/synchronization-data-jurusan', [AdminController::class, 'syncJurusan'])->name('admin.synchronization-data-jurusan');
+    Route::post('/synchronization-data-kelas', [AdminController::class, 'syncKelas'])->name('admin.synchronization-data-kelas');
+    Route::post('/synchronization-data-guru', [AdminController::class, 'syncGuru'])->name('admin.synchronization-data-guru');
+    Route::post('/synchronization-data-siswa', [AdminController::class, 'syncSiswa'])->name('admin.synchronization-data-siswa');
 
     // authorization
     Route::get('authorizationQR', [AdminController::class, 'authorizationQR'])->name('admin.authorizationQR');

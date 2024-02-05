@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PrintAbsensiRequest extends FormRequest
+class PrintAbsensiPendataanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +22,7 @@ class PrintAbsensiRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'nama_kelompok' => "required|string|exists:kelompoks,nama_kelompok",
             'tipe' => 'required|in:daftar-hadir,kehadiran',
             'bulan' => 'required|date_format:m-Y',
         ];

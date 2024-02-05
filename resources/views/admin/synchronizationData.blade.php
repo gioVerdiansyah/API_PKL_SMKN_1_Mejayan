@@ -13,7 +13,7 @@
     <div class="card">
         <div class="card-body pt-3 d-flex flex-column align-items-center">
             <p class="text-muted align-self-start">Synchronization From API Admin</p>
-            <div class="col-md-6 d-flex flex-column align-items-center" id="to-fetch">
+            <div class="col-md-6 d-flex flex-column align-items-center">
                 <link rel="stylesheet" href="{{ asset('css/button_synchronization.css') }}">
                 <button type="button" class="button" id="synchronization" onclick="sync()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -27,47 +27,72 @@
                     </svg>
                     <p>Synchronization Data</p>
                 </button>
+                <div class="mt-2 row w-100" id="message"></div>
             </div>
         </div>
     </div>
 
     <script>
         const sync = () => {
-            $.ajax({
-                type: "post",
-                url: "{{ route('admin.synchronization-data') }}",
-                data: {
-                    '_token': "{{ csrf_token() }}"
-                },
-                dataType: "json",
-                beforeSend: function(){
-                    $("#synchronization").addClass('loading');
-                    $("#synchronization p").text("GET DATA API ....");
-                },
-                success: function (response) {
-                    if(response.success){
-                        $("#synchronization p").text("Berhasil Synchronization Data!!!");
-                        $("#to-fetch").append(`
-                            <div class="mt-2">
-                                <p class="text-success">Pesan: ${response.message}</p>
-                                <p><strong>Jurusan:  ${response.data.jurusan.create}</strong> created <strong> ${response.data.jurusan.update} </strong> updated</p>
-                                <p><strong>Kelas:  ${response.data.kelas.create} </strong> created <strong> ${response.data.kelas.update} </strong> updated</p>
-                            </div>
-                        `);
-                    }else{
-                        $("#synchronization p").text("GAGAL!!!");
+            let nextUrl = "{{ route('admin.synchronization-data-jurusan') }}";
+            let nextPageUrl = '';
+            $("#message").html('');
 
-                        $("#to-fetch").append(`
-                            <div class="mt-2">
-                                <p class="text-danger">Pesan: ${response.message}</p>
+            const makeRequest = () => {
+                console.log(nextUrl);
+                $.ajax({
+                    type: "post",
+                    url: nextUrl,
+                    data: {
+                        '_token': "{{ csrf_token() }}",
+                        'next_page': nextPageUrl
+                    },
+                    dataType: "json",
+                    beforeSend: function() {
+                        $("#synchronization").addClass('loading');
+                        $("#synchronization p").text("GET DATA API ....");
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        if (response.success) {
+                            $("#message").append(`
+                                <div class="col-12 d-flex justify-center mt-2">
+                                    <div class="col-6 align-self-center"> <p>Data ${response.type}</p> </div>
+                                        <div class="col-6 text-center"> <p class="btn btn-sm btn-success">${response.message}</p> </div>
+                                </div>
+                            `);
+                                if (response.next_page_url === null) {
+                                    $("#synchronization p").text("Berhasil Synchronization Data!!!");
+                                    $("#synchronization").removeClass('loading');
+                                    $("#synchronization").removeAttr('onclick');
+                            } else {
+                                nextPageUrl = `${response.next_page_url}`;
+                                nextUrl = `${response.next_url}`;
+                                makeRequest();
+                            }
+                        } else {
+                            $("#synchronization p").text("Fetch Ulang");
+
+                            $("#message").append(`
+                                <div class="col-12 d-flex justify-center mt-2">
+                                    <div class="col-6 align-self-center"> <p>Data ${response.type}</p> </div>
+                                        <div class="col-6 text-center"> <p class="btn btn-sm btn-danger">${response.message}</p> </div>
+                                </div>
                                 <p class="text-danger">Error: ${response.error}</p>
-                            </div>
-                        `);
+                            `);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("synchronization error:");
+                        console.log("XHR:", xhr);
+                        console.log("Status:", status);
+                        console.log("Error:", error);
+                        $("#synchronization p").text("Fetch Ulang");
                     }
-                    $("#synchronization").removeClass('loading');
-                    $("#synchronization").removeAttr('onclick');
-                }
-            });
+                });
+            };
+
+            makeRequest();
         };
     </script>
 @endsection

@@ -29,4 +29,11 @@ class KelompokSiswaStoreRequest extends FormRequest
             'anggota.*' => 'uuid|unique:anggota_kelompoks,user_id|exists:users,id'
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'nama_kelompok.unique' => "Nama kelompok sudah di gunakan, baik Anda atau kakomli lain!"
+        ];
+    }
 }

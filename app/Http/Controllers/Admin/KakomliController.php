@@ -28,7 +28,8 @@ class KakomliController extends Controller
      */
     public function create()
     {
-        $jurusans = Jurusan::all();
+        $hasJurusan = Kakomli::whereNot('email', config('app.admin_email'))->pluck('jurusan_id');
+        $jurusans = Jurusan::whereNotIn('id', $hasJurusan)->get();
         return view('admin.kakomli.create', compact('jurusans'));
     }
 

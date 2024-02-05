@@ -20,7 +20,7 @@ class KelompokSiswaController extends Controller
      */
     public function index(Request $request)
     {
-        $kelompok = Kelompok::latest();
+        $kelompok = Kelompok::latest()->where('kakomli_id', auth()->guard('kakomli')->user()->id);
 
         if ($request->has('query') && !empty($request->input('query'))) {
             $input = $request->input('query');
@@ -41,7 +41,7 @@ class KelompokSiswaController extends Controller
             $kelompok->with(['dudi', 'guru', 'kakomli', "anggota"]);
         }
 
-        $kelompok = $kelompok->where('kakomli_id', auth()->guard('kakomli')->user()->id)->paginate(10);
+        $kelompok = $kelompok->paginate(10);
 
         return view('kakomli.pengelolaan_pkl.kelompok_siswa.index', compact('kelompok'));
     }
@@ -57,7 +57,7 @@ class KelompokSiswaController extends Controller
 
         $dudi = Dudi::where('jurusan_id', $kakomli->jurusan_id)->whereNotIn('id', $dudiTerdaftar)->get();
 
-        $guru = Guru::where('kakomli_id', $kakomli->id)->get();
+        $guru = Guru::select('id', 'nama')->get();
 
         $anggota = User::where('jurusan_id', $kakomli->jurusan_id)->whereNotIn('id', $anggotaTerdaftar)->get();
 

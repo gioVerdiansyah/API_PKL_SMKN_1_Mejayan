@@ -16,7 +16,6 @@ class HomeController extends Controller
         $kelompok = Kelompok::where('kakomli_id', $kakomli->id)->count();
         $user = User::where('jurusan_id', $kakomli->jurusan_id)->count();
         $dudi = Dudi::where('jurusan_id', $kakomli->jurusan_id)->count();
-        $guru = Guru::where('kakomli_id', $kakomli->id)->count();
-        return view('kakomli.home', compact('kelompok', 'user', 'dudi', 'guru'));
+        return view('kakomli.home', compact('kelompok', 'user', 'dudi'));
     }
 }

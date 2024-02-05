@@ -18,7 +18,7 @@
                 <p class="text-muted align-self-start">Cetak Absensi siswa-siswi</p>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="nama_kelompok" class="form-label">Print jurnal pada bulan:</label>
+                        <label for="nama_kelompok" class="form-label">Kelompok/DuDi:</label>
                         <select name="nama_kelompok" class="form-control" id="nama_kelompok">
                             @forelse ($kelompok as $items)
                                 <option value="{{ $items->nama_kelompok }}">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Kakomli;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PrintAbsensiPendataanRequest;
 use App\Models\Absensi;
 use App\Models\Dudi;
 use App\Models\Jurnal;
@@ -105,7 +106,7 @@ class RekapPendataanController extends Controller
 
         return view('kakomli.rekap_pendataan.print-absensi-siswa', compact('kelompok', 'dataBulan'));
     }
-    public function printAbsensiSiswa(Request $request)
+    public function printAbsensiSiswa(PrintAbsensiPendataanRequest $request)
     {
         $kelompok = Kelompok::with([
             'anggota',
@@ -169,7 +170,7 @@ class RekapPendataanController extends Controller
     }
     public function printJurnalSiswa(Request $request)
     {
-        $jurnal = Jurnal::with('user')->where('user_id', $request->siswa)->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])->get();
+        $jurnal = Jurnal::with('user')->where('status', '1')->where('user_id', $request->siswa)->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])->get();
         $user = User::with(['kelas', 'jurusan'])->where('id', $request->siswa)->first();
 
         $kelompok = Kelompok::with(['dudi', 'guru'])->whereHas('anggota', function ($query) use ($user) {
