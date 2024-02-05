@@ -78,9 +78,12 @@ class AdminKelompokSiswaController extends Controller
         try {
             DB::beginTransaction();
 
+            $jurusan_id = Dudi::where('id', $request->dudi_id)->select('id', 'jurusan_id')->first()->jurusan_id;
+            $kakomli_id = Kakomli::where('jurusan_id', $jurusan_id)->select('id')->first()->id;
+
             $kelompok = new Kelompok;
             $kelompok->nama_kelompok = $request->nama_kelompok;
-            $kelompok->kakomli_id = auth()->guard('kakomli')->user()->id;
+            $kelompok->kakomli_id = $kakomli_id;
             $kelompok->dudi_id = $request->dudi_id;
             $kelompok->guru_id = $request->guru_id;
             $kelompok->save();
@@ -165,8 +168,12 @@ class AdminKelompokSiswaController extends Controller
                 ]);
             }
 
+
+            $jurusan_id = Dudi::where('id', $request->dudi_id)->select('id', 'jurusan_id')->first()->jurusan_id;
+            $kakomli_id = Kakomli::where('jurusan_id', $jurusan_id)->select('id')->first()->id;
+
             $kelompok->nama_kelompok = $request->nama_kelompok;
-            $kelompok->kakomli_id = auth()->guard('kakomli')->user()->id;
+            $kelompok->kakomli_id = $kakomli_id;
             $kelompok->dudi_id = $request->dudi_id;
             $kelompok->guru_id = $request->guru_id;
             $kelompok->save();

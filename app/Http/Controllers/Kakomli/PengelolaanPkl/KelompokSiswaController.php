@@ -133,7 +133,7 @@ class KelompokSiswaController extends Controller
         }
 
         $dudi = Dudi::where('jurusan_id', auth()->guard('kakomli')->user()->jurusan_id)->get();
-        $guru = Guru::where('kakomli_id', auth()->guard('kakomli')->user()->id)->get();
+        $guru = Guru::all();
         $anggota = User::where('jurusan_id', auth()->guard('kakomli')->user()->jurusan_id)->get();
         $member = AnggotaKelompok::where('kelompok_id', $kelompok->id)->pluck('user_id')->toArray();
 

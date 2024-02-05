@@ -8,30 +8,45 @@
                 <div class="d-flex">
                     <div class="form-group">
                         <label for="tipe" class="form-label">Tipe Rekap</label>
-                        <select name="tipe" class="form-control" id="tipe">
+                        <select name="tipe" class="form-control @error('daftar-hadir') is-invalid @enderror" id="tipe">
                             <option value="daftar-hadir">Daftar Hadir</option>
                             <option value="kehadiran">Kehadiran</option>
                         </select>
                     </div>
+                    @error('daftar-hadir')
+                        <div class="invalid-feedback">
+                            <p>{{ $message }}</p>
+                        </div>
+                    @enderror
                     <div class="form-group mx-3">
                         <label for="kelompok" class="form-label">Kelompok</label>
-                        <select name="kelompok" class="form-control" id="kelompok">
+                        <select name="kelompok" class="form-control @error('kelompok') is-invalid @enderror" id="kelompok">
                             @forelse ($kelompok as $items)
                                 <option value="{{ $items->nama_kelompok }}">{{ $items->nama_kelompok }} / {{ $items->dudi->nama }}</option>
                             @empty
                                 <option disabled>Kelompok tidak ada</option>
                             @endforelse
                         </select>
+                        @error('kelompok')
+                            <div class="invalid-feedback">
+                            <p>{{ $message }}</p>
+                            </div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label for="bulan-bulan" class="form-label">Per Bulan</label>
-                        <select name="bulan" class="form-control" id="bulan-bulan">
+                        <select name="bulan" class="form-control @error('bulan') is-invalid @enderror" id="bulan-bulan">
                             @forelse ($dataBulan as $items)
                                 <option value="{{ $items['bulan'] }}">{{ $items['nama_bulan'] }}</option>
                             @empty
                                 <option disabled>Bulan tidak ada</option>
                             @endforelse
                         </select>
+                        @error('bulan')
+                            <div class="invalid-feedback">
+                                <p>{{ $message }}</p>
+                            </div>
+                        @enderror
                     </div>
                 </div>
                 <div id="button-download">

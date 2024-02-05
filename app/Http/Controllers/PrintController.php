@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GuruPrintAbsensiSiswaRequest;
+use App\Http\Requests\SiswaPrintJurnalRequest;
 use App\Models\Absensi;
 use App\Models\Guru;
 use App\Models\Jurnal;
@@ -10,7 +12,6 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use PhpOffice\PhpSpreadsheet\Writer\Xls\Style\ColorMap;
 
 class PrintController extends Controller
 {
@@ -45,7 +46,7 @@ class PrintController extends Controller
 
         return view('print_jurnal', compact('id', 'dataBulan'));
     }
-    public function printJurnalSiswa(Request $request)
+    public function printJurnalSiswa(SiswaPrintJurnalRequest $request)
     {
         try {
             $jurnal = Jurnal::with('user')->where('user_id', $request->user_id)->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])->get();
@@ -82,8 +83,6 @@ class PrintController extends Controller
     public function showPrintAbensiSiswa(string $guru_id)
     {
         $guru = Guru::where('id', $guru_id)->first();
-
-        // dd($guru);
 
         if (!$guru) {
             return to_route('home')->with('message', [
@@ -135,7 +134,7 @@ class PrintController extends Controller
         return view('print_absensi', compact('guru', 'kelompok', 'dataBulan'));
     }
 
-    public function printAbsensiSiswa(Request $request, string $guru_id)
+    public function printAbsensiSiswa(GuruPrintAbsensiSiswaRequest $request, string $guru_id)
     {
         // try {
         $nama_kelompok = $request->kelompok;
