@@ -11,16 +11,6 @@
         </div>
         <div class="d-flex align-items-center">
             <div class="d-flex justify-content-center my-3">
-                <div class="col-md-6 col-12 me-3 col-lg-4 pk-0">
-                    <select name="jurusan" class="form-select" id="jurusan">
-                        <option selected>Semua</option>
-                        @foreach ($jurusans as $jurusan)
-                            <option value="{{ $jurusan->id }}" {{ request('jurusan') == $jurusan->id ? 'selected' : '' }}>
-                                {{ $jurusan->jurusan }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
                 <form method="get" class="form-inline d-flex flex-row gap-1">
                     <input class="form-control mr-sm-2 py-0" type="search" name="query" placeholder="Search"
                         aria-label="Search" value="{{ request('query') }}">
@@ -37,7 +27,6 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Jurusan</th>
                             <th>Photo Profile</th>
                             <th>Nama</th>
                             <th>Email</th>
@@ -48,7 +37,6 @@
                         @forelse ($pengurus as $i => $data)
                             <tr>
                                 <th>{{ ++$i }}</th>
-                                <th>{{ $data->kakomli->jurusan->jurusan }}</th>
                                 <td><img src="{{ asset($data->photo_guru) }}" alt="Photo pengurus PKL"></td>
                                 <td style="white-space: initial;max-width: 200px">{{ $data->nama }}</td>
                                 <td>{{ $data->email }}</td>
@@ -70,45 +58,4 @@
             </div>
         </div>
     </div>
-    <script>
-        document.getElementById('jurusan').addEventListener('change', function() {
-            var selectedCategoryId = this.value;
-            var currentUrl = window.location.href;
-            var newUrl;
-            if (selectedCategoryId === "Semua") {
-                newUrl = currentUrl.replace(/jurusan=[^&]*/, '');
-            } else {
-                var ctParam = 'jurusan=' + selectedCategoryId;
-                if (currentUrl.includes('jurusan=')) {
-                    newUrl = currentUrl.replace(/jurusan=[^&]*/, ctParam);
-                } else {
-                    newUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + ctParam;
-                }
-            }
-            window.location.href = newUrl;
-        });
-        if (document.querySelectorAll('.delete').length > 0) {
-            document.querySelectorAll('.delete').forEach(function(form) {
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    var nameKakomli = form.getAttribute('nameKakomli');
-                    Swal.fire({
-                        title: 'Apakah anda yakin?',
-                        text: "Ingin menghapus pengurus PKL '" + nameKakomli + "'?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Ya, Hapus!",
-                        cancelButtonText: "Batal",
-                        background: 'var(--bs-body-bg)',
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
-                    });
-                });
-            });
-        }
-    </script>
 @endsection

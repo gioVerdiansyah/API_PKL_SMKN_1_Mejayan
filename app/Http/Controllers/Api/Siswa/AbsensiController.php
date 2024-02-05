@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Api\Siswa;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AbsenRequest;
-use App\Http\Requests\AbsenSalahRequest;
 use App\Models\Absensi;
 use App\Models\Dudi;
-use App\Models\Guru;
 use App\Models\Izin;
 use App\Models\Kelompok;
 use App\Models\User;
@@ -63,7 +61,7 @@ class AbsensiController extends Controller
 
             $jarakBatas = $dudi->radius;
 
-            $now = Carbon::now()->locale('id'); 
+            $now = Carbon::now()->locale('id');
             $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
 
             $jamMasuk = $user[$hariIni];

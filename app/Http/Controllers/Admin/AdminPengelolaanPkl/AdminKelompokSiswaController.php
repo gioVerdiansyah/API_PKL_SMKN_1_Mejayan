@@ -9,6 +9,7 @@ use App\Models\AnggotaKelompok;
 use App\Models\Dudi;
 use App\Models\Guru;
 use App\Models\Jurusan;
+use App\Models\Kakomli;
 use App\Models\Kelompok;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -27,18 +28,22 @@ class AdminKelompokSiswaController extends Controller
         if ($request->has('query') && !empty($request->input('query'))) {
             $input = $request->input('query');
 
-            $kelompok->where('nama_kelompok', 'LIKE', "%$input%")
-                ->orWhereHas('dudi', function ($query) use ($input) {
-                    $query->where('nama', 'LIKE', "%$input%");
-                })
-                ->orWhereHas('guru', function ($query) use ($input) {
-                    $query->where('nama', 'LIKE', "%$input%");
-                })
-                ->orWhereHas('kakomli', function ($query) use ($input) {
-                    $query->where('nama', 'LIKE', "%$input%");
-                })
-                ->orWhereHas('anggota');
+            $dudi_id = Dudi::where('nama', 'LIKE', "%$input%")->pluck('id');
+            $guru_id = Guru::where('nama', 'LIKE', "%$input%")->pluck('id');
+            $kakomli_id = Kakomli::where('nama', 'LIKE', "%$input%")->pluck('id');
 
+            if(!$dudi_id->isEmpty()){
+                $kelompok->whereIn('dudi_id', $dudi_id);
+            }
+
+            if(!$guru_id->isEmpty()){
+                $kelompok->whereIn('guru_id', $guru_id);
+            }
+
+            if(!$kakomli_id->isEmpty()){
+                $kelompok->whereIn('kakomli_id', $kakomli_id);
+            }
+            $kelompok->orWhere('nama_kelompok', 'LIKE', "%$input%");
         } else {
             $kelompok->with(['dudi', 'guru', 'kakomli', "anggota"]);
         }

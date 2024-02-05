@@ -3,7 +3,6 @@ namespace App\Http\Controllers\Api\Siswa;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserAuthRequest;
-use App\Models\AnggotaKelompok;
 use App\Models\Dudi;
 use App\Models\Guru;
 use App\Models\Kelompok;

@@ -58,29 +58,4 @@
             </div>
         </div>
     </div>
-        <script>
-        if (document.querySelectorAll('.delete').length > 0) {
-            document.querySelectorAll('.delete').forEach(function(form) {
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    var nameKakomli = form.getAttribute('nameKakomli');
-                    Swal.fire({
-                        title: 'Apakah anda yakin?',
-                        text: "Ingin menghapus pengurus PKL '" + nameKakomli + "'?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Ya, Hapus!",
-                        cancelButtonText: "Batal",
-                        background: 'var(--bs-body-bg)',
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
-                    });
-                });
-            });
-        }
-    </script>
 @endsection
