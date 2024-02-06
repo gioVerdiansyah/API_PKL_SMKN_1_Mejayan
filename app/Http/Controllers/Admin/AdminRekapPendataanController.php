@@ -62,7 +62,7 @@ class AdminRekapPendataanController extends Controller
             ];
         }
 
-        $absensi = Absensi::with('user')->whereIn('user_id', $absen->anggota->pluck('user_id'))->get();
+        $absensi = Absensi::with('user')->whereIn('user_id', $absen->anggota->pluck('user_id'))->orderBy('created_at', 'desc')->get();
 
         $uniqueMonths = $absensi->pluck('created_at')->map(function ($createdAt) {
             $date = Carbon::parse($createdAt);
@@ -101,6 +101,7 @@ class AdminRekapPendataanController extends Controller
         $absensi = Absensi::with(['user.kelas'])
             ->whereIn('user_id', $kelompok->anggota->pluck('user_id'))
             ->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])
+            ->orderBy('created_at', 'asc')
             ->get();
 
         $bulanTahun = Carbon::createFromFormat('m-Y', $request->bulan)->locale('id');
@@ -144,7 +145,7 @@ class AdminRekapPendataanController extends Controller
     }
     public function printJurnalSiswa(Request $request)
     {
-        $jurnal = Jurnal::with('user')->where('user_id', $request->siswa)->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])->get();
+        $jurnal = Jurnal::with('user')->where('user_id', $request->siswa)->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])->orderBy('created_at', 'asc')->get();
         $user = User::with(['kelas', 'jurusan'])->where('id', $request->siswa)->first();
 
         $kelompok = Kelompok::with(['dudi', 'guru'])->whereHas('anggota', function ($query) use ($user) {

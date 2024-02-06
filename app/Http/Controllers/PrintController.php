@@ -49,7 +49,7 @@ class PrintController extends Controller
     public function printJurnalSiswa(SiswaPrintJurnalRequest $request)
     {
         try {
-            $jurnal = Jurnal::with('user')->where('user_id', $request->user_id)->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])->get();
+            $jurnal = Jurnal::with('user')->where('user_id', $request->user_id)->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])->orderBy('created_at', 'asc')->get();
             $user = User::with(['kelas', 'jurusan'])->where('id', $request->user_id)->first();
 
             $kelompok = Kelompok::with(['dudi', 'guru'])->whereHas('anggota', function ($query) use ($user) {
@@ -159,6 +159,7 @@ class PrintController extends Controller
         $absensi = Absensi::with(['user.kelas'])
             ->whereIn('user_id', $kelompok->anggota->pluck('user_id'))
             ->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])
+            ->orderBy('created_at', 'asc')
             ->get();
 
         $bulanTahun = Carbon::createFromFormat('m-Y', $request->bulan)->locale('id');

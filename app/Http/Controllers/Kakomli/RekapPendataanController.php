@@ -86,7 +86,7 @@ class RekapPendataanController extends Controller
             ];
         }
 
-        $absensi = Absensi::with('user')->whereIn('user_id', $absen->anggota->pluck('user_id'))->get();
+        $absensi = Absensi::with('user')->whereIn('user_id', $absen->anggota->pluck('user_id'))->orderBy('created_at', 'desc')->get();
 
         $uniqueMonths = $absensi->pluck('created_at')->map(function ($createdAt) {
             $date = Carbon::parse($createdAt);

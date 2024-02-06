@@ -16,7 +16,7 @@ class PengurusPklController extends Controller
     {
         $pengurus = Kelompok::where('kakomli_id', auth()->guard('kakomli')->user()->id)->pluck('guru_id');
 
-        $pengurus = Guru::whereIn('id', $pengurus)->latest();
+        $pengurus = Guru::with('kelompok')->whereIn('id', $pengurus)->latest();
 
         if ($request->has('query') && !empty($request->input('query'))) {
             $input = $request->input('query');

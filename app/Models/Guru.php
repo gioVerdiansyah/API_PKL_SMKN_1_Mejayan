@@ -59,6 +59,10 @@ class Guru extends Authenticatable
     {
         return $this->hasMany(Kelompok::class, 'guru_id');
     }
+    public function kelompok_pkl(): HasMany
+    {
+        return $this->hasMany(Kelompok::class, 'id');
+    }
 
     public function absensi()
     {

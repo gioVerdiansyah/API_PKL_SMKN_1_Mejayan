@@ -27,7 +27,7 @@ class KelolaJurnalController extends Controller
                 ];
             }
 
-            $jurnal = Jurnal::with('user')->where('status', '3')->whereIn('user_id', $kelompok->anggota->pluck('user_id'))->whereDate('created_at', today()->subDays($hari));
+            $jurnal = Jurnal::with('user')->whereIn('user_id', $kelompok->anggota->pluck('user_id'))->whereDate('created_at', today()->subDays($hari));
 
             if($status !== '0'){
                 $jurnal->where('status', $status);

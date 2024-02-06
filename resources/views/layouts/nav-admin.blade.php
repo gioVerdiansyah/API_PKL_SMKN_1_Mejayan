@@ -130,7 +130,7 @@
                         class="nav-item {{ request()->routeIs('admin.rekap_pendataan.show_print_absensi_siswa') ? 'active' : '' }}">
                         <a href="{{ route('admin.rekap_pendataan.show_print_absensi_siswa') }}" class="nav-link">
                             <i class="fa-solid fa-check-to-slot"></i>
-                            <span class="link-title m-4">Rekap Absensi</span>
+                            <span class="link-title m-3">Rekap Absensi</span>
                         </a>
                     </li>
                     <li

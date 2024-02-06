@@ -36,7 +36,7 @@ class KelolaIzinController extends Controller
                 $izin = $izin->where('status', $status);
             }
 
-            $izin = $izin->paginate(1);
+            $izin = $izin->paginate(10);
 
             return response()->json(['success' => true, 'data' => $izin, 'kelompok' => $listKelompok, 'kelompok_ini' => $namaKelompok, 'status' => $status]);
         } catch (\Exception $e) {

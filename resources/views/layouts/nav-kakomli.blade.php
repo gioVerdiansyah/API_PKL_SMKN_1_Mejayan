@@ -127,7 +127,7 @@
                     <li class="nav-item {{ request()->routeIs('rekap_pendataan.show_print_absensi_siswa') ? 'active' : '' }}">
                         <a href="{{ route('rekap_pendataan.show_print_absensi_siswa') }}" class="nav-link">
                             <i class="fa-solid fa-check-to-slot"></i>
-                            <span class="link-title m-4">Rekap Absensi</span>
+                            <span class="link-title m-3">Rekap Absensi</span>
                         </a>
                     </li>
                     <li class="nav-item {{ request()->routeIs('rekap_pendataan.show_print_jurnal_siswa') ? 'active' : '' }}">
