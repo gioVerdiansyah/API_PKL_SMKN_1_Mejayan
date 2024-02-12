@@ -75,7 +75,7 @@ class AdminController extends Controller
             return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Jurusan', 'next_url' => route('admin.synchronization-data-kelas')]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['success' => false, 'message' => "DONE", 'type' => 'Jurusan','error' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => "FAIL", 'type' => 'Jurusan','error' => $e->getMessage()]);
         }
     }
 

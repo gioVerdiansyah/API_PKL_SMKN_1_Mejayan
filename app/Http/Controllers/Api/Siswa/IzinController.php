@@ -82,7 +82,7 @@ class IzinController extends Controller
             }
 
             if ($absenSudahAda) {
-                return response()->json(['success' => false, 'message' => 'Anda sudah dinyatakan absen, tidak bisa melakukan izin! Edit absensi menjadi \'Reset\' untuk mereset absensi'], 403);
+                return response()->json(['success' => false, 'message' => 'Anda sudah dinyatakan absen, tidak bisa melakukan izin!'], 403);
             }
 
 

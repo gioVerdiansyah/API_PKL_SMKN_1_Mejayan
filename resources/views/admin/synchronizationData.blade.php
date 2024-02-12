@@ -71,6 +71,7 @@
                                 makeRequest();
                             }
                         } else {
+                            $("#synchronization").removeClass('loading');
                             $("#synchronization p").text("Fetch Ulang");
 
                             $("#message").append(`
@@ -87,6 +88,7 @@
                         console.log("XHR:", xhr);
                         console.log("Status:", status);
                         console.log("Error:", error);
+                        $("#synchronization").removeClass('loading');
                         $("#synchronization p").text("Fetch Ulang");
                     }
                 });
