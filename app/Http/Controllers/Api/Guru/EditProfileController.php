@@ -28,7 +28,7 @@ class EditProfileController extends Controller
                 }
                 $fileName = $request->file('photo_guru')->hashName();
                 $path = $request->file('photo_guru')->storeAs('photo_guru', $fileName);
-                $guru->photo_guru = 'storage/' . $path;
+                $guru->photo_guru = config('app.url') . '/storage/' . $path;
             }
 
             if ($request->no_hp) {

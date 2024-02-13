@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class KelolaJurnalController extends Controller
 {
-    public function getJurnal(string $guru_id, string $nama_kelompok = null, int $hari = 0, string $status = '0')
+    public function getJurnal(string $guru_id, string $nama_kelompok = null, int $hari = 0, string $status = 'NaV')
     {
         try {
             $listKelompok = Kelompok::where('guru_id', $guru_id)->pluck('nama_kelompok')->toArray();
@@ -29,7 +29,7 @@ class KelolaJurnalController extends Controller
 
             $jurnal = Jurnal::with('user')->whereIn('user_id', $kelompok->anggota->pluck('user_id'))->whereDate('created_at', today()->subDays($hari));
 
-            if($status !== '0'){
+            if($status !== "NaV"){
                 $jurnal->where('status', $status);
             }
 
@@ -37,7 +37,7 @@ class KelolaJurnalController extends Controller
 
             return response()->json(['success' => true, 'data' => $jurnal, 'kelompok_ini' => $namaKelompok, 'kelompok' => $listKelompok, 'hari' => $hari, 'status' => $status], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Ada kesalahaan server!']);
+            return response()->json(['success' => false, 'message' => 'Ada kesalahaan server!', "error" => $e->getMessage()]);
         }
     }
 

@@ -66,11 +66,14 @@ class KelolaIzinController extends Controller
             $hariIni = strtolower(Carbon::parse($now)->locale('id')->dayName);
 
             if($request->status == 1 && $jumlahIzin > 0){
-                for($i = 1; $i <= $jumlahIzin; $i++){
+                for($i = 1; $i < $jumlahIzin; $i++){
+                    $date = explode(" ", strval(Carbon::parse($izin->akhir_izin)->subDays($i - 1)))[0];
                     $absensi = new Absensi;
                     $absensi->user_id = $izin->user_id;
                     $absensi->status = '6';
-                    $absensi->datang = date('Y-m-d') . ' ' . explode(' - ', $user->{$hariIni})[0];
+                    $absensi->datang = $date . ' ' . explode(' - ', $user->{$hariIni})[0];
+                    $absensi->created_at = $date . ' ' . explode(' - ', $user->{$hariIni})[0];
+                    $absensi->updated_at = $date . ' ' . explode(' - ', $user->{$hariIni})[0];
                     $absensi->save();
                 }
             }

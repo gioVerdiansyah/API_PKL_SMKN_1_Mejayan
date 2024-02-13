@@ -28,7 +28,7 @@ class EditProfileController extends Controller
                 }
                 $fileName = $request->file('photo_profile')->hashName();
                 $path = $request->file('photo_profile')->storeAs('photo_siswa', $fileName);
-                $user->photo_profile = 'storage/' . $path;
+                $user->photo_profile = config('app.url') . '/storage/' . $path;
             }
 
             if ($request->no_hp) {
