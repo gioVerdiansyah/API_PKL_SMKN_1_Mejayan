@@ -40,7 +40,7 @@ class IzinController extends Controller
                 ->whereDate('created_at', today())->where('status', '!=', '6')
                 ->exists();
 
-            $hasIzin = Izin::where('user_id', $user->id)->whereDate('created_at', today())->exists();
+            $hasIzin = Absensi::where('user_id', $user->id)->whereDate('created_at', today())->where('status', '6')->exists();
 
             if (!$hasIzin && $request->tipe_izin === "Dispensasi") {
                 $izin = new Izin;
@@ -78,7 +78,7 @@ class IzinController extends Controller
             }
 
             if ($hasIzin) {
-                return response()->json(['success' => false, "message" => "Anda sudah izin pada hari ini"], 403);
+                return response()->json(['success' => false, "message" => "Anda sudah melakukan izin!"], 403);
             }
 
             if ($absenSudahAda) {

@@ -48,7 +48,7 @@ class AbsensiController extends Controller
                 return response()->json(['success' => false, 'message' => 'Anda sudah absen!'], 403);
             }
 
-            $absenIzin = Izin::where('user_id', $user_id)->whereDate('created_at', today())->exists();
+            $absenIzin = Absensi::where('user_id', $user_id)->whereDate('created_at', today())->where('status', '6')->exists();
             if ($absenIzin) {
                 return response()->json(['success' => false, 'message' => "Anda tidak bisa absen karena anda sudah melakukan izin"], 403);
             }
