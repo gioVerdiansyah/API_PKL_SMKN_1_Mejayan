@@ -36,7 +36,6 @@
         const sync = () => {
             let nextUrl = "{{ route('admin.synchronization-data-jurusan') }}";
             let nextPageUrl = '';
-            $("#message").html('');
 
             const makeRequest = () => {
                 console.log(nextUrl);
@@ -49,6 +48,7 @@
                     },
                     dataType: "json",
                     beforeSend: function() {
+                        $("#synchronization").removeAttr('onclick');
                         $("#synchronization").addClass('loading');
                         $("#synchronization p").text("GET DATA API ....");
                     },
@@ -71,6 +71,7 @@
                                 makeRequest();
                             }
                         } else {
+                            $("#synchronization").attr("onclick", "sync()");
                             $("#synchronization").removeClass('loading');
                             $("#synchronization p").text("Fetch Ulang");
 
@@ -90,6 +91,7 @@
                         console.log("Error:", error);
                         $("#synchronization").removeClass('loading');
                         $("#synchronization p").text("Fetch Ulang");
+                        $("#synchronization").attr("onclick", "sync()");
                     }
                 });
             };

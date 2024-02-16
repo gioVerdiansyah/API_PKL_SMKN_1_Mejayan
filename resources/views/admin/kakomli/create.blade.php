@@ -26,7 +26,7 @@
               <select class="select2 form-select  @error('jurusan') is-invalid @enderror" id="jurusan" name="jurusan" data-placeholder="jurusan kakomli">
                   @foreach ($jurusans as $jurusan)
                     <option value="{{ $jurusan->id }}"
-                      {{ old('jurusan') ? 'selected' : '' }}>
+                      {{ old('jurusan') == $jurusan->id ? 'selected' : '' }}>
                       {{ $jurusan->jurusan }}
                     </option>
                   @endforeach

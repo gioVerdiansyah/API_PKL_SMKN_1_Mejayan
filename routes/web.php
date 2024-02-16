@@ -23,7 +23,6 @@ use App\Http\Controllers\Kakomli\PengurusPklController;
 use App\Http\Controllers\Kakomli\RekapPendataanController;
 use App\Http\Controllers\Kakomli\SiswaController;
 use App\Http\Controllers\PrintController;
-use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -184,13 +183,4 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
 
     // authorization
     Route::get('authorizationQR', [AdminController::class, 'authorizationQR'])->name('admin.authorizationQR');
-});
-
-
-// test
-Route::prefix('/test')->group(function(){
-    Route::get('/getColumn', [TestingController::class, 'getColumn']);
-    Route::get('/table-dudi-list', [TestingController::class, 'tableDudiList']);
-    Route::get('/table-pemetaan-dudi', [TestingController::class, 'tablePemetaanDudi']);
-    Route::get('/show-mail', [TestingController::class, 'showEmailTest']);
 });
