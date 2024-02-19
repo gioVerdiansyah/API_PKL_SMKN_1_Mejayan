@@ -224,6 +224,21 @@
                 </div>
                 <div class="modal-body">
                     <div class="col">
+                         <div>
+                            <p class="text-bold">*Note</p>
+                            <ul>
+                                <li>id tidak usah di isi</li>
+                                <li>photo_name tidak usah di isi</li>
+                                <li>Password tidak usah di isi, karena default adalah nis</li>
+                                <li>jurusan_id harus di isi dengan singkatan juruan, misal RPL</li>
+                                <li>kelas_id harus di isi seperti XII RPL 2</li>
+                                <li>senin sampai jumat harus di isi seperti 08:00 - 16:00 jam 8 adalah waktu mulai PKL sedangkan jam 4 adalah waktu pulang PKL, saptu minggu adalah opsional</li>
+                                <li>jenis_kelamin L atau P</li>
+                                <li>created_at tidak usah di isi</li>
+                                <li>updated_at tidak usah di isi</li>
+                                <li>remember_token tidak usah di isi</li>
+                            </ul>
+                        </div>
                         <a href="{{ route('admin.siswa.download_list_table') }}" type="button"
                             class="btn btn-primary">download list kolom</a>
                         <form action="{{ route('admin.siswa.import_data') }}" method="POST"

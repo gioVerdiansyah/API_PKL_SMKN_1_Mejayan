@@ -255,49 +255,6 @@ class SiswaController extends Controller
         }
     }
 
-    // Berurusan dengan Excel
-    public function generateKolom()
-    {
-        return Excel::download(new SiswaExport(), 'tambah_data_siswa_pkl.xlsx');
-    }
-
-    public function importData(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'file_excel' => [
-                'required',
-                'file',
-                'mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'mimes:xlsx',
-            ],
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput()->with('message', [
-                'icon' => 'error',
-                'title' => 'Error validasi',
-                'text' => 'harap masukkan file berupa .xlsx'
-            ]);
-        }
-        try {
-            $file = $request->file('file_excel');
-
-            Excel::import(new SiswaImport, $file);
-
-            return to_route('siswa.index')->with('message', [
-                'icon' => 'success',
-                'title' => 'Success!',
-                'text' => "Berhasil me-import data"
-            ]);
-        } catch (\Exception $e) {
-            return back()->with('message', [
-                'icon' => 'error',
-                'title' => 'Gagal!',
-                'text' => $e
-            ]);
-        }
-    }
-
     public function showPrintAbsensiSiswa(string $siswa_id)
     {
         $siswa = User::where('id', $siswa_id)->first();

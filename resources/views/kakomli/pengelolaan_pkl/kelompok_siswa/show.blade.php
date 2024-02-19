@@ -3,8 +3,8 @@
 @section('content')
     <title>{{ config('app.name', 'Laravel') }} - Detail kelompok {{ $kelompok->nama }}</title>
     <style>
-        #list-siswa li:nth-child(odd){
-            margin-right: 40px
+        #list-siswa li{
+            margin-right: 30px
         }
     </style>
     <div class="card p-4 mb-4 flex-row justify-content-between align-items-center">

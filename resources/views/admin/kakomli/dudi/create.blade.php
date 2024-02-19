@@ -349,6 +349,16 @@
                     </div>
                     <div class="modal-body">
                         <div class="col">
+                            <div>
+                                <p class="text-bold">*Note</p>
+                                <ul>
+                                    <li>id tidak usah di isi</li>
+                                    <li>jurusan_id harus di isi dengan singkatan juruan, misal RPL</li>
+                                    <li>koordinat harus ada koma sebagai misal latitude dan longitude</li>
+                                    <li>created_at tidak usah di isi</li>
+                                    <li>updated_at tidak usah di isi</li>
+                                </ul>
+                            </div>
                             <a href="{{ route('admin.dudi.download_list_table') }}" type="button"
                                 class="btn btn-primary">download list kolom</a>
                             <form action="{{ route('admin.dudi.import_data') }}" method="POST"

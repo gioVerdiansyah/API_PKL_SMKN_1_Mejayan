@@ -141,11 +141,9 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
     Route::post('/import-data-dudi', [AdminDudiController::class, 'importData'])->name('admin.dudi.import_data');
 
     Route::resource('/data-siswa', AdminSiswaController::class)->names('admin.siswa');
+    Route::get('/export-column-siswa', [AdminSiswaController::class, 'generateKolom'])->name('admin.siswa.download_list_table');
+    Route::post('/import-data-siswa', [AdminSiswaController::class, 'importData'])->name('admin.siswa.import_data');
     Route::prefix('/data-siswa')->group(function(){
-        Route::get('/export', [AdminSiswaController::class, 'generateKolom'])->name('admin.siswa.download_list_table');
-        Route::post('/import', [AdminSiswaController::class, 'importData'])->name('admin.siswa.import_data');
-
-
         // print absen & jurnal siswa on Admin
         Route::get('/print-absensi/{siswa_id}', [AdminSiswaController::class, 'showPrintAbsensiSiswa'])->name('admin.siswa.show_print_absensi_siswa');
         Route::post('/print-absensi/{siswa_id}', [AdminSiswaController::class, 'printAbsensiSiswa'])->name('admin.siswa.print_absensi_siswa');

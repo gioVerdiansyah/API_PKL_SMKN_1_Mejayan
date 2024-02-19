@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Guru;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserAuthRequest;
 use App\Models\Guru;
+use App\Models\Kelompok;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -27,11 +29,19 @@ class LoginController extends Controller
             // if auth success, create token
             $token = Auth::guard('guru')->user()->createToken('authToken')->plainTextToken;
             $guru = Guru::with('jurusan')->where('email', $request->email)->orWhere('nama', $request->email)->first();
+            $kelompok = Kelompok::with('anggota')->where('guru_id', $guru->id);
+
+            $jumlahSiswa = User::whereIn('id', $kelompok->get()->pluck('anggota.*.user_id')->collapse()->toArray())->count();
+            $jumlahKelompok = $kelompok->count();
 
             return response()->json([
                     'success' => true,
                     'data' => [
                         'guru' => $guru,
+                        'mengampu' => [
+                            'siswa' => $jumlahSiswa,
+                            'kelompok' => $jumlahKelompok,
+                        ],
                     ],
                     'token' => $token
             ], 200);

@@ -124,6 +124,8 @@ class KelompokSiswaController extends Controller
     public function edit(string $id)
     {
         $kelompok = Kelompok::where('id', $id)->first();
+        $anggotaTerdaftar = AnggotaKelompok::whereNot('kelompok_id', $kelompok->id)->pluck('user_id');
+
         if (!$kelompok) {
             return back()->with('message', [
                 'icon' => 'error',
@@ -134,7 +136,7 @@ class KelompokSiswaController extends Controller
 
         $dudi = Dudi::where('jurusan_id', auth()->guard('kakomli')->user()->jurusan_id)->get();
         $guru = Guru::all();
-        $anggota = User::where('jurusan_id', auth()->guard('kakomli')->user()->jurusan_id)->get();
+        $anggota = User::where('jurusan_id', auth()->guard('kakomli')->user()->jurusan_id)->whereNotIn('id', $anggotaTerdaftar)->get();
         $member = AnggotaKelompok::where('kelompok_id', $kelompok->id)->pluck('user_id')->toArray();
 
         return view('kakomli.pengelolaan_pkl.kelompok_siswa.edit', compact('kelompok', 'dudi', 'guru', 'anggota', 'member'));
