@@ -31,19 +31,19 @@
                         <link rel="stylesheet" href="{{ asset('css/select-for.css') }}">
                         <div class="wrapper mr-3">
                             <div class="option">
-                                <input class="input" type="radio" name="btn" value="option1" checked="">
+                                <input class="input" id="btn-download-siswa" type="radio" name="btn" value="option1" checked="">
                                 <button class="btn" id="btn-siswa">
                                     <span class="span">Siswa</span>
                                 </button>
                             </div>
                             <div class="option">
-                                <input class="input" type="radio" name="btn" value="option2">
-                                <button class="btn" id="btn-siswa">
+                                <input class="input" id="btn-download-pembimbing" type="radio" name="btn" value="option2">
+                                <button class="btn" id="btn-pembimbing">
                                     <span class="span">Pembimbing PKL</span>
                                 </button>
                             </div>
                         </div>
-                        <button class="button-download" type="button">
+                        <button class="button-download" id="button-download-apk" type="button" onclick="window.open(`http://192.168.10.148:8000/login`, '_blank')">
                             <span class="button__text"><i class="fa-brands fa-android"></i> Download</span>
                             <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"
                                     id="bdd05811-e15d-428c-bb53-8661459f9307" data-name="Layer 2" class="svg">
@@ -221,6 +221,18 @@
             </div>
         </div>
         <script>
+            $('#btn-download-siswa').on('change',function(){
+                if(this.checked){
+                    $("#button-download-apk").attr('onclick', `window.open('{{ config('app.apk_siswa') }}')`);
+                }
+            });
+
+            $('#btn-download-pembimbing').on('change',function(e){
+                if(this.checked){
+                    $("#button-download-apk").attr('onclick', `window.open('{{ config('app.apk_pembimbing') }}')`);
+                }
+            });
+
             $("#form-contact-me").on('submit', function(e) {
                 e.preventDefault();
 

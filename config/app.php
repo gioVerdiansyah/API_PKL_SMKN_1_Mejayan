@@ -27,6 +27,9 @@ return [
     'jam_tutup_absen' => env('JAM_TUTUP_ABSEN'),
     'jam_tutup_jurnal' => env('JAM_TUTUP_JURNAL'),
 
+    'apk_siswa' => env('APK_PKL_SISWA'),
+    'apk_pembimbing' => env('APK_PKL_PEMBIMBING'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
