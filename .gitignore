@@ -17,3 +17,5 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+public/apk/pembimbing_pkl.apk
+public/apk/presensi_pkl.apk

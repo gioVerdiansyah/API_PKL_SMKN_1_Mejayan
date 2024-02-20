@@ -43,7 +43,7 @@
                                 </button>
                             </div>
                         </div>
-                        <button class="button-download" id="button-download-apk" type="button" onclick="window.open(`http://192.168.10.148:8000/login`, '_blank')">
+                        <button class="button-download" id="button-download-apk" type="button" onclick="window.open(`{{ config('app.apk_siswa') }}`, '_blank')">
                             <span class="button__text"><i class="fa-brands fa-android"></i> Download</span>
                             <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"
                                     id="bdd05811-e15d-428c-bb53-8661459f9307" data-name="Layer 2" class="svg">
