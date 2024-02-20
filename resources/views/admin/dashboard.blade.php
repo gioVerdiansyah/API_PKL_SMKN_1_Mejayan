@@ -1,7 +1,7 @@
 @extends('layouts.nav-admin')
 
 @section('content')
-    <title>{{ config('app.name', 'Laravel') }} - Dashboard</title>
+    <title>Admin - Dashboard</title>
     <link rel="stylesheet" href="{{ asset('cssAdmin/dashboard.css') }}">
     <div class="row justify-content-center flex-wrap">
         <div class="col-md-3">

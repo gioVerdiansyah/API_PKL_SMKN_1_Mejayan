@@ -1,8 +1,7 @@
 @extends('layouts.nav-kakomli')
 
 @section('content')
-    <title>{{ config('app.name', 'Laravel') }} - Edit dudi</title>
-    <link rel="stylesheet" href="{{ asset('cssAdmin/css/demo1/profile-edit.css') }}">
+    <title>Edit dudi</title>
     <div class="card p-4 mb-4 flex-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">

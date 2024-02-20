@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+    <title>{{ config('app.name') }}</title>
+
     <section class="section gradient-banner">
         <div class="shapes-container">
             <div class="shape" data-aos="fade-down-left" data-aos-duration="1500" data-aos-delay="100"></div>

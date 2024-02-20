@@ -1,7 +1,7 @@
 @extends('layouts.nav-kakomli')
 
 @section('content')
-    <title>{{ config('app.name', 'Laravel') }} - Detail kelompok {{ $kelompok->nama }}</title>
+    <title>Detail kelompok</title>
     <style>
         #list-siswa li{
             margin-right: 30px

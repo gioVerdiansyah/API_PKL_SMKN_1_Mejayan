@@ -1,6 +1,7 @@
 @extends('layouts.nav-admin')
 
 @section('content')
+    <title>Admin - Siswa</title>
     <div class="card px-3 mb-4 flex-md-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">

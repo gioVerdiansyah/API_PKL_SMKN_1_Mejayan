@@ -1,6 +1,7 @@
 @extends('layouts.nav-admin')
 
 @section('content')
+    <title>Admin - Print Jurnal Siswa</title>
     <link rel="stylesheet" href="{{ asset('cssAdmin/vendors/select2/select2.min.css') }}">
     <script src="{{ asset('cssAdmin/js/select2.js') }}"></script>
     <script src="{{ asset('cssAdmin/vendors/select2/select2.min.js') }}"></script>

@@ -1,7 +1,7 @@
 @extends('layouts.nav-admin')
 
 @section('content')
-    <title>{{ config('app.name', 'Laravel') }} - Detail kelompok {{ $kelompok->nama }}</title>
+    <title>Admin - Detail kelompok</title>
     <style>
         #list-siswa li:nth-child(odd){
             margin-right: 40px

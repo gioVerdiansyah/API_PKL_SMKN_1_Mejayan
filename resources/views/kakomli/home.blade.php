@@ -2,7 +2,7 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('cssAdmin/style.css') }}">
-    <title>{{ config('app.name', 'Laravel') }} - Dashboard</title>
+    <title>Dashboard</title>
     <div class="row justify-content-center dashboard-template flex-wrap ">
         <div class="col-md-4 card-dashboard h-100">
             <div class="card card-detail text-white h-100">

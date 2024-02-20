@@ -1,6 +1,7 @@
 @extends('layouts.nav-kakomli')
 
 @section('content')
+<title>Kelompok Siswa PKL</title>
     <div class="card px-3 mb-4 flex-md-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">

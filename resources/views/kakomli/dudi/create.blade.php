@@ -1,7 +1,7 @@
 @extends('layouts.nav-kakomli')
 
 @section('content')
-    <title>{{ config('app.name', 'Laravel') }} - Tambah dudi</title>
+    <title>Tambah dudi</title>
     <div class="card p-4 mb-4 flex-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">

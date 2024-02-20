@@ -1,7 +1,7 @@
 @extends('layouts.nav-admin')
 
 @section('content')
-    <title>{{ config('app.name', 'Laravel') }} - Detail dudi {{ $siswa->nama }}</title>
+    <title>Admin - Detail dudi {{ $siswa->nama }}</title>
     <link rel="stylesheet" href="{{ asset('cssAdmin/css/demo1/profile-edit.css') }}">
     <div class="card p-4 mb-4 flex-row justify-content-between align-items-center">
         <div>

@@ -1,7 +1,7 @@
 @extends('layouts.nav-admin')
 
 @section('content')
-    <title>{{ config('app.name', 'Laravel') }} - Tambah Kelompok Siswa PKL</title>
+    <title>Admin - Tambah Kelompok Siswa PKL</title>
     <link rel="stylesheet" href="{{ asset('cssAdmin/vendors/select2/select2.min.css') }}">
     <script src="{{ asset('cssAdmin/js/select2.js') }}"></script>
     <script src="{{ asset('cssAdmin/vendors/select2/select2.min.js') }}"></script>

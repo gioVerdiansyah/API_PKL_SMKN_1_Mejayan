@@ -1,7 +1,7 @@
 @extends('layouts.nav-kakomli')
 
 @section('content')
-    <title>{{ config('app.name', 'Laravel') }} - Tambah siswa PKL</title>
+    <title>Tambah siswa PKL</title>
     <link rel="stylesheet" href="{{ asset('css/profile-edit.css') }}">
     <div class="card p-4 mb-4 flex-row justify-content-between align-items-center">
         <div>

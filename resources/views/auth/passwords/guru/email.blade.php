@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<title>Cek Email</title>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8" style="padding: 100px 30px">

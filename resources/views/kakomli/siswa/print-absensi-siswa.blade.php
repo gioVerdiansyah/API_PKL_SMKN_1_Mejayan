@@ -1,6 +1,7 @@
 @extends('layouts.nav-kakomli')
 
 @section('content')
+    <title>Print Absensi Siswa PKL</title>
     <div class="card p-4 mb-4 flex-md-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">

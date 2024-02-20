@@ -2,7 +2,7 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/profile-edit.css') }}">
-    <title>{{ config('app.name', 'Laravel') }} - Edit Profile</title>
+    <title>Edit Profile</title>
     <div class="card p-4 mb-4 flex-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">
