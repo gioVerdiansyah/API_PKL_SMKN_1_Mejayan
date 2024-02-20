@@ -29,8 +29,7 @@ class Kernel extends ConsoleKernel
                     ]);
                 }
             }
-        // })->dailyAt($jamTutupAbsen);
-        })->everyMinute();
+        })->dailyAt($jamTutupAbsen);
 
         $schedule->call(function () {
             $users = \App\Models\User::all();
@@ -45,8 +44,7 @@ class Kernel extends ConsoleKernel
                     ]);
                 }
             }
-        // })->dailyAt($jamTutupJurnal);
-        })->everyMinute();
+        })->dailyAt($jamTutupJurnal);
     }
 
     /**
