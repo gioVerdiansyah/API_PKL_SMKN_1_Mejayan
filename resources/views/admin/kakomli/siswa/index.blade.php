@@ -2,7 +2,7 @@
 
 @section('content')
     <title>Admin - Siswa</title>
-    <div class="card px-3 mb-4 flex-md-row justify-content-between align-items-center">
+    <div class="card px-3 mb-4 flex-md-row justify-content-between align-items-center py-3 py-md-0">
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
@@ -10,7 +10,7 @@
                 </ol>
             </nav>
         </div>
-        <div class="d-flex align-items-center">
+        <div class="d-flex flex-column flex-md-row align-items-md-center">
             <div class="col-md-6 col-12 me-3 col-lg-4 pk-0">
                 <select name="jurusan" class="form-select" id="jurusan">
                     <option selected>Semua</option>

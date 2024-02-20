@@ -14,14 +14,14 @@
     </div>
     <div class="card p-4">
         <div class="d-flex flex-column align-items-center pb-5">
-            <h4 class="mt-2">Tambah Dudi</h4>
+            <h4 class="mt-2">Edit Dudi</h4>
         </div>
         <form action="{{ route('dudi.update', $dudi->id) }}" method="POST">
             @method('PUT')
             @csrf
-            <div class="d-flex flex-column align-items-center">
+            <div class="d-flex flex-column align-items-md-center">
                 <label for="nama" class="form-label">Nama Dudi</label>
-                <input type="text" class="form-control w-25 @error('nama') is-invalid @enderror" placeholder="nama dudi"
+                <input type="text" class="form-control w-md-25 @error('nama') is-invalid @enderror" placeholder="nama dudi"
                     name="nama" id="nama" value="{{ old('nama', $dudi->nama) }}">
                 @error('nama')
                     <div>

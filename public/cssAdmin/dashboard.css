@@ -46,3 +46,12 @@
     animation-delay: 1.5s;
     color: rgba(121, 135, 161, 0.05);
 }
+
+
+/* Media Query */
+
+@media screen and (max-width: 560px) {
+    .col-md-3 {
+        margin: 5px 0;
+    }
+}

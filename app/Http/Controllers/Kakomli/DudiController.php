@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Kakomli;
 use App\Exports\DudiExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DudiStoreRequest;
+use App\Http\Requests\DudiUpdateRequest;
 use App\Imports\DudiImport;
 use App\Models\Dudi;
 use Illuminate\Http\Request;
@@ -110,7 +111,7 @@ class DudiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(DudiUpdateRequest $request, string $id)
     {
         try {
             DB::beginTransaction();

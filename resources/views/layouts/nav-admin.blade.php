@@ -105,7 +105,7 @@
                             <span class="link-title ms-3">Pengurus PKL</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('admin.siswa-kelompok.*') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->routeIs('admin.kelompok-siswa.*') ? 'active' : '' }}">
                         <a href="{{ route('admin.kelompok-siswa.index') }}" class="nav-link">
                             <i class="link-icon" data-feather="grid"></i>
                             <span class="link-title">Kelompok Siswa</span>
@@ -209,10 +209,10 @@
             <!-- partial:partials/_footer.html -->
             <footer
                 class="footer d-flex flex-column flex-md-row align-items-center justify-content-between px-4 py-3 border-top small">
-                <p class="text-muted mb-1 mb-md-0">Copyright © 2023 <a
-                        href="https://www.google.com/search?q=hummatech&rlz=1C1FKPE_idID1058ID1058&oq=hummatech&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIPCAEQLhgKGMcBGNEDGIAEMgkIAhAAGAoYgAQyBggDEEUYPDIGCAQQRRg8MgYIBRBFGDzSAQgxNzIxajBqN6gCALACAA&sourceid=chrome&ie=UTF-8"
+                <p class="text-muted mb-1 mb-md-0">Copyright © {{ date('Y') }} <a
+                        href="{{ config('app.url') }}"
                         target="_blank">{{ config('app.name') }}</a>.</p>
-                <p class="text-muted">Di buat oleh Hummaprofile <i class="mb-1 text-primary ms-1 icon-sm"
+                <p class="text-muted">Di buat oleh Verdiansyah <i class="mb-1 text-primary ms-1 icon-sm"
                         data-feather="heart"></i></p>
             </footer>
             <!-- partial -->

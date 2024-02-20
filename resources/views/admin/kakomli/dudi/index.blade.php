@@ -2,7 +2,7 @@
 
 @section('content')
     <title>Admin - DuDi</title>
-    <div class="card px-3 mb-4 flex-md-row justify-content-between align-items-center">
+    <div class="card px-3 mb-4 flex-md-row justify-content-between align-items-center py-3 py-md-0">
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
@@ -10,7 +10,7 @@
                 </ol>
             </nav>
         </div>
-        <div class="d-flex justify-content-center my-3">
+        <div class="d-flex justify-content-md-center flex-column flex-md-row my-3">
             <div class="col-md-6 col-12 me-3 col-lg-4 pk-0">
                 <select name="jurusan" class="form-select" id="jurusan">
                     <option selected>Semua</option>
@@ -21,7 +21,7 @@
                     @endforeach
                 </select>
             </div>
-            <form method="get" class="form-inline d-flex flex-row gap-1">
+            <form method="get" class="form-inline d-flex flex-row gap-1 py-2 py-md-0">
                 <input class="form-control mr-sm-2 py-0" type="search" name="query" placeholder="Search"
                     aria-label="Search" value="{{ request('query') }}">
                 <button class="btn btn-outline-primary py-0 my-sm-0" type="submit"><i

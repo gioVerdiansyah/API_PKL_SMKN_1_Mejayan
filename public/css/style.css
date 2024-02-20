@@ -429,7 +429,7 @@ button:focus,
 
 .main-nav {
     background: #fff;
-    z-index: 1;
+    z-index: 1000;
 }
 
 .main-nav .navbar-brand {

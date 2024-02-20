@@ -2,7 +2,7 @@
 
 @section('content')
     <title>Admin - Kakomli</title>
-    <div class="card p-4 mb-4 flex-row justify-content-between align-items-center">
+    <div class="card mb-4 flex-row justify-content-between align-items-center p-3">
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">

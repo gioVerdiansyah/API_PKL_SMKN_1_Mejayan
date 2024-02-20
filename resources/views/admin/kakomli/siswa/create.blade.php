@@ -3,7 +3,7 @@
 @section('content')
     <title>Admin - Tambah siswa PKL</title>
     <link rel="stylesheet" href="{{ asset('css/profile-edit.css') }}">
-    <div class="card p-4 mb-4 flex-row justify-content-between align-items-center">
+    <div class="card p-4 mb-4 flex-row justify-content-md-between flex-column flex-md-row align-items-center">
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-dot mb-0">
