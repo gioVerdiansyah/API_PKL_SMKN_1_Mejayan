@@ -41,6 +41,18 @@
 
                         <div class="row mb-3">
                             <div class="col-md-6 offset-md-4">
+                                <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                                <div class="g-recaptcha" id="feedback-recaptcha"
+                                    data-sitekey="{{ config('app.google_recaptcha_key') }}">
+                                </div>
+                                @error('g-recaptcha-response')
+                                    <p class="text-danger">Google Recaptcha tidak valid</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6 offset-md-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
@@ -51,14 +63,6 @@
                             </div>
                         </div>
 
-                        {{-- <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-                                <div class="g-recaptcha" id="feedback-recaptcha"
-                                    data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}">
-                                </div>
-                            </div>
-                        </div> --}}
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">

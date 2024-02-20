@@ -7,7 +7,7 @@ class Recaptcha implements Rule {
 	}
 
 	public function passes($attribute, $value) {
-		$data = array('secret' => env('GOOGLE_RECAPTCHA_SECRET'),
+		$data = array('secret' => config('app.google_recaptcha_secret'),
 			'response' => $value);
 
 		try {

@@ -30,6 +30,9 @@ return [
     'apk_siswa' => env('APK_PKL_SISWA'),
     'apk_pembimbing' => env('APK_PKL_PEMBIMBING'),
 
+    'google_recaptcha_key' => env('GOOGLE_RECAPTCHA_KEY'),
+    'google_recaptcha_secret' => env('GOOGLE_RECAPTCHA_SECRET'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
