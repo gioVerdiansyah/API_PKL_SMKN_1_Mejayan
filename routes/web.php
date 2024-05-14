@@ -87,7 +87,7 @@ Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
     Route::put('/edit-profile', [EditProfileKakomliController::class, 'update'])->name('kakomli.update_profile');
 
     Route::resource('/dudi', DudiController::class);
-    Route::prefix('/dudi')->group(function(){
+    Route::prefix('/dudi/excel')->group(function(){
         Route::get('/export', [DudiController::class, 'generateKolom'])->name('dudi.download_list_table');
         Route::post('/import', [DudiController::class, 'importData'])->name('dudi.import_data');
     });
@@ -95,8 +95,10 @@ Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
     Route::resource('/siswa-siswi', SiswaController::class)->names('siswa');
     Route::prefix('/siswa-siswi')->group(function(){
 
-        Route::get('/export', [SiswaController::class, 'generateKolom'])->name('siswa.download_list_table');
-        Route::post('/import', [SiswaController::class, 'importData'])->name('siswa.import_data');
+        Route::prefix('/excel')->group(function(){
+            Route::get('/export', [SiswaController::class, 'generateKolom'])->name('siswa.download_list_table');
+            Route::post('/import', [SiswaController::class, 'importData'])->name('siswa.import_data');
+        });
 
         // print absen & jurnal siswa on kakomli
         Route::get('/print-absensi/{siswa_id}', [SiswaController::class, 'showPrintAbsensiSiswa'])->name('siswa.show_print_absensi_siswa');

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->text('kegiatan');
             $table->string('bukti')->nullable();
-            $table->enum('status', ['0', '1', '2', '3'])->default(0)->comment("0=Netral,1=disetujui,2=ditolak,3=tidak mengisi");
+            $table->enum('status', ['0', '1', '2', '3', '4'])->default(0)->comment("0=Netral,1=disetujui,2=ditolak,3=tidak mengisi,4=izin/cuti/halangan");
             $table->text('keterangan')->nullable();
             $table->timestamps();
         });

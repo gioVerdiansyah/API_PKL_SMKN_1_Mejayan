@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Kakomli;
 use App\Exports\SiswaExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PrintAbsensiRequest;
-use App\Http\Requests\UserStoreAPIRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Imports\SiswaImport;
@@ -366,5 +365,48 @@ class SiswaController extends Controller
             unlink($path);
         }
         return view('generate_pdf.jurnal_siswa', ['dataJurnal' => $jurnal, 'user' => $user, 'kelompok' => $kelompok, 'isRekap' => true]);
+    }
+
+    // Berurusan dengan Excel
+    public function generateKolom()
+    {
+        return Excel::download(new SiswaExport(), 'tambah_data_siswa.xlsx');
+    }
+
+    public function importData(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file_excel' => [
+                'required',
+                'file',
+                'mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'mimes:xlsx',
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput()->with('message', [
+                'icon' => 'error',
+                'title' => 'Error validasi',
+                'text' => 'harap masukkan file berupa .xlsx'
+            ]);
+        }
+        try {
+            $file = $request->file('file_excel');
+
+            Excel::import(new SiswaImport, $file);
+
+            return to_route('siswa.index')->with('message', [
+                'icon' => 'success',
+                'title' => 'Success!',
+                'text' => "Berhasil me-import data"
+            ]);
+        } catch (\Exception $e) {
+            return back()->with('message', [
+                'icon' => 'error',
+                'title' => 'Gagal!',
+                'text' => $e
+            ]);
+        }
     }
 }
