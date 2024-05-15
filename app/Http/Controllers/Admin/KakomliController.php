@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KakomliStoreRequest;
 use App\Http\Requests\KakomliUpdateRequest;
+use App\Models\Guru;
 use App\Models\Jurusan;
 use App\Models\Kakomli;
 use Illuminate\Http\Request;
@@ -45,8 +46,15 @@ class KakomliController extends Controller
             $kakomli->jurusan_id = $request->jurusan;
             $kakomli->nama = $request->nama;
             $kakomli->email = $request->email;
-            $kakomli->password = Hash::make($request->password);
+            $kakomli->password = Hash::make($request->nip);
             $kakomli->save();
+
+            $guru = new Guru();
+            $guru->nama = $request->nama;
+            $guru->email = $request->email;
+            $guru->no_hp = $request->no_hp;
+            $guru->password = Hash::make($request->nip);
+            $guru->save();
 
             DB::commit();
             return to_route('kakomli.index')->with('message' , [
@@ -78,7 +86,9 @@ class KakomliController extends Controller
                 'text' => "ID kakomli tidak ditemukan"
             ]);
         }
-        return view('admin.kakomli.edit', compact('kakomli', 'jurusans'));
+
+        $guru = Guru::where('nama', $kakomli->nama)->first();
+        return view('admin.kakomli.edit', compact('kakomli', 'jurusans', 'guru'));
     }
 
     /**
@@ -89,6 +99,7 @@ class KakomliController extends Controller
         try{
             DB::beginTransaction();
             $kakomli = Kakomli::where('id', $id)->first();
+            $guru = Guru::where('id', $request->guru_id)->first();
             if (!$kakomli) {
                 return back()->with('message', [
                     'icon' => 'error',
@@ -101,8 +112,13 @@ class KakomliController extends Controller
             $kakomli->nama = $request->nama;
             $kakomli->email = $request->email;
 
+            $guru->nama = $request->nama;
+            $guru->email = $request->email;
+            $guru->no_hp = $request->no_hp;
+
             if($request->password !== null){
                 $kakomli->password = Hash::make($request->password);
+                $guru->password = Hash::make($request->password);
             }
 
             if($request->hasFile('photo_profile')){
@@ -114,9 +130,12 @@ class KakomliController extends Controller
                 $fileName = $request->file('photo_profile')->hashName();
                 $path = $request->file('photo_profile')->storeAs('photo_profile', $fileName);
                 $kakomli->photo_profile = 'storage/' . $path;
+
+                $guru->photo_profile = config('app.url') . '/storage/' . $path;
             }
 
             $kakomli->save();
+            $guru->save();
 
             DB::commit();
             return to_route('kakomli.index')->with('message', [

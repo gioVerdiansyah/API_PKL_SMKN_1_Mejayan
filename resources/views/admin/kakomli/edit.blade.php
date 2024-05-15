@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{{ asset('cssAdmin/vendors/select2/select2.min.css') }}">
     <script src="{{ asset('cssAdmin/js/select2.js') }}"></script>
     <script src="{{ asset('cssAdmin/vendors/select2/select2.min.js') }}"></script>
-      <link rel="stylesheet" href="{{ asset('css/profile-edit.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/profile-edit.css') }}">
     <div class="card p-4 mb-4 flex-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">
@@ -22,6 +22,7 @@
                 enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
+                <input type="text" name="guru_id" value="{{ old('guru_id', $guru->id) }}">
                 <div class="col-md-12 row mb-3">
                     <div class="d-flex flex-column align-items-center pb-5">
                         <label for="potoProfile" class="image-hover">
@@ -74,6 +75,16 @@
                             @enderror
                         </div>
                         <div class="mb-3">
+                            <label class="form-label" for="email">Nomor Telepon (62xxx)</label>
+                            <input type="number" class="form-control @error('no_hp') is-invalid @enderror" id="no_hp"
+                                name="no_hp" placeholder="Nomor HP yang aktif" value="{{ old('no_hp', $guru->no_hp) }}">
+                            @error('no_hp')
+                                <div class="invalid-feedback">
+                                    <p>{{ $message }}</p>
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label" for="password">Password</label>
                             <input type="password" class="form-control @error('password') is-invalid @enderror"
                                 id="password" name="password" placeholder="password kakomli"
@@ -99,18 +110,18 @@
         });
 
         document.getElementById('potoProfile').addEventListener('change', function(event) {
-        const inputFile = event.target;
-        const profileImage = document.getElementById('profileImage');
+            const inputFile = event.target;
+            const profileImage = document.getElementById('profileImage');
 
-        if (inputFile.files && inputFile.files[0]) {
-            const reader = new FileReader();
+            if (inputFile.files && inputFile.files[0]) {
+                const reader = new FileReader();
 
-            reader.onload = function (e) {
-                profileImage.src = e.target.result;
-            };
+                reader.onload = function(e) {
+                    profileImage.src = e.target.result;
+                };
 
-            reader.readAsDataURL(inputFile.files[0]);
-        }
-    });
+                reader.readAsDataURL(inputFile.files[0]);
+            }
+        });
     </script>
 @endsection

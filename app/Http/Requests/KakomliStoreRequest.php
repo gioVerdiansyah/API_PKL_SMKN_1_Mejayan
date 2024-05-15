@@ -25,7 +25,8 @@ class KakomliStoreRequest extends FormRequest
             'jurusan' => 'required|uuid',
             'nama' => 'required|string|max:255|unique:kakomlis,nama',
             'email' => 'required|email|unique:kakomlis,email',
-            'password' => 'required|string|min:8',
+            'nip' => 'required|integer',
+            'no_hp' => 'required|regex:/^62\d+$/'
         ];
     }
 }

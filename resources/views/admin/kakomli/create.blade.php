@@ -58,10 +58,20 @@
               @enderror
             </div>
             <div class="mb-3">
-              <label class="form-label" for="password">Password</label>
-              <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
-                name="password" placeholder="password kakomli" value="{{ old('password') }}">
-              @error('password')
+              <label class="form-label" for="email">Nomor Telepon (62xxx)</label>
+              <input type="number" class="form-control @error('no_hp') is-invalid @enderror" id="no_hp"
+                name="no_hp" placeholder="Nomor HP yang aktif" value="{{ old('no_hp') }}">
+              @error('no_hp')
+                <div class="invalid-feedback">
+                  <p>{{ $message }}</p>
+                </div>
+              @enderror
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="email">NIP</label>
+              <input type="number" class="form-control @error('nip') is-invalid @enderror" id="nip"
+                name="nip" placeholder="NIP guru" value="{{ old('nip') }}">
+              @error('nip')
                 <div class="invalid-feedback">
                   <p>{{ $message }}</p>
                 </div>
