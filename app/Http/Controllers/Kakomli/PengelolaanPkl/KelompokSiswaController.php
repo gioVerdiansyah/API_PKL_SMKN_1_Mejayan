@@ -8,6 +8,7 @@ use App\Http\Requests\KelompokSiswaUpdateRequest;
 use App\Models\AnggotaKelompok;
 use App\Models\Dudi;
 use App\Models\Guru;
+use App\Models\Jurusan;
 use App\Models\Kelompok;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -71,9 +72,15 @@ class KelompokSiswaController extends Controller
         try {
             DB::beginTransaction();
 
+            $kakomli = auth()->guard('kakomli')->user();
+            $jurusan = Jurusan::where('id', $kakomli->jurusan->id)->first();
+            $prev_kelompok = Kelompok::latest()->where('kakomli_id', $kakomli->id)->first();
+            $num_kl = $prev_kelompok ? intval(explode($jurusan->jurusan . ' ', $prev_kelompok)[1]) + 1 : 1;
+            $nama_kelompok = $prev_kelompok ? "Kelompok {$prev_kelompok->nama_kelompok} $num_kl" : "Kelompok {$jurusan->jurusan} 1";
+
             $kelompok = new Kelompok;
-            $kelompok->nama_kelompok = $request->nama_kelompok;
-            $kelompok->kakomli_id = auth()->guard('kakomli')->user()->id;
+            $kelompok->nama_kelompok = $nama_kelompok;
+            $kelompok->kakomli_id = $kakomli->id;
             $kelompok->dudi_id = $request->dudi_id;
             $kelompok->guru_id = $request->guru_id;
             $kelompok->save();

@@ -22,7 +22,6 @@ class KelompokSiswaStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_kelompok' => 'required|max:30|unique:kelompoks,nama_kelompok',
             'guru_id' => 'required|string|uuid|exists:gurus,id',
             'dudi_id' => 'required|string|uuid|unique:kelompoks,dudi_id|exists:dudis,id',
             'anggota' => 'required|array|min:1',

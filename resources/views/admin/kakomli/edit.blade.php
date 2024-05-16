@@ -22,7 +22,7 @@
                 enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
-                <input type="text" name="guru_id" value="{{ old('guru_id', $guru->id) }}">
+                <input type="text" name="guru_id" value="{{ old('guru_id', $guru->id) }}" hidden>
                 <div class="col-md-12 row mb-3">
                     <div class="d-flex flex-column align-items-center pb-5">
                         <label for="potoProfile" class="image-hover">

@@ -49,9 +49,9 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        $jurusan = Jurusan::all();
-        $kelas = Kelas::all();
-        return view('kakomli.siswa.create', compact('jurusan', 'kelas'));
+        $jurusan = Jurusan::where('id', auth()->guard('kakomli')->user()->jurusan_id)->first();
+        $kelas = Kelas::where('kelas', "LIKE", '%' . $jurusan->jurusan . '%')->get();
+        return view('kakomli.siswa.create', compact('kelas'));
     }
 
     /**
@@ -66,12 +66,12 @@ class SiswaController extends Controller
             $siswa->name = $request->nama;
             $siswa->nis = $request->nis;
             $siswa->email = $request->email;
-            $siswa->password = Hash::make($request->password ?? 'password');
+            $siswa->password = Hash::make($request->nis);
             $siswa->no_hp = $request->no_telp;
             $siswa->no_hp_ortu = $request->no_hp_ortu;
             $siswa->absen = $request->absen;
             $siswa->kelas_id = $request->kelas;
-            $siswa->jurusan_id = $request->jurusan;
+            $siswa->jurusan_id = auth()->guard('kakomli')->user()->jurusan_id;
             $siswa->jenis_kelamin = $request->jenis_kelamin;
             $siswa->alamat = $request->alamat;
             $siswa->senin = $request->senin;
@@ -163,12 +163,11 @@ class SiswaController extends Controller
             $siswa->name = $request->nama;
             $siswa->nis = $request->nis;
             $siswa->email = $request->email;
-            $siswa->password = Hash::make($request->password ?? 'password');
+            $siswa->password = Hash::make($request->nis);
             $siswa->no_hp = $request->no_telp;
             $siswa->no_hp_ortu = $request->no_hp_ortu;
             $siswa->absen = $request->absen;
             $siswa->kelas_id = $request->kelas;
-            $siswa->jurusan_id = $request->jurusan;
             $siswa->jenis_kelamin = $request->jenis_kelamin;
             $siswa->alamat = $request->alamat;
             $siswa->senin = $request->senin;

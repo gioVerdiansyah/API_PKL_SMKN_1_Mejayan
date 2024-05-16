@@ -24,19 +24,6 @@
             @method('PUT')
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <label for="nama" class="form-label">Nama Kelompok</label>
-
-                            <input type="text" class="form-control @error('nama_kelompok') is-invalid @enderror"
-                                placeholder="nama kelompok" name="nama_kelompok" id="nama" value="{{ old('nama_kelompok', $kelompok->nama_kelompok) }}">
-                            @error('nama_kelompok')
-                                <div>
-                                    <p class="text-danger mt-2">{{ $message }}</p>
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
 
                     <div class="row mt-3">
                         <div class="col-md-12">

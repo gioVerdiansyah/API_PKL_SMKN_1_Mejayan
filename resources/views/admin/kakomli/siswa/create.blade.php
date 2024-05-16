@@ -68,20 +68,6 @@
 
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <label for="password" class="form-label">Password</label>
-
-                            <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                placeholder="password siswa" name="password" id="password">
-                            @error('password')
-                                <div>
-                                    <p class="text-danger mt-2">{{ $message }}</p>
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-12">
                             <label for="email" class="form-label">Email</label>
 
                             <input type="email" class="form-control @error('email') is-invalid @enderror"
@@ -207,6 +193,105 @@
                     </div>
                 </div>
             </div>
+
+            <span class="fw-bold">Jam Dudi</span>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="senin" class="form-label">Senin</label>
+                                <input type="text" class="form-control @error('senin') is-invalid @enderror"
+                                    placeholder="jam masuk senin" name="senin" id="senin"
+                                    value="{{ old('senin', '08:00 - 16:00') }}" required>
+                                @error('senin')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="rabu" class="form-label">Rabu</label>
+                                <input type="text" class="form-control @error('rabu') is-invalid @enderror"
+                                    placeholder="jam masuk rabu" name="rabu" id="rabu"
+                                    value="{{ old('rabu', '08:00 - 16:00') }}" required>
+                                @error('rabu')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="jumat" class="form-label">Juma'at</label>
+                                <input type="text" class="form-control @error('jumat') is-invalid @enderror"
+                                    placeholder="jam masuk jumat" name="jumat" id="jumat"
+                                    value="{{ old('jumat', '08:00 - 16:00') }}" required>
+                                @error('jumat')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="minggu" class="form-label">Minggu</label>
+                                <input type="text" class="form-control @error('minggu') is-invalid @enderror"
+                                    placeholder="jam masuk minggu" name="minggu" id="minggu"
+                                    value="{{ old('minggu') }}">
+                                @error('minggu')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="selasa" class="form-label">Selasa</label>
+                                <input type="text" class="form-control @error('selasa') is-invalid @enderror"
+                                    placeholder="jam masuk selasa" name="selasa" id="selasa"
+                                    value="{{ old('selasa', '08:00 - 16:00') }}" required>
+                                @error('selasa')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="kamis" class="form-label">Kamis</label>
+                                <input type="text" class="form-control @error('kamis') is-invalid @enderror"
+                                    placeholder="jam masuk kamis" name="kamis" id="kamis"
+                                    value="{{ old('kamis', '08:00 - 16:00') }}" required>
+                                @error('kamis')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <label for="sabtu" class="form-label">Sabtu</label>
+                                <input type="text" class="form-control @error('sabtu') is-invalid @enderror"
+                                    placeholder="jam masuk sabtu" name="sabtu" id="sabtu"
+                                    value="{{ old('sabtu') }}">
+                                @error('sabtu')
+                                    <div>
+                                        <p class="text-danger mt-2">{{ $message }}</p>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             <div class="col-md12 mt-5 text-start">
                 <button type="submit" class="btn btn-primary profile-button">Tambah Siswa</button>

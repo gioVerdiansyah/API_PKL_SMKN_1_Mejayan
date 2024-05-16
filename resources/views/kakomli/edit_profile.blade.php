@@ -62,7 +62,20 @@
                         </div>
                     </div>
 
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label for="no_hp" class="form-label">No HP</label>
 
+                            <input type="number" class="form-control @error('no_hp') is-invalid @enderror"
+                                placeholder="no_hp Anda" name="no_hp" id="no_hp"
+                                value="{{ old('no_hp', $guru->no_hp) }}">
+                            @error('no_hp')
+                                <div>
+                                    <p class="text-danger mt-2">{{ $message }}</p>
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6 mb-3">
                     <div class="row mt-3">
@@ -87,6 +100,20 @@
                             <input type="password" class="form-control @error('confirm_pass') is-invalid @enderror"
                                 placeholder="Konfirmasi Password Anda" name="confirm_pass" id="confirm_pass">
                             @error('confirm_pass')
+                                <div>
+                                    <p class="text-danger mt-2">{{ $message }}</p>
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label for="confirm_pass" class="form-label">Deskripsi singkat Anda</label>
+
+                            <textarea type="text" class="form-control @error('deskripsi') is-invalid @enderror" placeholder="deskripsi"
+                                name="deskripsi" id="deskripsi" rows="5">{{ old('alamat', $guru->deskripsi) }}</textarea>
+                            @error('deskripsi')
                                 <div>
                                     <p class="text-danger mt-2">{{ $message }}</p>
                                 </div>

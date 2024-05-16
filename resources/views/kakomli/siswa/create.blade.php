@@ -68,20 +68,6 @@
 
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <label for="password" class="form-label">Password</label>
-
-                            <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                placeholder="password siswa" name="password" id="password">
-                            @error('password')
-                                <div>
-                                    <p class="text-danger mt-2">{{ $message }}</p>
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-12">
                             <label for="email" class="form-label">Email</label>
 
                             <input type="email" class="form-control @error('email') is-invalid @enderror"
@@ -100,6 +86,11 @@
 
                             <input type="number" class="form-control" placeholder="no telp" name="no_telp" id="no_telp"
                                 value="{{ old('no_telp') }}">
+                            @error('no_telp')
+                                <div>
+                                    <p class="text-danger mt-2">{{ $message }}</p>
+                                </div>
+                            @enderror
                         </div>
                     </div>
 
@@ -109,6 +100,11 @@
 
                             <input type="number" class="form-control" placeholder="no hp ortu" name="no_hp_ortu"
                                 id="no_hp_ortu" value="{{ old('no_hp_ortu') }}">
+                            @error('no_hp_ortu')
+                                <div>
+                                    <p class="text-danger mt-2">{{ $message }}</p>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -139,23 +135,6 @@
                                 @endforeach
                             </select>
                             @error('kelas')
-                                <div>
-                                    <p class="text-danger mt-2">{{ $message }}</p>
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <label for="jurusan" class="form-label">Jurusan</label>
-
-                            <select name="jurusan" id="jurusan" class="form-select">
-                                @foreach ($jurusan as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ old('jurusan') == $item->id ? 'selected' : '' }}>{{ $item->jurusan }}</option>
-                                @endforeach
-                            </select>
-                            @error('jurusan')
                                 <div>
                                     <p class="text-danger mt-2">{{ $message }}</p>
                                 </div>
@@ -330,7 +309,8 @@
                                 <li>Password tidak usah di isi, karena default adalah nis</li>
                                 <li>jurusan_id harus di isi dengan singkatan juruan, misal RPL</li>
                                 <li>kelas_id harus di isi seperti XII RPL 2</li>
-                                <li>senin sampai jumat harus di isi seperti 08:00 - 16:00 jam 8 adalah waktu mulai PKL sedangkan jam 4 adalah waktu pulang PKL, saptu minggu adalah opsional</li>
+                                <li>senin sampai jumat harus di isi seperti 08:00 - 16:00 jam 8 adalah waktu mulai PKL
+                                    sedangkan jam 4 adalah waktu pulang PKL, saptu minggu adalah opsional</li>
                                 <li>jenis_kelamin L atau P</li>
                                 <li>created_at tidak usah di isi</li>
                                 <li>updated_at tidak usah di isi</li>

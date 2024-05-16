@@ -29,7 +29,7 @@ class SiswaImport implements ToCollection, WithHeadingRow
                 $user = new User;
                 $user->name = $row['name'];
                 $user->email = $row['email'];
-                $user->password = Hash::make($row['password'] ?? 'password');
+                $user->password = Hash::make($row['nis']);
                 $user->jurusan_id = Auth::guard('kakomli')->user()->jurusan_id;
                 $user->kelas_id = $kelas->id;
                 $user->absen = $row['absen'];

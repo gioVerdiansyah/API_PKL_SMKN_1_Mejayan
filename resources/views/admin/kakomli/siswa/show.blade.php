@@ -135,8 +135,8 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-12 mt-1">
-                            <label class="form-label">Saptu</label>
-                            <p>{{ $siswa->saptu ?? 'libur' }}</p>
+                            <label class="form-label">Sabtu</label>
+                            <p>{{ $siswa->sabtu ?? 'libur' }}</p>
                         </div>
                     </div>
                 </div>

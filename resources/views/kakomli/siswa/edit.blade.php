@@ -25,8 +25,7 @@
             <div class="d-flex flex-column align-items-center pb-2">
                 <label for="potoProfile" class="image-hover">
                     <span class="edit-icon"></span>
-                    <img id="profileImage" src="{{ asset($siswa->photo_profile) }}" alt="Photo profile"
-                        width="100">
+                    <img id="profileImage" src="{{ asset($siswa->photo_profile) }}" alt="Photo profile" width="100">
                 </label>
                 <input type="file" name="photo_profile" id="potoProfile" class="d-none">
                 @error('poto_profile')
@@ -41,7 +40,8 @@
                             <label for="nama" class="form-label">Nama</label>
 
                             <input type="text" class="form-control @error('nama') is-invalid @enderror"
-                                placeholder="nama siswa" name="nama" id="nama" value="{{ old('nama', $siswa->name) }}">
+                                placeholder="nama siswa" name="nama" id="nama"
+                                value="{{ old('nama', $siswa->name) }}">
                             @error('nama')
                                 <div>
                                     <p class="text-danger mt-2">{{ $message }}</p>
@@ -57,20 +57,6 @@
                             <input type="text" class="form-control @error('nis') is-invalid @enderror" placeholder="NIS"
                                 name="nis" id="nis" value="{{ old('nis', $siswa->nis) }}">
                             @error('nis')
-                                <div>
-                                    <p class="text-danger mt-2">{{ $message }}</p>
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <label for="password" class="form-label">Password</label>
-
-                            <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                placeholder="password siswa" name="password" id="password">
-                            @error('password')
                                 <div>
                                     <p class="text-danger mt-2">{{ $message }}</p>
                                 </div>
@@ -97,7 +83,12 @@
                             <label for="no_telp" class="form-label">No Telp</label>
 
                             <input type="number" class="form-control" placeholder="no telp" name="no_telp" id="no_telp"
-                                value="{{ old('no_telp',$siswa->no_hp) }}">
+                                value="{{ old('no_telp', $siswa->no_hp) }}">
+                            @error('no_telp')
+                                <div>
+                                    <p class="text-danger mt-2">{{ $message }}</p>
+                                </div>
+                            @enderror
                         </div>
                     </div>
 
@@ -107,6 +98,11 @@
 
                             <input type="number" class="form-control" placeholder="no hp ortu" name="no_hp_ortu"
                                 id="no_hp_ortu" value="{{ old('no_hp_ortu', $siswa->no_hp_ortu) }}">
+                            @error('no_hp_ortu')
+                                <div>
+                                    <p class="text-danger mt-2">{{ $message }}</p>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -116,7 +112,8 @@
                             <label for="absen" class="form-label">Absen</label>
 
                             <input type="text" class="form-control @error('absen') is-invalid @enderror"
-                                placeholder="absen" name="absen" id="absen" value="{{ old('absen', $siswa->absen) }}">
+                                placeholder="absen" name="absen" id="absen"
+                                value="{{ old('absen', $siswa->absen) }}">
                             @error('absen')
                                 <div>
                                     <p class="text-danger mt-2">{{ $message }}</p>
@@ -132,27 +129,11 @@
                             <select name="kelas" id="kelas" class="form-select">
                                 @foreach ($kelas as $item)
                                     <option value="{{ $item->id }}"
-                                        {{ old('kelas', $siswa->kelas_id) == $item->id ? 'selected' : '' }}>{{ $item->kelas }}</option>
+                                        {{ old('kelas', $siswa->kelas_id) == $item->id ? 'selected' : '' }}>
+                                        {{ $item->kelas }}</option>
                                 @endforeach
                             </select>
                             @error('kelas')
-                                <div>
-                                    <p class="text-danger mt-2">{{ $message }}</p>
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <label for="jurusan" class="form-label">Jurusan</label>
-
-                            <select name="jurusan" id="jurusan" class="form-select">
-                                @foreach ($jurusan as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ old('jurusan', $siswa->jurusan_id) == $item->id ? 'selected' : '' }}>{{ $item->jurusan }}</option>
-                                @endforeach
-                            </select>
-                            @error('jurusan')
                                 <div>
                                     <p class="text-danger mt-2">{{ $message }}</p>
                                 </div>

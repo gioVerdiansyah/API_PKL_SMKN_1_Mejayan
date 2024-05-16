@@ -71,7 +71,7 @@ class AdminSiswaController extends Controller
             $siswa->name = $request->nama;
             $siswa->nis = $request->nis;
             $siswa->email = $request->email;
-            $siswa->password = Hash::make($request->password ?? 'password');
+            $siswa->password = Hash::make($request->nis);
             $siswa->no_hp = $request->no_telp;
             $siswa->no_hp_ortu = $request->no_hp_ortu;
             $siswa->absen = $request->absen;
@@ -79,6 +79,13 @@ class AdminSiswaController extends Controller
             $siswa->jurusan_id = $request->jurusan;
             $siswa->jenis_kelamin = $request->jenis_kelamin;
             $siswa->alamat = $request->alamat;
+            $siswa->senin = $request->senin;
+            $siswa->selasa = $request->selasa;
+            $siswa->rabu = $request->rabu;
+            $siswa->kamis = $request->kamis;
+            $siswa->jumat = $request->jumat;
+            $siswa->sabtu = $request->sabtu;
+            $siswa->minggu = $request->minggu;
 
             if($request->hasFile('photo_profile')){
                 $fileName = $request->file('photo_profile')->hashName();
@@ -161,7 +168,7 @@ class AdminSiswaController extends Controller
             $siswa->name = $request->nama;
             $siswa->nis = $request->nis;
             $siswa->email = $request->email;
-            $siswa->password = Hash::make($request->password ?? 'password');
+            $siswa->password = Hash::make($request->nis);
             $siswa->no_hp = $request->no_telp;
             $siswa->no_hp_ortu = $request->no_hp_ortu;
             $siswa->absen = $request->absen;
@@ -169,6 +176,13 @@ class AdminSiswaController extends Controller
             $siswa->jurusan_id = $request->jurusan;
             $siswa->jenis_kelamin = $request->jenis_kelamin;
             $siswa->alamat = $request->alamat;
+            $siswa->senin = $request->senin;
+            $siswa->selasa = $request->selasa;
+            $siswa->rabu = $request->rabu;
+            $siswa->kamis = $request->kamis;
+            $siswa->jumat = $request->jumat;
+            $siswa->sabtu = $request->sabtu;
+            $siswa->minggu = $request->minggu;
 
             if ($request->password !== null) {
                 $siswa->password = Hash::make($request->password);

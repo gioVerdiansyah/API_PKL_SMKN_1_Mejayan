@@ -11,7 +11,7 @@ class DudiUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class DudiUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => ['required', 'string', 'unique:dudis,nama,' . $this->route('dudi')->id . ',id'],
+            'nama' => ['required', 'string', 'unique:dudis,nama,' . $this->route('dudi') . ',id'],
             'pemimpin' => ['required', 'string'],
             'no_telp' => ['nullable', 'string'],
             'email' => ['nullable', 'email:rfc,dns'],
