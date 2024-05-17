@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware("verifyAPIKey")->group(function () {
     Route::post('/login', LoginController::class);
+    Route::post('/logout', [LoginController::class, 'logout']);
     Route::get('/check-login', [CheckLoginController::class, 'index']);
 
     // Absensi
@@ -51,6 +52,7 @@ Route::middleware("verifyAPIKey")->group(function () {
     // Guru
     Route::prefix('/guru')->group(function(){
         Route::post('/login', \App\Http\Controllers\Api\Guru\LoginController::class);
+        Route::post('/logout', [\App\Http\Controllers\Api\Guru\LoginController::class, 'logout']);
 
         // list absensi
         Route::get('/{guru_id}/absensi/get/{nama_kelompok?}/{hari?}', [KelolaAbsensiController::class, 'getAbsen']);

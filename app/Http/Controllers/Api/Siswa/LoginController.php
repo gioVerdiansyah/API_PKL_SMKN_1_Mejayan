@@ -9,6 +9,7 @@ use App\Models\Kelompok;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
@@ -88,4 +89,26 @@ class LoginController extends Controller
         return Auth::guard();
     }
 
+    public function logout()
+    {
+        try {
+            DB::beginTransaction();
+
+            auth('sanctum')->user()->currentAccessToken()->delete();
+
+            DB::commit();
+            return response()->json([
+                "success" => true,
+                "message" => "Berhasil logout",
+                "data" => []
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                "success" => false,
+                "message" => "Gagal logout",
+                "data" => $e->getMessage()
+            ]);
+        }
+    }
 }
