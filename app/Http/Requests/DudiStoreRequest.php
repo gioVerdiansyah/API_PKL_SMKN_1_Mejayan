@@ -24,7 +24,7 @@ class DudiStoreRequest extends FormRequest
         return [
             'nama' => ['required', 'string', 'unique:dudis,nama'],
             'pemimpin' => ['required', 'string'],
-            'no_telp' => ['nullable', 'string'],
+            'no_telp' => ['nullable', 'string', "gt:0", "regex:/^62\d+$/"],
             'email' => ['nullable', 'email:rfc,dns'],
             'alamat' => ['required', 'string'],
             'koordinat' => ['required', 'regex:/^-?\d{1,2}\.\d+, -?\d{1,3}\.\d+$/'],

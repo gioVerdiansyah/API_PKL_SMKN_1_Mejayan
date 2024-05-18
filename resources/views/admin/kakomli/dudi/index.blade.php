@@ -54,7 +54,7 @@
                                 <td>{{ $data->jurusan->jurusan }}</td>
                                 <td>{{ $data->nama }}</td>
                                 <td>{{ $data->pemimpin }}</td>
-                                <td>{{ $data->no_telp ?? 'tidak ada no telp' }}</td>
+                                <td>{!! $data->no_telp ? "<a href='https://api.whatsapp.com/send?phone=$data->no_telp' target='_blank'>$data->no_telp</a>" : '<p>tidak ada no telp</p>' !!}</td>
                                 <td style="white-space: initial">{{ $data->alamat }}</td>
                                 <td class="d-flex align-items-center gap-2">
                                     <a href="{{ route('admin.dudi.show', $data->id) }}"

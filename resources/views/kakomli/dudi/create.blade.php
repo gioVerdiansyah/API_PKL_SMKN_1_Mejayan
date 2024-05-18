@@ -50,7 +50,7 @@
 
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <label for="no_telp" class="form-label">Nomor Telepon</label>
+                            <label for="no_telp" class="form-label">Nomor Telepon (62xxx)</label>
                             <input type="tel" class="form-control @error('no_telp') is-invalid @enderror"
                                 placeholder="Nomor telephone dudi" name="no_telp" id="no_telp"
                                 value="{{ old('no_telp') }}">

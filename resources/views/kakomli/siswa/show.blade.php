@@ -37,21 +37,35 @@
                 <div class="row mt-3">
                     <div class="col-md-12">
                         <label class="form-label">Email</label>
-                        <p>{{ $siswa->email }}</p>
+                        <p><a href='mailto:{{ $siswa->email }}' target='_blank'>{{ $siswa->email }}</a></p>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-12 mt-1">
                         <label class="form-label">No Telp</label>
-                        <p>{{ $siswa->no_telp ?? 'tidak ada nomor telephone' }}</p>
+                        <p>
+                            @if ($siswa->no_hp)
+                                <a href='https://api.whatsapp.com/send?phone={{ $siswa->no_hp }}'
+                                    target='_blank'>{{ $siswa->no_hp }}</a>
+                            @else
+                                tidak ada nomor telephone
+                            @endif
+                        </p>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-12 mt-1">
                         <label class="form-label">No HP ortu</label>
-                        <p>{{ $siswa->no_hp_ortu ?? 'tidak ada nomor hp ortu' }}</p>
+                        <p>
+                            @if ($siswa->no_hp_ortu)
+                                <a href='https://api.whatsapp.com/send?phone={{ $siswa->no_hp_ortu }}'
+                                    target='_blank'>{{ $siswa->no_hp_ortu }}</a>
+                            @else
+                                tidak ada nomor hp ortu
+                            @endif
+                        </p>
                     </div>
                 </div>
             </div>
@@ -144,8 +158,10 @@
         </div>
 
         <div class="col-md12 d-flex mt-5 text-start">
-            <a href="{{ route('siswa.show_print_absensi_siswa', $siswa->id) }}" class="btn btn-primary profile-button me-2">Rekap Absen</a>
-            <a href="{{ route('siswa.show_print_jurnal_siswa', $siswa->id) }}" class="btn btn-success profile-button me-2">Rekap Jurnal</a>
+            <a href="{{ route('siswa.show_print_absensi_siswa', $siswa->id) }}"
+                class="btn btn-primary profile-button me-2">Rekap Absen</a>
+            <a href="{{ route('siswa.show_print_jurnal_siswa', $siswa->id) }}"
+                class="btn btn-success profile-button me-2">Rekap Jurnal</a>
             <a href="{{ route('siswa.edit', $siswa->id) }}" class="btn btn-warning profile-button me-2">Edit</a>
             <form nameSiswa="{{ $siswa->name }}" action="{{ route('siswa.destroy', $siswa->id) }}" id="delete"
                 method="POST">

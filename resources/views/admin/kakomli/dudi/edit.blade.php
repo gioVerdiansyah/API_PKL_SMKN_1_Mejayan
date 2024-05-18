@@ -27,7 +27,7 @@
                     <div class="row mt-3">
                         <div class="col-md-12 mt-1">
                             <label for="nama" class="form-label">Nama Dudi</label>
-                            <input type="text" class="form-control w-md-25 @error('nama') is-invalid @enderror"
+                            <input type="text" class="form-control @error('nama') is-invalid @enderror"
                                 placeholder="nama dudi" name="nama" id="nama"
                                 value="{{ old('nama', $dudi->nama) }}">
                             @error('nama')
@@ -54,7 +54,7 @@
 
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <label for="no_telp" class="form-label">Nomor Telepon</label>
+                            <label for="no_telp" class="form-label">Nomor Telepon (62xxx)</label>
                             <input type="tel" class="form-control @error('no_telp') is-invalid @enderror"
                                 placeholder="Nomor telephone dudi" name="no_telp" id="no_telp"
                                 value="{{ old('no_telp', $dudi->no_telp) }}">

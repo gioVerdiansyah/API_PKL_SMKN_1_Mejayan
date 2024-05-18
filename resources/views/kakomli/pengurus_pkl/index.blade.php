@@ -41,7 +41,7 @@
                                 <th>{{ ++$i }}</th>
                                 <td><img src="{{ asset($data->photo_guru) }}" alt="Photo pengurus PKL"></td>
                                 <td style="white-space: initial;max-width: 200px">{{ $data->nama }}</td>
-                                <td>{{ $data->email }}</td>
+                                <td><p><a href='mailto:{{ $data->email }}' target='_blank'>{{ $data->email }}</a></p></td>
                                 <td>{{ $data->kelompok[0]->nama_kelompok }}</td>
                                 <td style="white-space: initial;max-width: 300px">{{ $data->deskripsi ?? 'Tidak ada deskripsi' }}</td>
                                 <td class="d-flex align-items-center gap-2">

@@ -37,7 +37,7 @@
                                 </td>
                                 <td>{{ $data->nama }}</td>
                                 <td>{{ $data->jurusan->jurusan }}</td>
-                                <td>{{ $data->email }}</td>
+                                <td><p><a href='mailto:{{ $data->email }}' target='_blank'>{{ $data->email }}</a></p></td>
                                 <td class="d-flex align-items-center gap-2">
                                     <a href="{{ route('kakomli.edit', $data->id) }}" class="btn btn-warning px-2 py-1"><i
                                             class="link-icon" width="15" data-feather="edit"></i></a>

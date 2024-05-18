@@ -15,7 +15,8 @@
     </div>
     <div class="card p-4">
         <div class="d-flex flex-column align-items-center pb-5">
-            <img src="{{ asset($siswa->photo_profile) }}" alt="photo siswa" class="rounded-5 shadow-sm border" width="70">
+            <img src="{{ asset($siswa->photo_profile) }}" alt="photo siswa" class="rounded-5 shadow-sm border"
+                width="70">
         </div>
         <div class="row">
             <div class="col-md-6 mb-3">
@@ -29,28 +30,42 @@
                 <div class="row mt-3">
                     <div class="col-md-12">
                         <label class="form-label">NIS</label>
-                        <p>{{ $siswa->nis}}</p>
+                        <p>{{ $siswa->nis }}</p>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-12">
                         <label class="form-label">Email</label>
-                        <p>{{ $siswa->email }}</p>
+                        <p><a href='mailto:{{ $siswa->email }}' target='_blank'>{{ $siswa->email }}</a></p>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-12 mt-1">
                         <label class="form-label">No Telp</label>
-                        <p>{{ $siswa->no_telp ?? 'tidak ada nomor telephone' }}</p>
+                        <p>
+                            @if ($siswa->no_hp)
+                                <a href='https://api.whatsapp.com/send?phone={{ $siswa->no_hp }}'
+                                    target='_blank'>{{ $siswa->no_hp }}</a>
+                            @else
+                                tidak ada nomor telephone
+                            @endif
+                        </p>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-12 mt-1">
                         <label class="form-label">No HP ortu</label>
-                        <p>{{ $siswa->no_hp_ortu ?? 'tidak ada nomor hp ortu' }}</p>
+                        <p>
+                            @if ($siswa->no_hp_ortu)
+                                <a href='https://api.whatsapp.com/send?phone={{ $siswa->no_hp_ortu }}'
+                                    target='_blank'>{{ $siswa->no_hp_ortu }}</a>
+                            @else
+                                tidak ada nomor hp ortu
+                            @endif
+                        </p>
                     </div>
                 </div>
             </div>
@@ -72,14 +87,14 @@
                 <div class="row mt-3">
                     <div class="col-md-12 mt-1">
                         <label class="form-label">Jurusan</label>
-                        <p>{{ $siswa->jurusan->jurusan}}</p>
+                        <p>{{ $siswa->jurusan->jurusan }}</p>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-12 mt-1">
                         <label class="form-label">Jenis Kelamin</label>
-                        <p>{{ $siswa->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan'}}</p>
+                        <p>{{ $siswa->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</p>
                     </div>
                 </div>
 
@@ -92,61 +107,64 @@
             </div>
         </div>
         {{-- jam masuk --}}
-            <span class="fw-bold">Jam masuk siswa</span>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="row mt-3">
-                        <div class="col-md-12 mt-1">
-                            <label class="form-label">Senin</label>
-                            <p>{{ $siswa->senin }}</p>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12 mt-1">
-                            <label class="form-label">Rabu</label>
-                            <p>{{ $siswa->rabu }}</p>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12 mt-1">
-                            <label class="form-label">Juma'at</label>
-                            <p>{{ $siswa->jumat }}</p>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12 mt-1">
-                            <label class="form-label">Minggu</label>
-                            <p>{{ $siswa->minggu ?? 'libur' }}</p>
-                        </div>
+        <span class="fw-bold">Jam masuk siswa</span>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="row mt-3">
+                    <div class="col-md-12 mt-1">
+                        <label class="form-label">Senin</label>
+                        <p>{{ $siswa->senin }}</p>
                     </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <div class="row mt-3">
-                        <div class="col-md-12 mt-1">
-                            <label class="form-label">Selasa</label>
-                            <p>{{ $siswa->selasa }}</p>
-                        </div>
+                <div class="row mt-3">
+                    <div class="col-md-12 mt-1">
+                        <label class="form-label">Rabu</label>
+                        <p>{{ $siswa->rabu }}</p>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12 mt-1">
-                            <label class="form-label">Kamis</label>
-                            <p>{{ $siswa->kamis }}</p>
-                        </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12 mt-1">
+                        <label class="form-label">Juma'at</label>
+                        <p>{{ $siswa->jumat }}</p>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12 mt-1">
-                            <label class="form-label">Sabtu</label>
-                            <p>{{ $siswa->sabtu ?? 'libur' }}</p>
-                        </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12 mt-1">
+                        <label class="form-label">Minggu</label>
+                        <p>{{ $siswa->minggu ?? 'libur' }}</p>
                     </div>
                 </div>
             </div>
+            <div class="col-md-6 mb-3">
+                <div class="row mt-3">
+                    <div class="col-md-12 mt-1">
+                        <label class="form-label">Selasa</label>
+                        <p>{{ $siswa->selasa }}</p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12 mt-1">
+                        <label class="form-label">Kamis</label>
+                        <p>{{ $siswa->kamis }}</p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12 mt-1">
+                        <label class="form-label">Sabtu</label>
+                        <p>{{ $siswa->sabtu ?? 'libur' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="col-md12 d-flex mt-5 text-start">
-            <a href="{{ route('admin.siswa.show_print_absensi_siswa', $siswa->id) }}" class="btn btn-primary profile-button me-2">Rekap Absen</a>
-            <a href="{{ route('admin.siswa.show_print_jurnal_siswa', $siswa->id) }}" class="btn btn-success profile-button me-2">Rekap Jurnal</a>
+            <a href="{{ route('admin.siswa.show_print_absensi_siswa', $siswa->id) }}"
+                class="btn btn-primary profile-button me-2">Rekap Absen</a>
+            <a href="{{ route('admin.siswa.show_print_jurnal_siswa', $siswa->id) }}"
+                class="btn btn-success profile-button me-2">Rekap Jurnal</a>
             <a href="{{ route('admin.siswa.edit', $siswa->id) }}" class="btn btn-warning profile-button me-2">Edit</a>
-            <form nameSiswa="{{ $siswa->name }}" action="{{ route('admin.siswa.destroy', $siswa->id) }}" id="delete" method="POST">
+            <form nameSiswa="{{ $siswa->name }}" action="{{ route('admin.siswa.destroy', $siswa->id) }}" id="delete"
+                method="POST">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-danger profile-button">Hapus</button>

@@ -29,14 +29,15 @@
                 <div class="row mt-3">
                     <div class="col-md-12">
                         <label class="form-label">Nomor Telepon</label>
-                        <p>{{ $dudi->no_telp ?? 'tidak ada nomor telepon' }}</p>
+                        <p>{!! $dudi->no_telp ? "<a href='https://api.whatsapp.com/send?phone=$dudi->no_telp' target='_blank'>$dudi->no_telp</a>" :
+                            '<p>tidak ada no telp</p>' !!}</p>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-12">
                         <label class="form-label">Email</label>
-                        <p>{{ $dudi->email ?? 'tidak ada email' }}</p>
+                        <p>{!! $dudi->email ? "<a href='mailto:$dudi->email' target='_blank'>$dudi->email</a>" : 'tidak ada email' !!}</p>
                     </div>
                 </div>
             </div>
@@ -44,7 +45,13 @@
                 <div class="row mt-3">
                     <div class="col-md-12 mt-1">
                         <label class="form-label">Koordinat</label>
-                        <p>{{ $dudi->koordinat }}</p>
+                        <p>
+                            @php
+                                $link =
+                                    'https://www.google.com/maps/@' . str_replace(' ', '', $dudi->koordinat) . ',20z';
+                            @endphp
+                            <a href={{ $link }} target="_blank">{{ $dudi->koordinat }}</a>
+                        </p>
                     </div>
                 </div>
 
