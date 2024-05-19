@@ -4,6 +4,8 @@ namespace App\Console;
 
 use App\Models\Absensi;
 use App\Models\Jurnal;
+use App\Models\Kelompok;
+use App\Models\User;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -18,31 +20,37 @@ class Kernel extends ConsoleKernel
         $jamTutupJurnal = config('app.jam_tutup_jurnal', '22:00');
 
         $schedule->call(function () {
-            $users = \App\Models\User::all();
+            $kelompok = Kelompok::with(['anggota:id,kelompok_id,user_id'])->select('id')->get();
 
-            foreach ($users as $user) {
-                if(!Absensi::where('user_id', $user->id)->whereDate('created_at', today())->exists()){
-                    Absensi::create([
-                        'user_id' => $user->id,
-                        'status' => 3,
-                        'datang' => now(),
-                    ]);
+            foreach ($kelompok as $klmpk) {
+                foreach ($klmpk->anggota as $anggota) {
+                    $user = User::where('id', $anggota->user_id)->first();
+                    if (!Absensi::where('user_id', $user->id)->whereDate('created_at', today())->exists()) {
+                        Absensi::create([
+                            'user_id' => $user->id,
+                            'status' => 3,
+                            'datang' => now(),
+                        ]);
+                    }
                 }
             }
         })->dailyAt($jamTutupAbsen);
 
         $schedule->call(function () {
-            $users = \App\Models\User::all();
+            $kelompok = Kelompok::with(['anggota:id,kelompok_id,user_id'])->select('id')->get();
 
-            foreach ($users as $user) {
-                if(!Jurnal::where("user_id", $user->id)->whereDate('created_at', today())->exists()){
-                    $hasAlpha = Absensi::where('user_id', $user->id)->where('status', '3')->whereDate('created_at', today())->exists();
-                    $hasIzin = Absensi::where('user_id', $user->id)->where('status', '6')->orWhere('status', '7')->whereDate('created_at', today())->exists();
-                    Jurnal::create([
-                        'user_id' => $user->id,
-                        'status' => $hasIzin ? '4' : '3',
-                        'kegiatan' => $hasAlpha ? 'Tidak mengisi Jurnal karena Alpha' : 'Tidak mengisi Jurnal'
-                    ]);
+            foreach ($kelompok as $klmpk) {
+                foreach ($klmpk->anggota as $anggota) {
+                    $user = User::where('id', $anggota->user_id)->first();
+                    if (!Jurnal::where("user_id", $user->id)->whereDate('created_at', today())->exists()) {
+                        $hasAlpha = Absensi::where('user_id', $user->id)->where('status', '3')->whereDate('created_at', today())->exists();
+                        $hasIzin = Absensi::where('user_id', $user->id)->where('status', '6')->orWhere('status', '7')->whereDate('created_at', today())->exists();
+                        Jurnal::create([
+                            'user_id' => $user->id,
+                            'status' => $hasIzin ? '4' : '3',
+                            'kegiatan' => $hasAlpha ? 'Tidak mengisi Jurnal karena Alpha' : 'Tidak mengisi Jurnal'
+                        ]);
+                    }
                 }
             }
         })->dailyAt($jamTutupJurnal);
@@ -53,7 +61,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

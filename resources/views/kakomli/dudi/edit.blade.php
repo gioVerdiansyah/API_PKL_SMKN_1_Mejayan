@@ -21,7 +21,7 @@
             @csrf
             <div class="d-flex flex-column align-items-md-center">
                 <label for="nama" class="form-label">Nama Dudi</label>
-                <input type="text" class="form-control @error('nama') is-invalid @enderror" placeholder="nama dudi"
+                <input type="text" class="form-control w-md-25 @error('nama') is-invalid @enderror" placeholder="nama dudi"
                     name="nama" id="nama" value="{{ old('nama', $dudi->nama) }}">
                 @error('nama')
                     <div>
