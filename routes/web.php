@@ -110,6 +110,12 @@ Route::middleware(['auth.kakomli'])->prefix('/kakomli')->group(function () {
     });
 
     Route::resource('/pengurus-pkl', PengurusPklController::class)->only('index');
+    Route::prefix('/pengurus-pkl')->group(function(){
+        Route::prefix('/excel')->group(function () {
+            Route::get('/export', [SiswaController::class, 'generateKolom'])->name('siswa.download_list_table');
+            Route::post('/import', [SiswaController::class, 'importData'])->name('siswa.import_data');
+        });
+    });
 
     Route::prefix('/pengelolaan_pkl')->group(function(){
         Route::resource('/kelompok-siswa', KelompokSiswaController::class);

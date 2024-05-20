@@ -26,7 +26,7 @@ class UserUpdateRequest extends FormRequest
         return [
             'nama' => "required|string|unique:users,name," . $id . ",id",
             'email' => "required|email:rfc,dns|unique:users,email," . $id . ",id",
-            'nis' => "required|integer|unique:users,nis," . $id . ",id",
+            'nis' => "required|unique:users,nis," . $id . ",id",
             'kelas' => ['required', Rule::in(\App\Models\Kelas::pluck('id')->toArray())],
             'jenis_kelamin' => ['required', Rule::in(['P', 'L'])],
             'alamat' => 'nullable|string',

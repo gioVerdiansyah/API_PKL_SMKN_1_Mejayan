@@ -53,6 +53,11 @@
                     <li class="nav-item dropdown active">
                         <a class="nav-link dropdown-toggle" href="#">Home</a>
                     </li>
+                    @if (Auth::guard('kakomli')->check())
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="{{ route('kakomli.index') }}">Kelola Data</a>
+                        </li>
+                    @endif
                     <li class="nav-item @@about">
                         <a class="nav-link" href="#about">About</a>
                     </li>

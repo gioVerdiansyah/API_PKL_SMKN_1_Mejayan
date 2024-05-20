@@ -23,7 +23,6 @@ class KelompokSiswaUpdateRequest extends FormRequest
     {
         $id = $this->route('kelompok_siswa');
         return [
-            'nama_kelompok' => 'required|max:30|unique:kelompoks,nama_kelompok,' . $id . ',id',
             'guru_id' => 'required|string|uuid|exists:gurus,id',
             'dudi_id' => 'required|string|uuid|unique:kelompoks,dudi_id,' . $id .',id|exists:dudis,id',
             'anggota' => 'required|array|min:1',
