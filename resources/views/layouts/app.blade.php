@@ -55,7 +55,11 @@
                     </li>
                     @if (Auth::guard('kakomli')->check())
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="{{ route('kakomli.index') }}">Kelola Data</a>
+                            @if (Auth::guard('kakomli')->user()->email === config('app.admin_email'))
+                                <a class="nav-link dropdown-toggle" href="{{ route('admin.dashboard') }}">Kelola Data</a>
+                            @else
+                                <a class="nav-link dropdown-toggle" href="{{ route('home') }}">Kelola Data</a>
+                            @endif
                         </li>
                     @endif
                     <li class="nav-item @@about">

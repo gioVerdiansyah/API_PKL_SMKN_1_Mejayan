@@ -170,7 +170,7 @@ class RekapPendataanController extends Controller
     }
     public function printJurnalSiswa(Request $request)
     {
-        $jurnal = Jurnal::with('user')->where('status', '1')->where('user_id', $request->siswa)->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])->get();
+        $jurnal = Jurnal::with('user')->where('status', '1')->where('user_id', $request->siswa)->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])->orderBy('created_at', 'asc')->get();
         $user = User::with(['kelas', 'jurusan'])->where('id', $request->siswa)->first();
 
         $kelompok = Kelompok::with(['dudi', 'guru'])->whereHas('anggota', function ($query) use ($user) {
