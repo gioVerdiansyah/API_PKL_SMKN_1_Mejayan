@@ -35,6 +35,9 @@ class EditProfileController extends Controller
                 $guru->no_hp = $request->no_hp;
             }
 
+            $guru->email = $request->email;
+            $guru->deskripsi = $request->deskripsi;
+
             if ($request->filled('oldPass') && $request->filled('newPass') ) {
                 if (Hash::check($request->oldPass, $guru->password)) {
                     $guru->password = Hash::make($request->newPass);

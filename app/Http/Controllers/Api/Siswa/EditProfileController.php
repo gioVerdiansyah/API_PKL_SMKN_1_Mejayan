@@ -35,6 +35,10 @@ class EditProfileController extends Controller
                 $user->no_hp = $request->no_hp;
             }
 
+            $user->email = $request->email;
+            $user->no_hp_ortu = $request->no_hp_ortu;
+            $user->alamat = $request->alamat;
+
             if ($request->filled('oldPass') && $request->filled('newPass')) {
                 if (Hash::check($request->oldPass, $user->password)) {
                     $user->password = Hash::make($request->newPass);

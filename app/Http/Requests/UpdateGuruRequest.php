@@ -28,7 +28,9 @@ class UpdateGuruRequest extends FormRequest
             'no_hp' => 'required|string|gt:0|regex:/^62\d+$/',
             'newPass' => 'required_with:oldPass,string,min:8',
             'confirmPass' => 'required_with:oldPass|same:newPass',
-            'photo_guru' => "nullable|file|image|mimes:png,jpg,jpeg|max:2048"
+            'photo_guru' => "nullable|file|image|mimes:png,jpg,jpeg|max:2048",
+            'email' => 'required|email:rfc,dns',
+            'deskripsi' => 'nullable'
         ];
     }
 
