@@ -81,7 +81,8 @@ class AbsensiController extends Controller
             $telatMenit = ($telat->h * 60) + $telat->i;
 
             if ($jamSekarangTimestamp >= ($jamMasukTimestamp - $selisihSatuJam)) {
-                if ($jamSekarangTimestamp < strtotime(config('app.jam_tutup_absen'))) {
+                $jamMaxPulang = Carbon::createFromFormat('H:i', explode(" - ", $user->{strtolower(Carbon::now()->dayName)})[1])->addHour()->format('H:i');
+                if ($jamSekarangTimestamp < strtotime($jamMaxPulang)) {
                     if ($request->wfh == '1') {
                         if ($jamSekarangTimestamp > $jamMasukTimestamp) {
                             Absensi::create([
@@ -132,7 +133,7 @@ class AbsensiController extends Controller
                         'telat' => $waktuTelat
                     ]);
                     DB::commit();
-                    return response()->json(['success' => true, 'status' => 3, 'message' => 'Anda dinyatakan ALPHA. Absen telah di tutup pukul ' . config('app.jam_tutup_absen')], 201);
+                    return response()->json(['success' => true, 'status' => 3, 'message' => 'Anda dinyatakan ALPHA. Absen telah di tutup pukul ' . $jamMaxPulang], 201);
                 }
             } else {
                 return response()->json(['success' => false, 'message' => 'Absen di mulai 1 jam sebelum jam masuk!'], 403);

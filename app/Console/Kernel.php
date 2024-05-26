@@ -6,6 +6,7 @@ use App\Models\Absensi;
 use App\Models\Jurnal;
 use App\Models\Kelompok;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,7 +26,7 @@ class Kernel extends ConsoleKernel
             foreach ($kelompok as $klmpk) {
                 foreach ($klmpk->anggota as $anggota) {
                     $user = User::where('id', $anggota->user_id)->first();
-                    if (!Absensi::where('user_id', $user->id)->whereDate('created_at', today())->exists()) {
+                    if ($user->{strtolower(Carbon::now()->dayName)} != null && !Absensi::where('user_id', $user->id)->whereDate('created_at', today())->exists()) {
                         Absensi::create([
                             'user_id' => $user->id,
                             'status' => 3,
@@ -42,7 +43,7 @@ class Kernel extends ConsoleKernel
             foreach ($kelompok as $klmpk) {
                 foreach ($klmpk->anggota as $anggota) {
                     $user = User::where('id', $anggota->user_id)->first();
-                    if (!Jurnal::where("user_id", $user->id)->whereDate('created_at', today())->exists()) {
+                    if ($user->{strtolower(Carbon::now()->dayName)} != null && !Jurnal::where("user_id", $user->id)->whereDate('created_at', today())->exists()) {
                         $hasAlpha = Absensi::where('user_id', $user->id)->where('status', '3')->whereDate('created_at', today())->exists();
                         $hasIzin = Absensi::where('user_id', $user->id)->where('status', '6')->orWhere('status', '7')->whereDate('created_at', today())->exists();
                         Jurnal::create([
