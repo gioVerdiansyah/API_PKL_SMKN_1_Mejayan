@@ -48,26 +48,16 @@ class AdminController extends Controller
             $dataJurusan = json_decode($responseJurusan->body());
 
             foreach ($dataJurusan as $item) {
-                $existingJurusan = Jurusan::find($item->id);
-
-                if ($existingJurusan && $existingJurusan->updated_at != $item->updated_at) {
-                    $existingJurusan->jurusan = $item->jurusan;
-                    $existingJurusan->full_name = $item->full_name;
-                    $existingJurusan->gambar = config('app.admin_url') . $item->gambar;
-                    $existingJurusan->created_at = $item->created_at;
-                    $existingJurusan->updated_at = $item->updated_at;
-                    $existingJurusan->save();
-
-                } elseif (!$existingJurusan) {
-                    $newJurusan = new Jurusan();
-                    $newJurusan->id = $item->id;
-                    $newJurusan->jurusan = $item->jurusan;
-                    $newJurusan->full_name = $item->full_name;
-                    $newJurusan->gambar = config('app.admin_url') . $item->gambar;
-                    $newJurusan->created_at = $item->created_at;
-                    $newJurusan->updated_at = $item->updated_at;
-                    $newJurusan->save();
-                }
+                Jurusan::updateOrCreate(
+                    ['id' => $item->id],
+                    [
+                        'jurusan' => $item->jurusan,
+                        'full_name' => $item->full_name,
+                        'gambar' => config('app.admin_url') . $item->gambar,
+                        'created_at' => $item->created_at,
+                        'updated_at' => $item->updated_at
+                    ]
+                );
             }
 
             DB::commit();
@@ -87,21 +77,14 @@ class AdminController extends Controller
             $dataKelas = json_decode($responseKelas->body());
 
             foreach ($dataKelas as $item) {
-                $existingKelas = Kelas::find($item->id);
-
-                if ($existingKelas && $existingKelas->updated_at != $item->updated_at) {
-                    $existingKelas->kelas = $item->tingkatan . ' ' . $item->kelas;
-                    $existingKelas->created_at = Carbon::parse($item->created_at);
-                    $existingKelas->updated_at = Carbon::parse($item->updated_at);
-                    $existingKelas->save();
-                } elseif (!$existingKelas) {
-                    $newKelas = new Kelas();
-                    $newKelas->id = $item->id;
-                    $newKelas->kelas = $item->tingkatan . ' ' . $item->kelas;
-                    $newKelas->created_at = Carbon::parse($item->created_at);
-                    $newKelas->updated_at = Carbon::parse($item->updated_at);
-                    $newKelas->save();
-                }
+                Kelas::updateOrCreate(
+                    ['id' => $item->id],
+                    [
+                        'kelas' => $item->tingkatan . ' ' . $item->kelas,
+                        'created_at' => Carbon::parse($item->created_at),
+                        'updated_at' => Carbon::parse($item->updated_at)
+                    ]
+                );
             }
 
             DB::commit();
@@ -120,32 +103,18 @@ class AdminController extends Controller
             $dataGuru = json_decode($responseKelas->body());
 
             foreach ($dataGuru as $item) {
-                $existingGuru = Guru::find($item->id);
-
-                if ($existingGuru && $existingGuru->updated_at != $item->updated_at) {
-                    $existingGuru->nama = $item->nama;
-                    $existingGuru->email = $item->email;
-                    $existingGuru->no_hp = $item->nomor_hp;
-                    $existingGuru->email = $item->email;
-                    $existingGuru->password = Hash::make($item->nip);
-                    $existingGuru->photo_guru = config('app.admin_url') . $item->foto_guru;
-                    $existingGuru->created_at = Carbon::parse($item->created_at);
-                    $existingGuru->updated_at = Carbon::parse($item->updated_at);
-                    $existingGuru->save();
-                } elseif (!$existingGuru) {
-                    $newGuru = new Guru();
-                    $newGuru->id = $item->id;
-                    $newGuru->nama = $item->nama;
-                    $newGuru->email = $item->email;
-                    $newGuru->email = $item->email;
-                    $newGuru->no_hp = $item->nomor_hp;
-                    $newGuru->email = $item->email;
-                    $newGuru->password = Hash::make($item->nip);
-                    $newGuru->photo_guru = config('app.admin_url') . $item->foto_guru;
-                    $newGuru->created_at = Carbon::parse($item->created_at);
-                    $newGuru->updated_at = Carbon::parse($item->updated_at);
-                    $newGuru->save();
-                }
+                Guru::updateOrCreate(
+                    ['id' => $item->id],
+                    [
+                        'nama' => $item->nama,
+                        'email' => $item->email,
+                        'no_hp' => $item->nomor_hp,
+                        'password' => Hash::make($item->nip),
+                        'photo_guru' => config('app.admin_url') . $item->foto_guru,
+                        'created_at' => Carbon::parse($item->created_at),
+                        'updated_at' => Carbon::parse($item->updated_at)
+                    ]
+                );
             }
 
             DB::commit();
@@ -168,39 +137,22 @@ class AdminController extends Controller
             $dataSiswa = $dataResponse->data;
 
             foreach ($dataSiswa as $item) {
-                $existingSiswa = User::find($item->id);
-
-                if ($existingSiswa && $existingSiswa->updated_at != $item->updated_at) {
-                    $existingSiswa->name = $item->nama;
-                    $existingSiswa->email = $item->email;
-                    $existingSiswa->no_hp = $item->no_hp;
-                    $existingSiswa->email = $item->email;
-                    $existingSiswa->password = Hash::make($item->nis);
-                    $existingSiswa->nis = $item->nis;
-                    $existingSiswa->kelas_id = $item->kelas->id;
-                    $existingSiswa->jurusan_id = $item->kelas->jurusan_id;
-                    $existingSiswa->absen = $item->nomor_absen;
-                    $existingSiswa->jenis_kelamin = strtoupper($item->gender);
-                    $existingSiswa->created_at = Carbon::parse($item->created_at);
-                    $existingSiswa->updated_at = Carbon::parse($item->updated_at);
-                    $existingSiswa->save();
-                } elseif (!$existingSiswa) {
-                    $newSiswa = new User();
-                    $newSiswa->id = $item->id;
-                    $newSiswa->name = $item->nama;
-                    $newSiswa->email = $item->email;
-                    $newSiswa->no_hp = $item->no_hp;
-                    $newSiswa->email = $item->email;
-                    $newSiswa->password = Hash::make($item->nis);
-                    $newSiswa->nis = $item->nis;
-                    $newSiswa->kelas_id = $item->kelas->id;
-                    $newSiswa->jurusan_id = $item->kelas->jurusan_id;
-                    $newSiswa->absen = $item->nomor_absen;
-                    $newSiswa->jenis_kelamin = strtoupper($item->gender);
-                    $newSiswa->created_at = Carbon::parse($item->created_at);
-                    $newSiswa->updated_at = Carbon::parse($item->updated_at);
-                    $newSiswa->save();
-                }
+                    User::updateOrCreate(
+                        ['id' => $item->id],
+                        [
+                            'name' => $item->nama,
+                            'email' => $item->email,
+                            'no_hp' => $item->no_hp,
+                            'password' => Hash::make($item->nis),
+                            'nis' => $item->nis,
+                            'kelas_id' => $item->kelas->id,
+                            'jurusan_id' => $item->kelas->jurusan_id,
+                            'absen' => $item->nomor_absen,
+                            'jenis_kelamin' => strtoupper($item->gender),
+                            'created_at' => Carbon::parse($item->created_at),
+                            'updated_at' => Carbon::parse($item->updated_at)
+                        ]
+                    );
             }
 
             DB::commit();
