@@ -47,13 +47,9 @@ class EditProfileController extends Controller
                 }
             }
 
-            if ($request->hasFile('photo_profile') || ($request->filled('oldPass') && $request->filled('newPass') || $request->filled('no_hp'))) {
-                $user->save();
-                DB::commit();
-                return response()->json(['success' => true, 'message' => "Logout dan login kembali untuk melihat perubahan"], 201);
-            } else {
-                return response()->json(['success' => false, 'message' => "Tidak ada perubahan!!!"], 422);
-            }
+            $user->save();
+            DB::commit();
+            return response()->json(['success' => true, 'message' => "Logout dan login kembali untuk melihat perubahan"], 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => "Error: " . $e->getMessage()], 500);

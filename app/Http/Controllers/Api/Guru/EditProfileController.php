@@ -38,7 +38,7 @@ class EditProfileController extends Controller
             $guru->email = $request->email;
             $guru->deskripsi = $request->deskripsi;
 
-            if ($request->filled('oldPass') && $request->filled('newPass') ) {
+            if ($request->filled('oldPass') && $request->filled('newPass')) {
                 if (Hash::check($request->oldPass, $guru->password)) {
                     $guru->password = Hash::make($request->newPass);
                 } else {
@@ -46,13 +46,9 @@ class EditProfileController extends Controller
                 }
             }
 
-            if ($request->hasFile('photo_guru') || ($request->filled('oldPass') && $request->filled('newPass') || $request->filled('no_hp'))) {
-                $guru->save();
-                DB::commit();
-                return response()->json(['success' => true, 'message' => "Logout dan login kembali untuk melihat perubahan"], 201);
-            } else {
-                return response()->json(['success' => false, 'message' => "Tidak ada perubahan!!!", 'no_hp' => $request->no_hp], 422);
-            }
+            $guru->save();
+            DB::commit();
+            return response()->json(['success' => true, 'message' => "Logout dan login kembali untuk melihat perubahan"], 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => "Error: " . $e->getMessage()], 500);
