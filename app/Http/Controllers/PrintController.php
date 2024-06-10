@@ -82,124 +82,127 @@ class PrintController extends Controller
 
     public function showPrintAbensiSiswa(string $guru_id)
     {
-        $guru = Guru::where('id', $guru_id)->first();
+        try {
+            $guru = Guru::where('id', $guru_id)->first();
 
-        if (!$guru) {
-            return to_route('home')->with('message', [
-                'icon' => 'error',
-                'title' => 'Not Found',
-                'text' => 'ID guru tidak ditemukan'
-            ]);
+            if (!$guru) {
+                return to_route('home')->with('message', [
+                    'icon' => 'error',
+                    'title' => 'Not Found',
+                    'text' => 'ID guru tidak ditemukan'
+                ]);
+            }
+
+            $guru_id = $guru->id;
+            $kelompok = Kelompok::with([
+                'dudi' => function ($query) {
+                    $query->select(['id', 'nama']);
+                }
+            ])->where('guru_id', $guru_id)->get();
+
+            $absen = Kelompok::with([
+                'anggota',
+                'dudi' => function ($query) {
+                    $query->select(['id', 'nama']);
+                }
+            ])->where('guru_id', $guru_id)->first();
+
+            if (!$absen) {
+                $absen = (object) [
+                    'anggota' => collect([['user_id' => null]]),
+                    'dudi' => []
+                ];
+            }
+
+            $absensi = Absensi::with('user')->whereIn('user_id', $absen->anggota->pluck('user_id'))->get();
+
+            $uniqueMonths = $absensi->pluck('created_at')->map(function ($createdAt) {
+                $date = Carbon::parse($createdAt);
+                $year = $date->format('Y');
+                $month = $date->format('m') . '-' . $year;
+                $namaBulan = $date->translatedFormat('F');
+                if ($year < date('Y')) {
+                    $namaBulan .= ' ' . $year;
+                }
+                return [
+                    'bulan' => $month,
+                    'nama_bulan' => $namaBulan
+                ];
+            })->unique();
+
+            $dataBulan = $uniqueMonths->values()->all();
+
+            return view('print_absensi', compact('guru', 'kelompok', 'dataBulan'));
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => "Error: {$e->getMessage()}"], 500);
         }
-
-        $guru_id = $guru->id;
-        $kelompok = Kelompok::with([
-            'dudi' => function ($query) {
-                $query->select(['id', 'nama']);
-            }
-        ])->where('guru_id', $guru_id)->get();
-
-        $absen = Kelompok::with([
-            'anggota',
-            'dudi' => function ($query) {
-                $query->select(['id', 'nama']);
-            }
-        ])->where('guru_id', $guru_id)->first();
-
-        if (!$absen) {
-            $absen = (object) [
-                'anggota' => collect([['user_id' => null]]),
-                'dudi' => []
-            ];
-        }
-
-        $absensi = Absensi::with('user')->whereIn('user_id', $absen->anggota->pluck('user_id'))->get();
-
-        $uniqueMonths = $absensi->pluck('created_at')->map(function ($createdAt) {
-            $date = Carbon::parse($createdAt);
-            $year = $date->format('Y');
-            $month = $date->format('m') . '-' . $year;
-            $namaBulan = $date->translatedFormat('F');
-            if ($year < date('Y')) {
-                $namaBulan .= ' ' . $year;
-            }
-            return [
-                'bulan' => $month,
-                'nama_bulan' => $namaBulan
-            ];
-        })->unique();
-
-        $dataBulan = $uniqueMonths->values()->all();
-
-        return view('print_absensi', compact('guru', 'kelompok', 'dataBulan'));
     }
 
     public function printAbsensiSiswa(GuruPrintAbsensiSiswaRequest $request, string $guru_id)
     {
-        // try {
-        $nama_kelompok = $request->kelompok;
-        $listKelompok = Kelompok::where('guru_id', $guru_id)->pluck('nama_kelompok')->toArray();
+        try {
+            $nama_kelompok = $request->kelompok;
+            $listKelompok = Kelompok::where('guru_id', $guru_id)->pluck('nama_kelompok')->toArray();
 
-        $namaKelompok = $nama_kelompok ?? ($listKelompok[0] ?? '!kelompok');
+            $namaKelompok = $nama_kelompok ?? ($listKelompok[0] ?? '!kelompok');
 
-        $kelompok = Kelompok::with([
-            'anggota',
-            'dudi' => function ($query) {
-                $query->select(['id', 'nama', 'pemimpin']);
+            $kelompok = Kelompok::with([
+                'anggota',
+                'dudi' => function ($query) {
+                    $query->select(['id', 'nama', 'pemimpin']);
+                }
+            ])->where('guru_id', $guru_id)->where('nama_kelompok', $namaKelompok)->first();
+
+            if (!$kelompok) {
+                $kelompok = (object) [
+                    'anggota' => collect([['user_id' => null]]),
+                    'dudi' => []
+                ];
             }
-        ])->where('guru_id', $guru_id)->where('nama_kelompok', $namaKelompok)->first();
 
-        if (!$kelompok) {
-            $kelompok = (object) [
-                'anggota' => collect([['user_id' => null]]),
-                'dudi' => []
-            ];
+            $absensi = Absensi::with(['user.kelas'])
+                ->whereIn('user_id', $kelompok->anggota->pluck('user_id'))
+                ->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])
+                ->orderBy('created_at', 'asc')
+                ->get();
+
+            $bulanTahun = Carbon::createFromFormat('m-Y', $request->bulan)->locale('id');
+            $absensiBulan = $bulanTahun->translatedFormat('F Y');
+
+            $listUser = User::whereIn('id', $kelompok->anggota->pluck('user_id'))->get();
+            if ($request->tipe === "daftar-hadir") {
+                return view('generate_pdf.rekap_daftar_absensi', compact('absensi', 'kelompok', 'absensiBulan', 'listUser'));
+            }
+            $bulannya = $request->bulan;
+            return view('generate_pdf.rekap_absensi_kehadiran', compact('absensi', 'kelompok', 'absensiBulan', 'listUser', 'bulannya'));
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => "Error: {$e->getMessage()}"], 500);
         }
-
-        $absensi = Absensi::with(['user.kelas'])
-            ->whereIn('user_id', $kelompok->anggota->pluck('user_id'))
-            ->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])
-            ->orderBy('created_at', 'asc')
-            ->get();
-
-        $bulanTahun = Carbon::createFromFormat('m-Y', $request->bulan)->locale('id');
-        $absensiBulan = $bulanTahun->translatedFormat('F Y');
-
-        $listUser = User::whereIn('id', $kelompok->anggota->pluck('user_id'))->get();
-        if ($request->tipe === "daftar-hadir") {
-            return view('generate_pdf.rekap_daftar_absensi', compact('absensi', 'kelompok', 'absensiBulan', 'listUser'));
-        }
-        // dd($absensi->where('status', '1')->count());
-        $bulannya = $request->bulan;
-        return view('generate_pdf.rekap_absensi_kehadiran', compact('absensi', 'kelompok', 'absensiBulan', 'listUser', 'bulannya'));
-
-        // } catch (\Exception $e) {
-        //     return response()->json(['success' => false, 'message' => "Error: {$e->getMessage()}"], 500);
-        // }
     }
     public function absenPrint(string $guru_id)
     {
-        // try {
-        $guru = Guru::with('jurusan')->where('id', $guru_id)->first();
+        try {
+            $guru = Guru::with('jurusan')->where('id', $guru_id)->first();
 
-        if (!$guru) {
-            return response()->json(['success' => false, 'message' => 'ID guru tidak ditemukan']);
+            if (!$guru) {
+                return response()->json(['success' => false, 'message' => 'ID guru tidak ditemukan']);
+            }
+
+            $dataAbsensi = Absensi::with([
+                'user' => function ($query) use ($guru_id) {
+                    $query->where('guru_id', $guru_id);
+                },
+                'user.detailUser.detailPkl.jamPkl'
+            ])->get();
+
+            if (!$dataAbsensi) {
+                return response()->json(['success' => false, 'message' => 'Ada kesalahan server', 'error' => 'ID absensi tidak ditemukan']);
+            }
+
+            return view('generate_pdf.rekap_absensi', compact('dataAbsensi', 'guru'));
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Ada kesalahan server', 'error' => $e]);
         }
-
-        $dataAbsensi = Absensi::with([
-            'user' => function ($query) use ($guru_id) {
-                $query->where('guru_id', $guru_id);
-            },
-            'user.detailUser.detailPkl.jamPkl'
-        ])->get();
-
-        if (!$dataAbsensi) {
-            return response()->json(['success' => false, 'message' => 'Ada kesalahan server', 'error' => 'ID absensi tidak ditemukan']);
-        }
-
-        return view('generate_pdf.rekap_absensi', compact('dataAbsensi', 'guru'));
-        // } catch (\Exception $e) {
-        //     return response()->json(['success' => false, 'message' => 'Ada kesalahan server', 'error' => $e]);
-        // }
     }
 }

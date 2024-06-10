@@ -1,7 +1,8 @@
 @extends('layouts.nav-kakomli')
 
 @section('content')
-<title>Print Absensi Siswa</title>
+    <title>Print Absensi Siswa</title>
+    <link rel="stylesheet" href="{{ asset('cssAdmin/vendors/select2/select2.min.css') }}">
     <div class="card p-4 mb-4 flex-md-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">
@@ -22,7 +23,8 @@
                         <label for="nama_kelompok" class="form-label">Kelompok/DuDi:</label>
                         <select name="nama_kelompok" class="form-control" id="nama_kelompok">
                             @forelse ($kelompok as $items)
-                                <option value="{{ $items->nama_kelompok }}">{{ $items->nama_kelompok . " / " . $items->dudi->nama }}</option>
+                                <option value="{{ $items->nama_kelompok }}">
+                                    {{ $items->nama_kelompok . ' / ' . $items->dudi->nama }}</option>
                             @empty
                                 <option disabled>Tidak ada Kelompok atau DuDi</option>
                             @endforelse
@@ -74,4 +76,10 @@
             </div>
         </form>
     </div>
+    <script src="{{ asset('cssAdmin/vendors/select2/select2.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#nama_kelompok').select2();
+        });
+    </script>
 @endsection

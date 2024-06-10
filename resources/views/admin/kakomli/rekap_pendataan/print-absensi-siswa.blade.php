@@ -2,6 +2,7 @@
 
 @section('content')
     <title>Admin - Print Absensi</title>
+    <link rel="stylesheet" href="{{ asset('cssAdmin/vendors/select2/select2.min.css') }}">
     <div class="card p-4 mb-4 flex-md-row justify-content-between align-items-center">
         <div>
             <nav aria-label="breadcrumb">
@@ -73,4 +74,10 @@
             </div>
         </form>
     </div>
+    <script src="{{ asset('cssAdmin/vendors/select2/select2.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#nama_kelompok').select2();
+        });
+    </script>
 @endsection

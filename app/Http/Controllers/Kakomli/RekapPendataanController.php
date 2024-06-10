@@ -125,6 +125,7 @@ class RekapPendataanController extends Controller
         $absensi = Absensi::with(['user.kelas'])
             ->whereIn('user_id', $kelompok->anggota->pluck('user_id'))
             ->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])
+            ->orderBy('created_at', 'asc')
             ->get();
 
         $bulanTahun = Carbon::createFromFormat('m-Y', $request->bulan)->locale('id');
