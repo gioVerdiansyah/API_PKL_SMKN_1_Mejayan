@@ -29,7 +29,7 @@ class IzinStoreRequest extends FormRequest
             'alasan' => 'required|string|max:1000',
             'awal_izin' => 'required|date',
             'akhir_izin' => 'required|date',
-            'bukti' => 'required|file|mimes:png,jpg,jpeg,pdf',
+            'bukti' => 'required|file|mimes:png,jpg,jpeg',
         ];
     }
     protected function failedValidation(Validator $validator)
