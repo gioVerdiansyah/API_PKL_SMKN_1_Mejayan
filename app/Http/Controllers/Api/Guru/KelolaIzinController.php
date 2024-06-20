@@ -100,7 +100,7 @@ class KelolaIzinController extends Controller
             $absen->status = 3;
             $absen->save();
 
-            if (Storage::exists($izin->bukti)) {
+            if (!is_null($izin->bukti) && Storage::exists($izin->bukti)) {
                 Storage::delete($izin->bukti);
             }
 

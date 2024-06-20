@@ -184,7 +184,7 @@ class SiswaController extends Controller
 
             if ($request->hasFile('photo_profile')) {
                 if (strpos($siswa->photo_profile, 'storage/') !== false) {
-                    if (Storage::exists(explode('storage/', $siswa->photo_profile)[1])) {
+                    if (is_string($siswa->photo_profile) &&Storage::exists(explode('storage/', $siswa->photo_profile)[1])) {
                         Storage::delete(explode('storage/', $siswa->photo_profile)[1]);
                     }
                 }
@@ -230,7 +230,7 @@ class SiswaController extends Controller
             $siswaName = $siswa->name;
 
             if (strpos($siswa->photo_profile, 'storage/') !== false) {
-                if (Storage::exists(explode('storage/', $siswa->photo_profile)[1])) {
+                if (is_string($siswa->photo_profile) &&Storage::exists(explode('storage/', $siswa->photo_profile)[1])) {
                     Storage::delete(explode('storage/', $siswa->photo_profile)[1]);
                 }
             }

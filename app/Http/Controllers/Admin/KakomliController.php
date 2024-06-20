@@ -123,7 +123,7 @@ class KakomliController extends Controller
 
             if($request->hasFile('photo_profile')){
                 if (strpos($kakomli->photo_profile, 'storage/') !== false) {
-                    if (Storage::exists(explode('storage/', $kakomli->photo_profile)[1])) {
+                    if (is_string($kakomli->photo_profile) && Storage::exists(explode('storage/', $kakomli->photo_profile)[1])) {
                         Storage::delete(explode('storage/', $kakomli->photo_profile)[1]);
                     }
                 }
@@ -169,7 +169,7 @@ class KakomliController extends Controller
                 ]);
             }
 
-            if (Storage::exists(explode('storage/', $kakomli->photo_profile)[1])) {
+            if (is_string($kakomli->photo_profile) && Storage::exists(explode('storage/', $kakomli->photo_profile)[1])) {
                 Storage::delete(explode('storage/', $kakomli->photo_profile)[1]);
             }
 

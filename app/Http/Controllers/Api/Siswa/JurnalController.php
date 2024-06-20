@@ -55,7 +55,7 @@ class JurnalController extends Controller
             }
 
             $fileName = $request->file("bukti")->hashName();
-            $path = $request->file("bukti")->storeAs("jurnal", $fileName,);
+            $path = $request->file("bukti")->storeAs("jurnal", $fileName);
 
             $jurnal->bukti = $path;
             $jurnal->save();
@@ -119,11 +119,11 @@ class JurnalController extends Controller
             if ($request->hasFile("bukti")) {
                 $fileName = $request->file("bukti")->hashName();
 
-                if(Storage::exists($path)){
+                if(!is_null($path) && Storage::exists($path)){
                     Storage::delete($path);
                 }
 
-                $path = $request->file("bukti")->storeAs("jurnal", $fileName, );
+                $path = $request->file("bukti")->storeAs("jurnal", $fileName);
             }
 
 

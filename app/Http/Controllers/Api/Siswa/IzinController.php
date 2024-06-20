@@ -177,7 +177,7 @@ class IzinController extends Controller
 
             $path = $izin->bukti;
             if ($request->hasFile("bukti")) {
-                if (Storage::exists($path)) {
+                if (!is_null($path) && Storage::exists($path)) {
                     Storage::delete($path);
                 }
                 $nameFile = $request->file('bukti')->hashName();
