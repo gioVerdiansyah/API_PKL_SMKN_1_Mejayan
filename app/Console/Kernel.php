@@ -45,11 +45,25 @@ class Kernel extends ConsoleKernel
                     $user = User::where('id', $anggota->user_id)->first();
                     if ($user->{strtolower(Carbon::now()->dayName)} != null && !Jurnal::where("user_id", $user->id)->whereDate('created_at', today())->exists()) {
                         $hasAlpha = Absensi::where('user_id', $user->id)->where('status', '3')->whereDate('created_at', today())->exists();
-                        $hasIzin = Absensi::where('user_id', $user->id)->where('status', '6')->orWhere('status', '7')->whereDate('created_at', today())->exists();
+                        $hasIzin = Absensi::where('user_id', $user->id)->where('status', '6')->whereDate('created_at', today())->exists();
+                        $isHoliday = Absensi::where('user_id', $user->id)->where('status', '7')->whereDate('created_at', today())->exists();
+
+                        $kegiatan = "";
+
+                        if ($hasIzin) {
+                            $kegiatan = "Tidak ada jurnal karena izin";
+                        } else if ($hasAlpha) {
+                            $kegiatan = "Tidak ada Jurnal karena Alpha";
+                        } else if ($isHoliday) {
+                            $kegiatan = "Tidak ada Jurnal karena Libur";
+                        } else {
+                            $kegiatan = "Tidak ada Jurnal";
+                        }
+
                         Jurnal::create([
                             'user_id' => $user->id,
                             'status' => $hasIzin ? '4' : '3',
-                            'kegiatan' => $hasAlpha ? 'Tidak mengisi Jurnal karena Alpha' : 'Tidak mengisi Jurnal'
+                            'kegiatan' => $kegiatan
                         ]);
                     }
                 }

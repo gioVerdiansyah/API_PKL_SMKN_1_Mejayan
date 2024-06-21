@@ -180,6 +180,9 @@ Route::middleware(['admin.ini'])->prefix('/admin-ini')->group(function () {
         Route::post('/print-jurnal', [AdminRekapPendataanController::class, 'printJurnalSiswa'])->name('admin.rekap_pendataan.print_jurnal_siswa');
     });
 
+    Route::get("/set-libur", [AdminController::class, 'setLibur'])->name('admin.set_libur');
+    Route::post("/set-libur", [AdminController::class, 'setLiburSent'])->name('admin.set_libur_sent');
+
     // synchronization
     Route::get('/synchronization-data', [AdminController::class, 'synchronization'])->name('admin.synchronization');
     Route::post('/synchronization-data-jurusan', [AdminController::class, 'syncJurusan'])->name('admin.synchronization-data-jurusan');

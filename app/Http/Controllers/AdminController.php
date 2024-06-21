@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Absensi;
 use App\Models\Dudi;
 use App\Models\Guru;
 use App\Models\Jurusan;
@@ -65,12 +66,13 @@ class AdminController extends Controller
             return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Jurusan', 'next_url' => route('admin.synchronization-data-kelas')]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['success' => false, 'message' => "FAIL", 'type' => 'Jurusan','error' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => "FAIL", 'type' => 'Jurusan', 'error' => $e->getMessage()]);
         }
     }
 
-    public function syncKelas(){
-        try{
+    public function syncKelas()
+    {
+        try {
             DB::beginTransaction();
 
             $responseKelas = Http::withHeader('x-api-key', config('app.api_key'))->get(config('app.admin_url_api') . 'kelas');
@@ -89,13 +91,14 @@ class AdminController extends Controller
 
             DB::commit();
             return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Kelas', "next_url" => route('admin.synchronization-data-guru')]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => "FAIL", 'type' => 'Kelas', 'error' => $e->getMessage()]);
         }
     }
 
-    public function syncGuru(){
+    public function syncGuru()
+    {
         try {
             DB::beginTransaction();
 
@@ -118,25 +121,26 @@ class AdminController extends Controller
             }
 
             DB::commit();
-            return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Guru' , "next_url" => route('admin.synchronization-data-siswa')]);
+            return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Guru', "next_url" => route('admin.synchronization-data-siswa')]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['success' => false, 'message' => "FAIL", 'type' => 'Guru' , 'error' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => "FAIL", 'type' => 'Guru', 'error' => $e->getMessage()]);
         }
     }
 
-    public function syncSiswa(Request $response){
+    public function syncSiswa(Request $response)
+    {
         try {
-            if(is_string($response->next_page)){
-            DB::beginTransaction();
+            if (is_string($response->next_page)) {
+                DB::beginTransaction();
 
-            $url = ($response->next_page === 'undefined') ? config('app.admin_url_api') . 'siswa' : $response->next_page;
+                $url = ($response->next_page === 'undefined') ? config('app.admin_url_api') . 'siswa' : $response->next_page;
 
-            $responseKelas = Http::withHeader('x-api-key', config('app.api_key'))->get($url);
-            $dataResponse = json_decode($responseKelas->body());
-            $dataSiswa = $dataResponse->data;
+                $responseKelas = Http::withHeader('x-api-key', config('app.api_key'))->get($url);
+                $dataResponse = json_decode($responseKelas->body());
+                $dataSiswa = $dataResponse->data;
 
-            foreach ($dataSiswa as $item) {
+                foreach ($dataSiswa as $item) {
                     User::updateOrCreate(
                         ['id' => $item->id],
                         [
@@ -153,16 +157,16 @@ class AdminController extends Controller
                             'updated_at' => Carbon::parse($item->updated_at)
                         ]
                     );
-            }
+                }
 
-            DB::commit();
-            return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Siswa ' . (($dataResponse->last_page === $dataResponse->current_page) ? 'Terakhir' : 'Ke-' . $dataResponse->current_page), "next_url" => route('admin.synchronization-data-siswa'), 'next_page_url' => $dataResponse->next_page_url]);
-        }else{
-            return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Siswa', "next_url" => null]);
-        }
+                DB::commit();
+                return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Siswa ' . (($dataResponse->last_page === $dataResponse->current_page) ? 'Terakhir' : 'Ke-' . $dataResponse->current_page), "next_url" => route('admin.synchronization-data-siswa'), 'next_page_url' => $dataResponse->next_page_url]);
+            } else {
+                return response()->json(['success' => true, 'message' => "DONE", 'type' => 'Siswa', "next_url" => null]);
+            }
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['success' => false, 'message' => "FAIL", 'type' => 'Siswa',  'error' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => "FAIL", 'type' => 'Siswa', 'error' => $e->getMessage()]);
         }
     }
     public function authorizationQR()
@@ -176,5 +180,61 @@ class AdminController extends Controller
         $response = json_decode($response);
 
         return view('admin.authorizationQR', compact('response'));
+    }
+
+    public function setLibur()
+    {
+        return view('admin.set_libur');
+    }
+
+    public function setLiburSent()
+    {
+        try {
+            DB::beginTransaction();
+
+            $day = strtolower(Carbon::now()->dayName);
+
+            $users = User::get(['id', $day]);
+
+            foreach ($users as $item) {
+                $datang = Carbon::createFromFormat('H:i', explode(" - ", $item->{$day})[0])->setDate(Carbon::now()->year, Carbon::now()->month, Carbon::now()->day);
+                $pulang = Carbon::createFromFormat('H:i', explode(" - ", $item->{$day})[1])->setDate(Carbon::now()->year, Carbon::now()->month, Carbon::now()->day);
+
+                $absensi = Absensi::where('user_id', $item->id)
+                    ->whereDate('created_at', Carbon::today())
+                    ->first();
+
+                if ($absensi) {
+                    $absensi->update([
+                        'status' => 7,
+                        'datang' => $datang,
+                        'pulang' => $pulang,
+                    ]);
+                } else {
+                    Absensi::create([
+                        'user_id' => $item->id,
+                        'status' => 7,
+                        'datang' => $datang,
+                        'pulang' => $pulang,
+                        'created_at' => now()
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return to_route('admin.dashboard')->with('message', [
+                'icon' => 'success',
+                'title' => 'Success!',
+                'text' => "Berhasil menandai hari ini libur!"
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return back()->with('message', [
+                'icon' => 'error',
+                'title' => 'Error!',
+                'text' => $e->getMessage()
+            ]);
+        }
     }
 }

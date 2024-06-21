@@ -111,6 +111,12 @@
                             <span class="link-title">Kelompok Siswa</span>
                         </a>
                     </li>
+                    <li class="nav-item {{ request()->routeIs('admin.set_libur') ? 'active' : '' }}">
+                        <a href="{{ route('admin.set_libur') }}" class="nav-link">
+                            <i class="link-icon" data-feather="calendar"></i>
+                            <span class="link-title">Set Libur</span>
+                        </a>
+                    </li>
 
                     <li class="nav-item nav-category">Rekap Pendataan</li>
                     <li class="nav-item {{ request()->routeIs('admin.rekap_pendataan.dudi.*') ? 'active' : '' }}">
