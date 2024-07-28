@@ -57,14 +57,14 @@ class KakomliController extends Controller
             $guru->save();
 
             DB::commit();
-            return to_route('kakomli.index')->with('message' , [
+            return to_route('kakomli.index')->with('message', [
                 'icon' => 'success',
                 'title' => 'Success!',
                 'text' => 'Berhasil menambah kakomli ' . $request->nama
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('message' , [
+            return back()->with('message', [
                 'icon' => 'error',
                 'title' => 'Ada kesalahan server',
                 'text' => $e
@@ -79,7 +79,7 @@ class KakomliController extends Controller
     {
         $kakomli = Kakomli::where('id', $id)->first();
         $jurusans = Jurusan::all();
-        if(!$kakomli){
+        if (!$kakomli) {
             return back()->with('message', [
                 'icon' => 'error',
                 'title' => 'Ada kesalahan server',
@@ -87,7 +87,7 @@ class KakomliController extends Controller
             ]);
         }
 
-        $guru = Guru::where('nama', $kakomli->nama)->first();
+        $guru = Guru::where('nama', "LIKE", "%" . $kakomli->nama . "%")->first();
         return view('admin.kakomli.edit', compact('kakomli', 'jurusans', 'guru'));
     }
 
@@ -96,7 +96,7 @@ class KakomliController extends Controller
      */
     public function update(KakomliUpdateRequest $request, string $id)
     {
-        try{
+        try {
             DB::beginTransaction();
             $kakomli = Kakomli::where('id', $id)->first();
             $guru = Guru::where('id', $request->guru_id)->first();
@@ -116,12 +116,12 @@ class KakomliController extends Controller
             $guru->email = $request->email;
             $guru->no_hp = $request->no_hp;
 
-            if($request->password !== null){
+            if ($request->password !== null) {
                 $kakomli->password = Hash::make($request->password);
                 $guru->password = Hash::make($request->password);
             }
 
-            if($request->hasFile('photo_profile')){
+            if ($request->hasFile('photo_profile')) {
                 if (strpos($kakomli->photo_profile, 'storage/') !== false) {
                     if (is_string($kakomli->photo_profile) && Storage::exists(explode('storage/', $kakomli->photo_profile)[1])) {
                         Storage::delete(explode('storage/', $kakomli->photo_profile)[1]);
@@ -143,7 +143,7 @@ class KakomliController extends Controller
                 'title' => 'Success',
                 'text' => "Berhasil me-update kakomli"
             ]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('message', [
                 'icon' => 'error',
@@ -158,7 +158,7 @@ class KakomliController extends Controller
      */
     public function destroy(string $id)
     {
-        try{
+        try {
             DB::beginTransaction();
             $kakomli = Kakomli::where('id', $id)->first();
             if (!$kakomli) {
@@ -181,7 +181,7 @@ class KakomliController extends Controller
                 'title' => 'Success',
                 'text' => "Berhasil me-hapus kakomli"
             ]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('message', [
                 'icon' => 'error',
