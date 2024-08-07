@@ -347,7 +347,7 @@ class AdminSiswaController extends Controller
         $absensi = Absensi::with(['user.kelas'])
             ->where('user_id', $siswa_id)
             ->whereRaw("DATE_FORMAT(created_at, '%m-%Y') = ?", [$request->bulan])
-            ->get();
+            ->orderBy('created_at', 'asc')->get();
 
         $bulanTahun = Carbon::createFromFormat('m-Y', $request->bulan)->locale('id');
         $absensiBulan = $bulanTahun->translatedFormat('F Y');
